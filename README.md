@@ -1,10 +1,10 @@
 # SGI 2022/2023
 
-## Group T0xG0y
+## Group T01G01
 | Name             | Number    | E-Mail             |
 | ---------------- | --------- | ------------------ |
-| John Doe         | 201801010 | ...                |
-| Jane Doe         | 201801011 | ...                |
+| Bruno Rosendo         | 201906334 | up201906334@fe.up.pt                |
+| João Mesquita         | 201906682 | up201906682@fe.up.pt                |
 
 ----
 
