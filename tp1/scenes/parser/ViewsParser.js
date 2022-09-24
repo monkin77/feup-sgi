@@ -12,8 +12,8 @@ export class ViewsParser {
      * @param {view block element} viewsNode
      */
     constructor(xmlReader, viewsNode) {
-        this.views = {};
-        this.reports = []; // Keeps track of parsing errors  TODO: USE THIS
+        this._views = {};
+        this._reports = []; // Keeps track of parsing errors
 
         this.parse(xmlReader, viewsNode);
     }
@@ -59,7 +59,7 @@ export class ViewsParser {
             }
         }
 
-        if (Object.keys(this.views).length == 0) {
+        if (Object.keys(this._views).length == 0) {
             this.addReport(
                 "There needs to be at least one view (perspective or ortho)"
             );
@@ -111,7 +111,7 @@ export class ViewsParser {
         );
         if (!Array.isArray(toCoords)) return toCoords;
 
-        this.views[camId] = new CGFcamera(
+        this._views[camId] = new CGFcamera(
             angle * DEGREE_TO_RAD,
             near,
             far,
@@ -183,7 +183,7 @@ export class ViewsParser {
                 `'up' child of the ortho with id: ${camId}`
             );
 
-        this.views[camId] = new CGFcameraOrtho(
+        this._views[camId] = new CGFcameraOrtho(
             left,
             right,
             bottom,
@@ -198,14 +198,22 @@ export class ViewsParser {
     };
 
     addReport = (text) => {
-        this.reports.push(`[${parserId}] ${text}`);
+        this._reports.push(`[${parserId}] ${text}`);
     };
 
     /**
      *
      * @returns true if the parser has reports, false otherwise
      */
-    hasReports = () => this.reports.length > 0;
+    hasReports = () => this._reports.length > 0;
+
+    get reports() {
+        return this._reports;
+    }
+
+    get views() {
+        return this._views;
+    }
 }
 
 const defaultOrthoUp = [0, 1, 0];
