@@ -1,8 +1,9 @@
 import { CGFcamera, CGFcameraOrtho } from "../../../lib/CGF.js";
-import { DEGREE_TO_RAD, parseCoordinates3D } from "./utils.js";
+import { DEGREE_TO_RAD, onXMLMinorError, parseCoordinates3D } from "./utils.js";
 
 /**
  * TODO: Add cameras to the scene in the onGraphLoaded method of XMLScene
+ * TODO: Extract common code of the Parsers to a parent parser class
  */
 export class ViewsParser {
     /**
@@ -23,10 +24,10 @@ export class ViewsParser {
      * @param {view block element} viewsNode
      */
     parse(xmlReader, viewsNode) {
-        // TODO: GET DEFAULT VIEW
         this.defaultViewId = xmlReader.getString(viewsNode, "default");
         if (this.defaultViewId == null) {
-            return "<views> block is missing the 'default' property"; // Add report
+            this.addReport("<views> block is missing the 'default' property");
+            return;
         }
 
         const children = viewsNode.children;
@@ -34,26 +35,46 @@ export class ViewsParser {
         this.ambient = [];
         this.background = [];
 
+        let err;
         for (const child of children) {
             switch (child.nodeName) {
                 case "perspective":
-                    this.parsePerspective(xmlReader, child); // ADD reports
+                    if (
+                        (err = this.parsePerspective(xmlReader, child)) != null
+                    ) {
+                        this.addReport(err);
+                        return;
+                    }
                     break;
                 case "ortho":
-                    this.parseOrtho(xmlReader, child);
+                    if ((err = this.parseOrtho(xmlReader, child)) != null) {
+                        this.addReport(err);
+                        return;
+                    }
                     break;
                 default:
-                    return `Invalid type of View: ${child.nodeName}. Valid types are: perspective and ortho`;
+                    onXMLMinorError(
+                        `Invalid type of View: ${child.nodeName}. Valid types are: perspective and ortho. Ignoring...`
+                    );
             }
         }
 
         if (Object.keys(this.views).length == 0) {
-            return "There needs to be at least one view (perspective or ortho)"; // Add report
+            this.addReport(
+                "There needs to be at least one view (perspective or ortho)"
+            );
+            return;
         }
 
         return null;
     }
 
+    /**
+     *
+     * @param {*} xmlReader
+     * @param {*} perspectiveNode
+     * @returns {null | string } null if successful, an error string otherwise
+     */
     parsePerspective = (xmlReader, perspectiveNode) => {
         const camId = xmlReader.getString(perspectiveNode, "id");
         if (camId == null) return "no 'id' defined for perspective";
@@ -97,8 +118,16 @@ export class ViewsParser {
             fromCoords,
             toCoords
         );
+
+        return null;
     };
 
+    /**
+     *
+     * @param {*} xmlReader
+     * @param {*} orthoNode
+     * @returns {null | string } null if successful, an error string otherwise
+     */
     parseOrtho = (xmlReader, orthoNode) => {
         const camId = xmlReader.getString(orthoNode, "id");
         if (camId == null) return "no 'id' defined for ortho";
@@ -165,7 +194,19 @@ export class ViewsParser {
             toCoords,
             upCoords
         );
+        return null;
     };
+
+    addReport = (text) => {
+        this.reports.push(`[${parserId}] ${text}`);
+    };
+
+    /**
+     *
+     * @returns true if the parser has reports, false otherwise
+     */
+    hasReports = () => this.reports.length > 0;
 }
 
 const defaultOrthoUp = [0, 1, 0];
+const parserId = "Views Parser";
