@@ -202,13 +202,13 @@ export class MySceneGraph {
      */
     parseScene(sceneNode) {
         // Get root of the scene.
-        var root = this.reader.getString(sceneNode, "root");
+        var root = this.reader.getString(sceneNode, "root", false);
         if (root == null) return "no root defined for scene";
 
         this.idRoot = root;
 
         // Get axis length
-        var axis_length = this.reader.getFloat(sceneNode, "axis_length");
+        var axis_length = this.reader.getFloat(sceneNode, "axis_length", false);
         if (axis_length == null)
             this.onXMLMinorError(
                 "no axis_length defined for scene; assuming 'length = 1'"
@@ -300,7 +300,7 @@ export class MySceneGraph {
             }
 
             // Get id of the current light.
-            var lightId = this.reader.getString(children[i], "id");
+            var lightId = this.reader.getString(children[i], "id", false);
             if (lightId == null) return "no ID defined for light";
 
             // Checks for repeated IDs.
@@ -313,7 +313,7 @@ export class MySceneGraph {
 
             // Light enable/disable
             var enableLight = true;
-            var aux = this.reader.getBoolean(children[i], "enabled");
+            var aux = this.reader.getBoolean(children[i], "enabled", false);
             if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
                 this.onXMLMinorError(
                     "unable to parse value component of the 'enable light' field for ID = " +
@@ -364,13 +364,17 @@ export class MySceneGraph {
 
             // Gets the additional attributes of the spot light
             if (children[i].nodeName == "spot") {
-                var angle = this.reader.getFloat(children[i], "angle");
+                var angle = this.reader.getFloat(children[i], "angle", false);
                 if (!(angle != null && !isNaN(angle)))
                     return (
                         "unable to parse angle of the light for ID = " + lightId
                     );
 
-                var exponent = this.reader.getFloat(children[i], "exponent");
+                var exponent = this.reader.getFloat(
+                    children[i],
+                    "exponent",
+                    false
+                );
                 if (!(exponent != null && !isNaN(exponent)))
                     return (
                         "unable to parse exponent of the light for ID = " +
@@ -440,7 +444,7 @@ export class MySceneGraph {
             }
 
             // Get id of the current material.
-            var materialID = this.reader.getString(children[i], "id");
+            var materialID = this.reader.getString(children[i], "id", false);
             if (materialID == null) return "no ID defined for material";
 
             // Checks for repeated IDs.
@@ -480,7 +484,7 @@ export class MySceneGraph {
             }
 
             // Get id of the current transformation.
-            var transformationID = this.reader.getString(children[i], "id");
+            var transformationID = this.reader.getString(children[i], "id", false);
             if (transformationID == null)
                 return "no ID defined for transformation";
 
@@ -552,7 +556,7 @@ export class MySceneGraph {
             }
 
             // Get id of the current primitive.
-            var primitiveId = this.reader.getString(children[i], "id");
+            var primitiveId = this.reader.getString(children[i], "id", false);
             if (primitiveId == null) return "no ID defined for texture";
 
             // Checks for repeated IDs.
@@ -583,7 +587,7 @@ export class MySceneGraph {
             // Retrieves the primitive coordinates.
             if (primitiveType == "rectangle") {
                 // x1
-                var x1 = this.reader.getFloat(grandChildren[0], "x1");
+                var x1 = this.reader.getFloat(grandChildren[0], "x1", false);
                 if (!(x1 != null && !isNaN(x1)))
                     return (
                         "unable to parse x1 of the primitive coordinates for ID = " +
@@ -591,7 +595,7 @@ export class MySceneGraph {
                     );
 
                 // y1
-                var y1 = this.reader.getFloat(grandChildren[0], "y1");
+                var y1 = this.reader.getFloat(grandChildren[0], "y1", false);
                 if (!(y1 != null && !isNaN(y1)))
                     return (
                         "unable to parse y1 of the primitive coordinates for ID = " +
@@ -599,7 +603,7 @@ export class MySceneGraph {
                     );
 
                 // x2
-                var x2 = this.reader.getFloat(grandChildren[0], "x2");
+                var x2 = this.reader.getFloat(grandChildren[0], "x2", false);
                 if (!(x2 != null && !isNaN(x2) && x2 > x1))
                     return (
                         "unable to parse x2 of the primitive coordinates for ID = " +
@@ -607,7 +611,7 @@ export class MySceneGraph {
                     );
 
                 // y2
-                var y2 = this.reader.getFloat(grandChildren[0], "y2");
+                var y2 = this.reader.getFloat(grandChildren[0], "y2", false);
                 if (!(y2 != null && !isNaN(y2) && y2 > y1))
                     return (
                         "unable to parse y2 of the primitive coordinates for ID = " +
@@ -656,7 +660,7 @@ export class MySceneGraph {
             }
 
             // Get id of the current component.
-            var componentID = this.reader.getString(children[i], "id");
+            var componentID = this.reader.getString(children[i], "id", false);
             if (componentID == null) return "no ID defined for componentID";
 
             // Checks for repeated IDs.
@@ -699,17 +703,17 @@ export class MySceneGraph {
         var position = [];
 
         // x
-        var x = this.reader.getFloat(node, "x");
+        var x = this.reader.getFloat(node, "x", false);
         if (!(x != null && !isNaN(x)))
             return "unable to parse x-coordinate of the " + messageError;
 
         // y
-        var y = this.reader.getFloat(node, "y");
+        var y = this.reader.getFloat(node, "y", false);
         if (!(y != null && !isNaN(y)))
             return "unable to parse y-coordinate of the " + messageError;
 
         // z
-        var z = this.reader.getFloat(node, "z");
+        var z = this.reader.getFloat(node, "z", false);
         if (!(z != null && !isNaN(z)))
             return "unable to parse z-coordinate of the " + messageError;
 
@@ -732,7 +736,7 @@ export class MySceneGraph {
         if (!Array.isArray(position)) return position;
 
         // w
-        var w = this.reader.getFloat(node, "w");
+        var w = this.reader.getFloat(node, "w", false);
         if (!(w != null && !isNaN(w)))
             return "unable to parse w-coordinate of the " + messageError;
 
@@ -750,22 +754,22 @@ export class MySceneGraph {
         var color = [];
 
         // R
-        var r = this.reader.getFloat(node, "r");
+        var r = this.reader.getFloat(node, "r", false);
         if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
             return "unable to parse R component of the " + messageError;
 
         // G
-        var g = this.reader.getFloat(node, "g");
+        var g = this.reader.getFloat(node, "g", false);
         if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
             return "unable to parse G component of the " + messageError;
 
         // B
-        var b = this.reader.getFloat(node, "b");
+        var b = this.reader.getFloat(node, "b", false);
         if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
             return "unable to parse B component of the " + messageError;
 
         // A
-        var a = this.reader.getFloat(node, "a");
+        var a = this.reader.getFloat(node, "a", false);
         if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
             return "unable to parse A component of the " + messageError;
 

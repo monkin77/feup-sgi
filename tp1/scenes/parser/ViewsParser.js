@@ -24,7 +24,7 @@ export class ViewsParser {
      * @param {view block element} viewsNode
      */
     parse(xmlReader, viewsNode) {
-        this.defaultViewId = xmlReader.getString(viewsNode, "default");
+        this.defaultViewId = xmlReader.getString(viewsNode, "default", false);
         if (this.defaultViewId == null) {
             this.addReport("<views> block is missing the 'default' property");
             return;
@@ -76,16 +76,16 @@ export class ViewsParser {
      * @returns {null | string } null if successful, an error string otherwise
      */
     parsePerspective = (xmlReader, perspectiveNode) => {
-        const camId = xmlReader.getString(perspectiveNode, "id");
+        const camId = xmlReader.getString(perspectiveNode, "id", false);
         if (camId == null) return "no 'id' defined for perspective";
 
-        const near = xmlReader.getFloat(perspectiveNode, "near");
+        const near = xmlReader.getFloat(perspectiveNode, "near", false);
         if (near == null) return "no 'near' defined for perspective";
 
-        const far = xmlReader.getFloat(perspectiveNode, "far");
+        const far = xmlReader.getFloat(perspectiveNode, "far", false);
         if (far == null) return "no 'far' defined for perspective";
 
-        const angle = xmlReader.getFloat(perspectiveNode, "angle");
+        const angle = xmlReader.getFloat(perspectiveNode, "angle", false);
         if (angle == null) return "no 'angle' defined for perspective";
 
         let from = perspectiveNode.getElementsByTagName("from");
@@ -129,25 +129,25 @@ export class ViewsParser {
      * @returns {null | string } null if successful, an error string otherwise
      */
     parseOrtho = (xmlReader, orthoNode) => {
-        const camId = xmlReader.getString(orthoNode, "id");
+        const camId = xmlReader.getString(orthoNode, "id", false);
         if (camId == null) return "no 'id' defined for ortho";
 
-        const near = xmlReader.getFloat(orthoNode, "near");
+        const near = xmlReader.getFloat(orthoNode, "near", false);
         if (near == null) return "no 'near' defined for ortho";
 
-        const far = xmlReader.getFloat(orthoNode, "far");
+        const far = xmlReader.getFloat(orthoNode, "far", false);
         if (far == null) return "no 'far' defined for ortho";
 
-        const left = xmlReader.getFloat(orthoNode, "left");
+        const left = xmlReader.getFloat(orthoNode, "left", false);
         if (left == null) return "no 'left' defined for ortho";
 
-        const right = xmlReader.getFloat(orthoNode, "right");
+        const right = xmlReader.getFloat(orthoNode, "right", false);
         if (right == null) return "no 'right' defined for ortho";
 
-        const top = xmlReader.getFloat(orthoNode, "top");
+        const top = xmlReader.getFloat(orthoNode, "top", false);
         if (top == null) return "no 'top' defined for ortho";
 
-        const bottom = xmlReader.getFloat(orthoNode, "bottom");
+        const bottom = xmlReader.getFloat(orthoNode, "bottom", false);
         if (bottom == null) return "no 'bottom' defined for ortho";
 
         let from = orthoNode.getElementsByTagName("from");
