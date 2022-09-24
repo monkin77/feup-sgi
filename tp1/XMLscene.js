@@ -2,8 +2,6 @@ import { CGFscene } from '../lib/CGF.js';
 import { CGFaxis, CGFcamera } from '../lib/CGF.js';
 
 
-var DEGREE_TO_RAD = Math.PI / 180;
-
 /**
  * XMLscene class, representing the scene that is to be rendered.
  */
@@ -44,17 +42,18 @@ export class XMLscene extends CGFscene {
      * Initializes the scene cameras.
      */
     initCameras() {
-            this.camera = new CGFcamera(
-                0.4,
-                0.1,
-                500,
-                vec3.fromValues(15, 15, 15),
-                vec3.fromValues(0, 0, 0)
-            );
-        }
-        /**
-         * Initializes the scene lights with the values read from the XML file.
-         */
+        this.camera = new CGFcamera(
+            0.4,
+            0.1,
+            500,
+            vec3.fromValues(15, 15, 15),
+            vec3.fromValues(0, 0, 0)
+        );
+    }
+
+    /**
+     * Initializes the scene lights with the values read from the XML file.
+     */
     initLights() {
         var i = 0;
         // Lights index.
@@ -124,6 +123,10 @@ export class XMLscene extends CGFscene {
      */
     onGraphLoaded() {
         this.axis = new CGFaxis(this, this.graph.referenceLength);
+
+        // Update Cameras (TODO: Currently just 1)
+        this.camera =
+            this.graph.viewsParser.views[this.graph.viewsParser.defaultViewId];
 
         this.gl.clearColor(
             this.graph.background[0],

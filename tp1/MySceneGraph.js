@@ -226,8 +226,8 @@ export class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        this.views = new ViewsParser(this.reader, viewsNode);
-        if (this.views.hasReports()) return this.views.reports[0];
+        this.viewsParser = new ViewsParser(this.reader, viewsNode);
+        if (this.viewsParser.hasReports()) return this.viewsParser.reports[0];
 
         return null;
     }
