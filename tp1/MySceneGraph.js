@@ -2,8 +2,6 @@ import { CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
 import { ViewsParser } from "./scenes/parser/ViewsParser.js";
 
-var DEGREE_TO_RAD = Math.PI / 180;
-
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
 var VIEWS_INDEX = 1;
