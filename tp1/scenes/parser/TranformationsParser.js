@@ -1,18 +1,19 @@
 import { CGFcamera, CGFcameraOrtho } from "../../../lib/CGF.js";
+import { Parser } from "./Parser.js";
 import { DEGREE_TO_RAD, onXMLMinorError, parseCoordinates3D } from "./utils.js";
 
 /**
  * TODO: Extract common code of the Parsers to a parent parser class
  */
-export class TransformationsParser {
+export class TransformationsParser extends Parser {
     /**
      * Constructor for the TransformationsParser object.
      * @param {CGF xml Reader} xmlReader
      * @param {transformations block element} transformationsNode
      */
     constructor(xmlReader, transformationsNode) {
+        super();
         this._transformations = {};
-        this._reports = []; // Keeps track of parsing errors
 
         this.parse(xmlReader, transformationsNode);
     }
@@ -33,13 +34,16 @@ export class TransformationsParser {
             }
 
             if ((err = this.parseTransformation(xmlReader, child)) != null) {
-                this.addReport(err);
+                this.addReport(parserId, err);
                 return;
             }
         }
 
         if (Object.keys(this._transformations).length == 0) {
-            this.addReport("There needs to be at least one transformation");
+            this.addReport(
+                parserId,
+                "There needs to be at least one transformation"
+            );
             return;
         }
 
@@ -126,20 +130,6 @@ export class TransformationsParser {
 
         return null;
     };
-
-    addReport = (text) => {
-        this._reports.push(`[${parserId}] ${text}`);
-    };
-
-    /**
-     *
-     * @returns true if the parser has reports, false otherwise
-     */
-    hasReports = () => this._reports.length > 0;
-
-    get reports() {
-        return this._reports;
-    }
 
     get transformations() {
         return this._transformations;
