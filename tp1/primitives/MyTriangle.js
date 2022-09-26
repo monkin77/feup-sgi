@@ -1,5 +1,5 @@
 import { CGFobject } from '../../lib/CGF.js';
-import { euclideanDistance } from '../utils/algebra.js';
+import { euclideanDistance, crossProductNormalized } from '../utils/algebra.js';
 
 /**
  * MyTriangle
@@ -27,14 +27,13 @@ export class MyTriangle extends CGFobject {
         ];
 
         this.indices = [
-            0, 1, 2
+            0, 1, 2,
         ];
 
-        this.normals = [
-            0, 0, 1,
-            0, 0, 1,
-            0, 0, 1
-        ];
+        const v1 = [this.x2 - this.x1, this.y2 - this.y1, this.z2 - this.z1];
+        const v2 = [this.x3 - this.x1, this.y3 - this.y1, this.z3 - this.z1];
+        const normalVector = crossProductNormalized(v1, v2);
+        this.normals = [].concat(normalVector, normalVector, normalVector);
 
         const a = euclideanDistance(this.x1, this.y1, this.z1, this.x2, this.y2, this.z2);
         const b = euclideanDistance(this.x2, this.y2, this.z2, this.x3, this.y3, this.z3);
