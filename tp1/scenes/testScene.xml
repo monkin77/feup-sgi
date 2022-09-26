@@ -44,8 +44,8 @@
     </transformations>
 
     <primitives>
-        <primitive id="demoTriangle">
-            <triangle x1="0" y1="-2" z1="0" x2="2" y2="-2" z2="0" x3="1" y3="1" z3="-2" />
+        <primitive id="demoSphere">
+            <sphere radius="2" stacks="100" slices="100" />
         </primitive>
     </primitives>
 
@@ -60,7 +60,7 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="demoTriangle" />
+                <primitiveref id="demoSphere" />
             </children>
         </component>
     </components>
