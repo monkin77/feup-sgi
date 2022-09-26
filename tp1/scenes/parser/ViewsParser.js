@@ -32,9 +32,6 @@ export class ViewsParser {
 
         const children = viewsNode.children;
 
-        this.ambient = [];
-        this.background = [];
-
         let err;
         for (const child of children) {
             switch (child.nodeName) {
@@ -78,6 +75,8 @@ export class ViewsParser {
     parsePerspective = (xmlReader, perspectiveNode) => {
         const camId = xmlReader.getString(perspectiveNode, "id", false);
         if (camId == null) return "no 'id' defined for perspective";
+        if (camId in this._views)
+            return `ID must be unique for each perspective (conflict: ID = ${camId})`;
 
         const near = xmlReader.getFloat(perspectiveNode, "near", false);
         if (near == null) return "no 'near' defined for perspective";

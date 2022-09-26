@@ -228,6 +228,7 @@ export class MySceneGraph {
     /**
      * Parses the <views> block.
      * @param {view block element} viewsNode
+     * @returns null upon success, or an error message upon failure
      */
     parseView(viewsNode) {
         this.viewsParser = new ViewsParser(this.reader, viewsNode);
@@ -272,6 +273,7 @@ export class MySceneGraph {
      * @param {lights block element} lightsNode
      */
     parseLights(lightsNode) {
+        // TO DO: CONFIRM LIGHTS ARE BEING PARSED CORRECTLY
         var children = lightsNode.children;
 
         this.lights = [];
@@ -488,7 +490,11 @@ export class MySceneGraph {
             }
 
             // Get id of the current transformation.
-            var transformationID = this.reader.getString(children[i], "id", false);
+            var transformationID = this.reader.getString(
+                children[i],
+                "id",
+                false
+            );
             if (transformationID == null)
                 return "no ID defined for transformation";
 
