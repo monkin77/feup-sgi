@@ -41,9 +41,11 @@ export class MyCylinder extends CGFobject {
 					curSlice <= this.slices;
 					curSlice++, ang += sliceAngle
 				) {
+				const cos = Math.cos(ang);
+				const sin = Math.sin(ang);
 
 				this.vertices.push(
-					curRadius * Math.cos(ang), curRadius * Math.sin(ang), h,
+					curRadius * cos, curRadius * sin, h,
 				);
 				// Last vertices already have indices
 				if (curSlice < this.slices && curStack < this.stacks) {
@@ -53,7 +55,7 @@ export class MyCylinder extends CGFobject {
 					);
 				}
 				this.normals.push(
-					Math.cos(ang), Math.sin(ang), 0,
+					cos, sin, 0,
 				);
 				this.texCoords.push(
 					curSlice / this.slices,
