@@ -1,5 +1,6 @@
 import { CGFXMLreader } from '../lib/CGF.js';
-import { MyRectangle } from './MyRectangle.js';
+import { MyRectangle } from './primitives/MyRectangle.js';
+import { MyCylinder } from './primitives/MyCylinder.js';
 import { ViewsParser } from "./scenes/parser/ViewsParser.js";
 
 // Order of the groups in the XML document.
@@ -628,6 +629,58 @@ export class MySceneGraph {
                 );
 
                 this.primitives[primitiveId] = rect;
+            } else if (primitiveType == "cylinder") {
+                // base
+                var base = this.reader.getFloat(grandChildren[0], "base", false);
+                if (!(base != null && !isNaN(base)))
+                    return (
+                        "unable to parse base of the primitive coordinates for ID = " +
+                        primitiveId
+                    );
+
+                // top
+                var top = this.reader.getFloat(grandChildren[0], "top", false);
+                if (!(top != null && !isNaN(top)))
+                    return (
+                        "unable to parse top of the primitive coordinates for ID = " +
+                        primitiveId
+                    );
+
+                // height
+                var height = this.reader.getFloat(grandChildren[0], "height", false);
+                if (!(height != null && !isNaN(height)))
+                    return (
+                        "unable to parse height of the primitive coordinates for ID = " +
+                        primitiveId
+                    );
+
+                // slices
+                var slices = this.reader.getFloat(grandChildren[0], "slices", false);
+                if (!(slices != null && !isNaN(slices)))
+                    return (
+                        "unable to parse slices of the primitive coordinates for ID = " +
+                        primitiveId
+                    );
+
+                // stacks
+                var stacks = this.reader.getFloat(grandChildren[0], "stacks", false);
+                if (!(stacks != null && !isNaN(stacks)))
+                    return (
+                        "unable to parse stacks of the primitive coordinates for ID = " +
+                        primitiveId
+                    );
+
+                var cyl = new MyCylinder(
+                    this.scene,
+                    primitiveId,
+                    base,
+                    top,
+                    height,
+                    slices,
+                    stacks
+                );
+
+                this.primitives[primitiveId] = cyl;
             } else {
                 console.warn("To do: Parse other primitives.");
             }
@@ -810,6 +863,6 @@ export class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives["demoRectangle"].display();
+        this.primitives["demoCylinder"].display();
     }
 }
