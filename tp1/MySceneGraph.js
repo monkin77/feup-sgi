@@ -857,7 +857,8 @@ export class MySceneGraph {
         this.componentsParser = new ComponentsParser(
             this.reader,
             componentsNode,
-            this.transformationsParser.transformations
+            this.transformationsParser.transformations, [], [],
+            this.primitives
         );
         if (this.componentsParser.hasReports())
             return this.componentsParser.reports[0];

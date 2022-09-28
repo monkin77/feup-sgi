@@ -2,7 +2,7 @@ export class Component {
     /**
      * Constructor for the Component object.
      * @param {id}
-     * @param {transformation} reference to this component's transformation. If declared inline, 
+     * @param {transformation} reference to this component's transformation. If declared inline,
      * the parser is responsible for creating the transformation object and adding it to the exiting ones
      * @param {materials}
      * @param {texture}
@@ -31,6 +31,4 @@ export class Component {
     get children() {
         return this._children;
     }
-}
-
 }

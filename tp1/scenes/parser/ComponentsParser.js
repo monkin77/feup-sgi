@@ -1,3 +1,4 @@
+import { Component } from "../model/Component.js";
 import { Parser } from "./Parser.js";
 import {
     onXMLMinorError,
@@ -11,10 +12,20 @@ export class ComponentsParser extends Parser {
      * @param {CGF xml Reader} xmlReader
      * @param {components block element} componentsNode
      */
-    constructor(xmlReader, componentsNode, transformations) {
+    constructor(
+        xmlReader,
+        componentsNode,
+        transformations,
+        materials,
+        textures,
+        primitives
+    ) {
         super();
         this._components = {};
         this._transformations = transformations;
+        this._materials = materials;
+        this._textures = textures;
+        this._primitives = primitives;
 
         this.parse(xmlReader, componentsNode);
     }
@@ -83,19 +94,41 @@ export class ComponentsParser extends Parser {
         if (materialsNode.length != 1)
             return `<materials> must be defined inside the component with id = ${componentId}`;
         materialsNode = materialsNode[0];
-        // handle materials
+        /* 
+        // TO DO: wait for materials to be implemented
+        const { error: materialsErr, value: materialsList } =
+        this.handleMaterials(xmlReader, materialsNode, componentId);
+        if (materialsErr) return materialsErr; */
 
         let textureNode = componentNode.getElementsByTagName("texture");
         if (textureNode.length != 1)
             return `<texture> must be defined inside the component with id = ${componentId}`;
         textureNode = textureNode[0];
-        // handle texture
+        /*
+        // TO DO: wait for texture to be implemented 
+        const { error: textureErr, value: textureValue } = this.handleTexture(
+            xmlReader,
+            textureNode,
+            componentId
+        );
+        if (textureErr) return textureErr; */
 
         let childrenNode = componentNode.getElementsByTagName("children");
         if (childrenNode.length != 1)
             return `<children> must be defined inside the component with id = ${componentId}`;
         childrenNode = childrenNode[0];
-        // handle children
+        const { error: childrenErr, value: childrenValue } =
+        this.handleChildren(xmlReader, childrenNode, componentId);
+        if (childrenErr) return childrenErr;
+
+        this._components[componentId] = new Component(
+            componentId,
+            transfID, [],
+            "",
+            childrenValue
+        );
+
+        return null;
     };
 
     /**
@@ -150,6 +183,140 @@ export class ComponentsParser extends Parser {
         this._transformations[componentTransfId] = transfMatrix;
 
         return { value: componentTransfId };
+    };
+
+    /**
+     *
+     * @param {*} xmlReader
+     * @param {*} materialsNode
+     * @param {*} componentId
+     * @returns {{value: string[]} | {error: string}} {value: <materialIDs>} if successful, {error: <error string>} otherwise.
+     */
+    handleMaterials = (xmlReader, materialsNode, componentId) => {
+        const children = materialsNode.children;
+
+        let materials = [];
+        for (const child of children) {
+            if (child.nodeName != "material") {
+                onXMLMinorError(
+                    `Unknown tag <${child.nodeName}> inside <materials> of component with ID = ${componentId}`
+                );
+                continue;
+            }
+
+            const materialId = xmlReader.getString(child, "id", false);
+            if (materialId == null)
+                return {
+                    error: `no 'id' defined for <material> inside <materials> of component with ID = ${componentId}`,
+                };
+            if (!(materialId in this._materials) && materialId != "inherit")
+                return {
+                    error: `<material> contains an invalid id (ID = ${materialId}) inside <materials> of component with ID = ${componentId}`,
+                };
+
+            materials.push(materialId);
+        }
+        if (materials.length == 0)
+            return {
+                error: `There must be at least one material defined inside <materials> of component with ID = ${componentId}`,
+            };
+
+        return { value: materials };
+    };
+
+    /**
+     *
+     * @param {*} xmlReader
+     * @param {*} textureNode
+     * @param {*} componentId
+     * @returns { {value: {textureId: string, lengthS: number, lengthT: number}} | {error: string} } {value: {<textureId, lengthS, lengthT>}} if successful, {error: <error string>} otherwise.
+     */
+    handleTexture = (xmlReader, textureNode, componentId) => {
+        const textureId = xmlReader.getString(textureNode, "id", false);
+        if (textureId == null)
+            return {
+                error: `no 'id' defined for <texture> inside <components> of component with ID = ${componentId}`,
+            };
+        if (!(textureId in this._textures) &&
+            textureId != "inherit" &&
+            textureId != "none"
+        )
+            return {
+                error: `<texture> contains an invalid id (ID = ${textureId}) inside <components> of component with ID = ${componentId}`,
+            };
+
+        const lengthS = xmlReader.getFloat(textureNode, "length_s", false);
+        if (lengthS == null)
+            return {
+                error: `no 'length_s' defined for <texture> inside <components> of component with ID = ${componentId}`,
+            };
+        const lengthT = xmlReader.getFloat(textureNode, "length_t", false);
+        if (lengthT == null)
+            return {
+                error: `no 'length_t' defined for <texture> inside <components> of component with ID = ${componentId}`,
+            };
+
+        return { value: { textureId, lengthS, lengthT } };
+    };
+
+    /**
+     *
+     * @param {*} xmlReader
+     * @param {*} childrenNode
+     * @param {*} componentId
+     * @returns {{value: {components: string[], primitives: string[]}} | {error: string}} {value: {<components, primitives>}} if successful, {error: <error string>} otherwise.
+     */
+    handleChildren = (xmlReader, childrenNode, componentId) => {
+        const children = childrenNode.children;
+
+        const components = [];
+        const primitives = [];
+        for (const child of children) {
+            switch (child.nodeName) {
+                case "componentref":
+                    const childComponentId = xmlReader.getString(
+                        child,
+                        "id",
+                        false
+                    );
+                    if (childComponentId == null)
+                        return {
+                            error: `no 'id' defined for <componentref> inside <children> of component with ID = ${componentId}`,
+                        };
+                    if (!(childComponentId in this._components))
+                        return {
+                            error: `<componentref> contains an invalid id (ID = ${childComponentId}) inside <children> of component with ID = ${componentId}`,
+                        };
+
+                    components.push(childComponentId);
+                    // TO DO: Should this be done?
+                    // this._components[childComponentId].parent = componentId;
+                    break;
+                case "primitiveref":
+                    const primitiveId = xmlReader.getString(child, "id", false);
+                    if (primitiveId == null)
+                        return {
+                            error: `no 'id' defined for <primitiveref> inside <children> of component with ID = ${componentId}`,
+                        };
+                    if (!(primitiveId in this._primitives))
+                        return {
+                            error: `<primitiveref> contains an invalid id (ID = ${primitiveId}) inside <children> of component with ID = ${componentId}`,
+                        };
+                    primitives.push(primitiveId);
+                    break;
+                default:
+                    onXMLMinorError(
+                        `Unknown tag <${child.nodeName}> inside <children> of component with ID = ${componentId}`
+                    );
+            }
+        }
+
+        if (components.length == 0 && primitives.length == 0)
+            return {
+                error: `There must be at least one child defined inside <children> of component with ID = ${componentId}`,
+            };
+
+        return { value: { components, primitives } };
     };
 
     get components() {
