@@ -4,6 +4,7 @@ import { MyCylinder } from "./primitives/MyCylinder.js";
 import { MyTriangle } from "./primitives/MyTriangle.js";
 import { MySphere } from "./primitives/MySphere.js";
 import { MyTorus } from "./primitives/MyTorus.js";
+import { ComponentsParser } from "./scenes/parser/ComponentsParser.js";
 import { TransformationsParser } from "./scenes/parser/TranformationsParser.js";
 import { ViewsParser } from "./scenes/parser/ViewsParser.js";
 
@@ -853,56 +854,16 @@ export class MySceneGraph {
      * @param {components block element} componentsNode
      */
     parseComponents(componentsNode) {
-        var children = componentsNode.children;
+        this.componentsParser = new ComponentsParser(
+            this.reader,
+            componentsNode,
+            this.transformationsParser.transformations
+        );
+        if (this.componentsParser.hasReports())
+            return this.componentsParser.reports[0];
 
-        this.components = [];
-
-        var grandChildren = [];
-        var grandgrandChildren = [];
-        var nodeNames = [];
-
-        // Any number of components.
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].nodeName != "component") {
-                this.onXMLMinorError(
-                    "unknown tag <" + children[i].nodeName + ">"
-                );
-                continue;
-            }
-
-            // Get id of the current component.
-            var componentID = this.reader.getString(children[i], "id", false);
-            if (componentID == null) return "no ID defined for componentID";
-
-            // Checks for repeated IDs.
-            if (this.components[componentID] != null)
-                return (
-                    "ID must be unique for each component (conflict: ID = " +
-                    componentID +
-                    ")"
-                );
-
-            grandChildren = children[i].children;
-
-            nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++) {
-                nodeNames.push(grandChildren[j].nodeName);
-            }
-
-            var transformationIndex = nodeNames.indexOf("transformation");
-            var materialsIndex = nodeNames.indexOf("materials");
-            var textureIndex = nodeNames.indexOf("texture");
-            var childrenIndex = nodeNames.indexOf("children");
-
-            this.onXMLMinorError("To do: Parse components.");
-            // Transformations
-
-            // Materials
-
-            // Texture
-
-            // Children
-        }
+        console.log("Parsed Components");
+        return null;
     }
 
     /**

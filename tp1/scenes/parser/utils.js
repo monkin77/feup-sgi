@@ -27,17 +27,17 @@ export const parseCoordinates3D = (xmlReader, node, messageError) => {
     var position = [];
 
     // x
-    var x = xmlReader.getFloat(node, "x");
+    var x = xmlReader.getFloat(node, "x", false);
     if (!(x != null && !isNaN(x)))
         return "unable to parse x-coordinate of the " + messageError;
 
     // y
-    var y = xmlReader.getFloat(node, "y");
+    var y = xmlReader.getFloat(node, "y", false);
     if (!(y != null && !isNaN(y)))
         return "unable to parse y-coordinate of the " + messageError;
 
     // z
-    var z = xmlReader.getFloat(node, "z");
+    var z = xmlReader.getFloat(node, "z", false);
     if (!(z != null && !isNaN(z)))
         return "unable to parse z-coordinate of the " + messageError;
 
@@ -48,7 +48,7 @@ export const parseCoordinates3D = (xmlReader, node, messageError) => {
 
 /**
  * Converts an axis name to vec3 representation
- * @param {*} axis 
+ * @param {*} axis
  * @returns array representing the axis
  */
 export const axisToVec = (axis) => {
@@ -63,3 +63,86 @@ export const axisToVec = (axis) => {
             return [0, 0, 0];
     }
 };
+
+/**
+ *
+ * @param {*} xmlReader
+ * @param {*} transformationNode
+ * @param {*} transformationId
+ * @return { {matrix: mat4, counter: number} | {error: string} } object with the transformation matrix and the number of transformations applied,
+ * or an object with an error string
+ */
+export const calculateTransformationMatrix = (
+    xmlReader,
+    transformationNode,
+    transformationId
+) => {
+    let transfMatrix = mat4.create();
+
+    let coordinates;
+    let transfCounter = 0;
+    for (const child of transformationNode.children) {
+        switch (child.nodeName) {
+            case "translate":
+                coordinates = parseCoordinates3D(
+                    xmlReader,
+                    child,
+                    `translate transformation with ID = ${transformationId}`
+                );
+                if (!Array.isArray(coordinates)) return { error: coordinates };
+
+                transfMatrix = mat4.translate(
+                    transfMatrix,
+                    transfMatrix,
+                    coordinates
+                );
+                transfCounter++;
+                break;
+            case "rotate":
+                let axis = xmlReader.getString(child, "axis", false);
+                if (axis == null)
+                    return {
+                        error: `no 'axis' defined for rotation in transformation ${transformationId}`,
+                    };
+                axis = axisToVec(axis);
+
+                const angle = xmlReader.getFloat(child, "angle", false);
+                if (angle == null)
+                    return {
+                        error: `no 'angle' defined for rotation in transformation ${transformationId}`,
+                    };
+
+                transfMatrix = mat4.rotate(
+                    transfMatrix,
+                    transfMatrix,
+                    angle * DEGREE_TO_RAD,
+                    axis
+                );
+                transfCounter++;
+                break;
+            case "scale":
+                coordinates = parseCoordinates3D(
+                    xmlReader,
+                    child,
+                    `scale transformation with ID = ${transformationId}`
+                );
+                if (!Array.isArray(coordinates)) return { error: coordinates };
+
+                transfMatrix = mat4.scale(
+                    transfMatrix,
+                    transfMatrix,
+                    coordinates
+                );
+                transfCounter++;
+                break;
+            default:
+                onXMLMinorError(
+                    `unknown transformation <${child.nodeName}>. Ignoring...`
+                );
+        }
+    }
+
+    return { matrix: transfMatrix, counter: transfCounter };
+};
+
+export const buildComponentTransfID = (componentID) => `${componentID}-transf`;

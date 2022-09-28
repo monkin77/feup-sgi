@@ -1,9 +1,8 @@
 import { Parser } from "./Parser.js";
 import {
     onXMLMinorError,
-    parseCoordinates3D,
-    DEGREE_TO_RAD,
-    axisToVec,
+    calculateTransformationMatrix,
+    buildComponentTransfID,
 } from "./utils.js";
 
 export class ComponentsParser extends Parser {
@@ -12,9 +11,10 @@ export class ComponentsParser extends Parser {
      * @param {CGF xml Reader} xmlReader
      * @param {components block element} componentsNode
      */
-    constructor(xmlReader, componentsNode) {
+    constructor(xmlReader, componentsNode, transformations) {
         super();
         this._components = {};
+        this._transformations = transformations;
 
         this.parse(xmlReader, componentsNode);
     }
@@ -44,13 +44,13 @@ export class ComponentsParser extends Parser {
             }
         }
 
-        if (Object.keys(this._components).length == 0) {
+        /* if (Object.keys(this._components).length == 0) {
             this.addReport(
                 parserId,
                 "There needs to be at least one component"
             );
             return;
-        }
+        } */
 
         return null;
     }
@@ -72,7 +72,12 @@ export class ComponentsParser extends Parser {
         if (transformationNode.length != 1)
             return `<transformation> must be defined inside the component with id = ${componentId}`;
         transformationNode = transformationNode[0];
-        // Handle transformation
+        const { error: transfErr, value: transfID } = this.handleTransformation(
+            xmlReader,
+            transformationNode,
+            componentId
+        );
+        if (transfErr) return transfErr;
 
         let materialsNode = componentNode.getElementsByTagName("materials");
         if (materialsNode.length != 1)
@@ -91,6 +96,60 @@ export class ComponentsParser extends Parser {
             return `<children> must be defined inside the component with id = ${componentId}`;
         childrenNode = childrenNode[0];
         // handle children
+    };
+
+    /**
+     *
+     * @param {*} xmlReader
+     * @param {*} transformationNode
+     * @param {string} componentId
+     * @return {{value: string} | {error: string}} {value: <transformationID | "">} if successful, {error: <error string>} otherwise.
+     *  If the component does not contain transformations, an empty string will be returned in the value property
+     */
+    handleTransformation = (xmlReader, transformationNode, componentId) => {
+        const children = transformationNode.children;
+
+        // Handle <tranformationref> case
+        let transfRefNode =
+            transformationNode.getElementsByTagName("transformationref");
+        if (transfRefNode.length > 1) {
+            return {
+                error: `There can only be one <transformationref> inside <transformation>`,
+            };
+        } else if (transfRefNode.length == 1) {
+            if (children.length > 1)
+                return {
+                    error: `<tranformationref> cannot be coupled with other transformations in component with ID = ${componentId}`,
+                };
+
+            const transfId = xmlReader.getString(transfRefNode, "id", false);
+            if (transfId == null)
+                return { error: "no 'id' defined for <transformationref>" };
+            if (!(transfId in this._transformations))
+                return {
+                    error: `{<transformationref> contains an invalid id (ID = ${transfId})}`,
+                };
+
+            return { value: transfId };
+        }
+
+        const {
+            matrix: transfMatrix,
+            counter: transfCounter,
+            error,
+        } = calculateTransformationMatrix(
+            xmlReader,
+            transformationNode,
+            componentId
+        );
+        if (error != null) return { error: error };
+        if (transfCounter == 0) return { value: "" };
+
+        // Add the inline matrix to the existing object of transformations and return the id of the new matrix
+        const componentTransfId = buildComponentTransfID(componentId);
+        this._transformations[componentTransfId] = transfMatrix;
+
+        return { value: componentTransfId };
     };
 
     get components() {
