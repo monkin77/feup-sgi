@@ -6,9 +6,6 @@ import {
     axisToVec,
 } from "./utils.js";
 
-/**
- * TODO: Extract common code of the Parsers to a parent parser class
- */
 export class TransformationsParser extends Parser {
     /**
      * Constructor for the TransformationsParser object.
