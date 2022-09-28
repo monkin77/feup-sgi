@@ -56,6 +56,10 @@
         <primitive id="demoTorus">
             <torus inner="1" outer="5" slices="20" loops="50" />
         </primitive>
+
+        <primitive id="demoRectangle">
+            <rectangle x1="1" y1="1" x2="2" y2="2" />
+        </primitive>
     </primitives>
 
     <components>
