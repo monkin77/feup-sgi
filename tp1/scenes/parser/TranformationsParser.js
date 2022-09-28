@@ -1,6 +1,10 @@
-import { CGFcamera, CGFcameraOrtho } from "../../../lib/CGF.js";
 import { Parser } from "./Parser.js";
-import { DEGREE_TO_RAD, onXMLMinorError, parseCoordinates3D } from "./utils.js";
+import {
+    onXMLMinorError,
+    parseCoordinates3D,
+    DEGREE_TO_RAD,
+    axisToVec,
+} from "./utils.js";
 
 /**
  * TODO: Extract common code of the Parsers to a parent parser class
@@ -84,9 +88,10 @@ export class TransformationsParser extends Parser {
                     transfCounter++;
                     break;
                 case "rotate":
-                    const axis = xmlReader.getString(child, "axis", false);
+                    let axis = xmlReader.getString(child, "axis", false);
                     if (axis == null)
                         return `no 'axis' defined for rotation in transformation ${transfId}`;
+                    axis = axisToVec(axis);
 
                     const angle = xmlReader.getFloat(child, "angle", false);
                     if (angle == null)
@@ -96,7 +101,7 @@ export class TransformationsParser extends Parser {
                     transfMatrix = mat4.rotate(
                         transfMatrix,
                         transfMatrix,
-                        angle,
+                        angle * DEGREE_TO_RAD,
                         axis
                     );
                     transfCounter++;

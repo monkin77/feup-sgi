@@ -45,3 +45,21 @@ export const parseCoordinates3D = (xmlReader, node, messageError) => {
 
     return position;
 };
+
+/**
+ * Converts an axis name to vec3 representation
+ * @param {*} axis 
+ * @returns array representing the axis
+ */
+export const axisToVec = (axis) => {
+    switch (axis) {
+        case "x":
+            return [1, 0, 0];
+        case "y":
+            return [0, 1, 0];
+        case "z":
+            return [0, 0, 1];
+        default:
+            return [0, 0, 0];
+    }
+};
