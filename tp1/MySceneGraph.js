@@ -981,8 +981,43 @@ export class MySceneGraph {
      */
     displayScene() {
         //To do: Create display loop for transversing the scene graph
-
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives["demoTorus"].display();
+        // this.primitives["demoTorus"].display();
+        // this.primitives["demoRectangle"].display();
+
+        /* 
+        This alternative is to draw all components
+        for (const component of Object.values(
+                this.componentsParser.components
+            )) {
+            this.drawComponent(component);
+        } */
+
+        // Draw components inside the root component
+        this.drawComponent(this.componentsParser.components["root"]);
+    }
+
+    drawComponent(component) {
+        this.scene.pushMatrix();
+
+        if (component.hasTransformation()) {
+            this.scene.multMatrix(
+                this.transformationsParser.transformations[
+                    component.transformation
+                ]
+            );
+        }
+
+        for (const primitive of component.primitives) {
+            this.primitives[primitive].display();
+        }
+
+        for (const childComponent of component.components) {
+            this.drawComponent(
+                this.componentsParser.components[childComponent]
+            );
+        }
+
+        this.scene.popMatrix();
     }
 }

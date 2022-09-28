@@ -59,10 +59,11 @@
     </primitives>
 
     <components>
-        <component id="demoRoot">
+        <component id="component1">
             <transformation>
-                <translate x="0" y="0" z="1" />
-                <scale x="2" y="1" z="1" />
+                <translate x="3" y="-1" z="1" />
+                <scale x="1" y="1" z="1" />
+                <rotate angle="50" axis="z" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -70,6 +71,34 @@
             <texture id="demoTexture"/>
             <children>
                 <primitiveref id="demoTorus" />
+            </children>
+        </component>
+
+        <component id="component2">
+            <transformation>
+                <translate x="3" y="4" z="3" />
+                <scale x="2" y="1" z="2" />
+                <rotate angle="30" axis="x" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoRectangle" />
+            </children>
+        </component>
+
+        <component id="root">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="component2" />
+                <componentref id="component1" />
             </children>
         </component>
     </components>

@@ -6,14 +6,15 @@ export class Component {
      * the parser is responsible for creating the transformation object and adding it to the exiting ones
      * @param {materials}
      * @param {texture}
-     * @param {children}
+     * @param { { components: string[], primitives: string[] } }
      */
     constructor(id, transformation, materials, texture, children) {
         this._id = id;
         this._transformation = transformation;
         this._materials = materials;
         this._texture = texture;
-        this._children = children;
+        this._primitives = children.primitives;
+        this._components = children.components;
     }
 
     get id() {
@@ -28,7 +29,12 @@ export class Component {
     get texture() {
         return this._texture;
     }
-    get children() {
-        return this._children;
+    get primitives() {
+        return this._primitives;
     }
+    get components() {
+        return this._components;
+    }
+
+    hasTransformation = () => this._transformation != "";
 }
