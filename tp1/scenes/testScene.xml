@@ -72,6 +72,10 @@
             <triangle x1="-0.5" y1="0" z1="0" x2="0.5" y2="0" z2="0" x3="0" y3="1" z3="0" />
         </primitive>
 
+        <primitive id="isoscelesTriangle">
+            <triangle x1="-0.75" y1="0" z1="0" x2="0.75" y2="0" z2="0" x3="0" y3="1" z3="0" />
+        </primitive>
+
         <primitive id="sphere">
             <sphere radius="1" slices="20" stacks="20" />
         </primitive>
@@ -147,21 +151,95 @@
         </component>
 
         <!--  Triangular Prism  -->
-        <component id="triangularPrism">
+        <component id="triangularPrismBase">
             <transformation>
-              
+                <rotate axis="y" angle="180" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="prismPrimitive" />
+                <primitiveref id="isoscelesTriangle" />
             </children>
         </component>
 
+         <component id="triangularPrismTop">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="isoscelesTriangle" />
+            </children>
+        </component>
 
+         <component id="triangularPrismRight">
+            <transformation>
+                <translate x="0.75" y="0" z="1" />
+                <rotate axis="y" angle="90" />
+                <rotate axis="x" angle="-36.87" />
+                <scale x="1" y="1.25" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
 
+        <component id="triangularPrismLeft">
+            <transformation>
+                <translate x="-0.75" y="0" z="0" />
+                <rotate axis="y" angle="-90" />
+                <rotate axis="x" angle="-36.87" />
+                <scale x="1" y="1.25" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+        <component id="triangularPrismBot">
+            <transformation>
+                <translate x="-0.75" y="0" z="0" />
+                <rotate axis="x" angle="90" />
+                <scale x="1.5" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+        <component id="triangularPrism">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="triangularPrismBase" />
+                <componentref id="triangularPrismTop" />
+                <componentref id="triangularPrismRight" />
+                <componentref id="triangularPrismLeft" />
+                <componentref id="triangularPrismBot" />
+            </children>
+        </component>
+        
          <component id="head">
             <transformation>
                 <translate x="0" y="3" z="0" />
@@ -193,8 +271,8 @@
 
         <component id="upperBack">
             <transformation>
-                <translate x="-0.8" y="1" z="-0.2" />
-                <scale x="0.8" y="0.7" z="0.3" />
+                <translate x="-0.8" y="0.8" z="-0.3" />
+                <scale x="0.8" y="1" z="0.5" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -207,7 +285,11 @@
 
         <component id="boobies">
             <transformation>
-    
+                <translate x="0" y="0.8" z="0" />
+                <scale x="1.625" y="0.97" z="1" />
+                <translate x="0.5" y="0" z="0" />
+                <rotate axis="z" angle="-90" />
+                <rotate axis="x" angle="90" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -228,6 +310,7 @@
             <texture id="demoTexture"/>
             <children>
                 <componentref id="upperBack" />
+                <componentref id="boobies" />
             </children>
         </component>
 
@@ -254,9 +337,6 @@
             <texture id="demoTexture"/>
             <children>
                 <componentref id="laraCroft" />
-                <!-- <primitiveref id="triangle" /> -->
-                <!-- <primitiveref id="sphere" /> -->
-                <!-- <primitiveref id="cylinder" />  -->
             </children>
         </component>
     </components>

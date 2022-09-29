@@ -54,10 +54,11 @@ export class MySphere extends CGFobject {
 						idx + this.stacks + 2, idx + 1, idx,
 					);
 				}
+                // TODO review normals of sphere and torus
                 this.normals.push(
-                    stackSin * sliceCos,
-                    stackSin * sliceSin,
-                    stackCos,
+                    -stackSin * sliceCos,
+                    -stackSin * sliceSin,
+                    -stackCos,
                 );
                 this.texCoords.push(
                     curSlice / this.slices,
