@@ -127,6 +127,7 @@ export class XMLscene extends CGFscene {
         // Update Cameras (TODO: Currently just 1)
         this.camera =
             this.graph.viewsParser.views[this.graph.viewsParser.defaultViewId];
+        this.interface.setActiveCamera(this.camera);
 
         this.gl.clearColor(
             this.graph.background[0],

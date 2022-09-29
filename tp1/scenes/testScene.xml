@@ -2,24 +2,31 @@
     <scene root="demoRoot" axis_length="5"/>
 
     <views default="defaultCamera">
-        <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="30" y="15" z="30" />
+        <perspective id="defaultCamera" near="0.1" far="50" angle="30">
+            <from x="20" y="15" z="20" />
             <to x="0" y="-2" z="0" />
         </perspective>
+
         <perspective id="camera2" near="0.1" far="500" angle="45">
             <from x="30" y="15" z="30" />
             <to x="0" y="-2" z="0" />
         </perspective>
+
+        <!-- <ortho id="orthoCam" near="0.1" far="500" left="0" right="5" top="5" bottom="0" >
+            <from x="30" y="15" z="30" />
+            <to x="0" y="-2" z="0" />
+        </ortho> -->
+
     </views>
 
     <ambient>
-        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
         <background r="0.0" g="0.0" b="0.0" a="1.0" />
     </ambient>
 
     <lights>
         <omni id="demoLight" enabled="1">
-            <location x="9.8" y="11.9" z="10" w="1.0" />
+            <location x="9.8" y="5" z="5" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -72,29 +79,33 @@
         <primitive id="cylinder">
             <cylinder base="1" top="1" height="2" slices="20" stacks="20" />
         </primitive>
+
+        <primitive id="prismPrimitive">
+            <cylinder base="1" top="1" height="2" slices="4" stacks="20" />
+        </primitive>
     </primitives>
 
     <components>
-        <component id="component1">
+        <!-- Custom Shapes -->
+        <component id="prismCylinder">
             <transformation>
-                <translate x="3" y="-1" z="1" />
-                <scale x="1" y="1" z="1" />
-                <rotate angle="50" axis="z" />
+                <rotate axis="y" angle="90" />
+                <rotate axis="z" angle="45" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="torus" />
+                <primitiveref id="prismPrimitive" />
             </children>
         </component>
 
-        <component id="component2">
+        <component id="prismBase">
             <transformation>
-                <translate x="3" y="4" z="3" />
-                <scale x="2" y="1" z="2" />
-                <rotate angle="30" axis="x" />
+                <scale x="1" y="1.414" z="1.414" />
+                <translate x="0" y="-0.5" z="-0.5" />
+                <rotate axis="y" angle="-90" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -102,6 +113,106 @@
             <texture id="demoTexture"/>
             <children>
                 <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+         <component id="prismTop">
+            <transformation>
+                <scale x="1" y="1.42" z="1.414" />
+                <translate x="2" y="-0.5" z="0.5" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+        <component id="prism">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="prismCylinder" />
+                <componentref id="prismBase" />
+                <componentref id="prismTop" />
+            </children>
+        </component>
+
+
+         <component id="head">
+            <transformation>
+                <translate x="0" y="3" z="0" />
+                <scale x="0.7" y="1" z="0.8" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+        </component>
+
+        <component id="neck">
+            <transformation>
+                <translate x="0" y="2.1" z="0" />
+                <scale x="0.25" y="0.3" z="0.25" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="cylinder" />
+            </children>
+        </component>
+
+        <component id="upperBack">
+            <transformation>
+                <translate x="-0.8" y="1" z="-0.2" />
+                <scale x="0.8" y="0.7" z="0.3" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="prism" />
+            </children>
+        </component>
+
+        <component id="torso">
+            <transformation>
+                
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="upperBack" />
+            </children>
+        </component>
+
+        <component id="laraCroft">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="head" />
+                <componentref id="neck" />
+                <componentref id="torso" />
             </children>
         </component>
 
@@ -113,11 +224,10 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <componentref id="component2" />
-                <componentref id="component1" />
+                <componentref id="laraCroft" />
                 <!-- <primitiveref id="triangle" /> -->
                 <!-- <primitiveref id="sphere" /> -->
-                <primitiveref id="cylinder" /> 
+                <!-- <primitiveref id="cylinder" />  -->
             </children>
         </component>
     </components>
