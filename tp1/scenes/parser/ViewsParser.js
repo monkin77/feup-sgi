@@ -1,19 +1,20 @@
 import { CGFcamera, CGFcameraOrtho } from "../../../lib/CGF.js";
+import { Parser } from "./Parser.js";
 import { DEGREE_TO_RAD, onXMLMinorError, parseCoordinates3D } from "./utils.js";
 
 /**
  * TODO: Add cameras to the scene in the onGraphLoaded method of XMLScene
  * TODO: Extract common code of the Parsers to a parent parser class
  */
-export class ViewsParser {
+export class ViewsParser extends Parser {
     /**
      * Constructor for the ViewsParser object.
      * @param {CGF xml Reader} xmlReader
      * @param {view block element} viewsNode
      */
     constructor(xmlReader, viewsNode) {
+        super();
         this._views = {};
-        this._reports = []; // Keeps track of parsing errors
 
         this.parse(xmlReader, viewsNode);
     }
@@ -26,14 +27,14 @@ export class ViewsParser {
     parse(xmlReader, viewsNode) {
         this.defaultViewId = xmlReader.getString(viewsNode, "default", false);
         if (this.defaultViewId == null) {
-            this.addReport("<views> block is missing the 'default' property");
+            this.addReport(
+                parserId,
+                "<views> block is missing the 'default' property"
+            );
             return;
         }
 
         const children = viewsNode.children;
-
-        this.ambient = [];
-        this.background = [];
 
         let err;
         for (const child of children) {
@@ -42,13 +43,13 @@ export class ViewsParser {
                     if (
                         (err = this.parsePerspective(xmlReader, child)) != null
                     ) {
-                        this.addReport(err);
+                        this.addReport(parserId, err);
                         return;
                     }
                     break;
                 case "ortho":
                     if ((err = this.parseOrtho(xmlReader, child)) != null) {
-                        this.addReport(err);
+                        this.addReport(parserId, err);
                         return;
                     }
                     break;
@@ -61,6 +62,7 @@ export class ViewsParser {
 
         if (Object.keys(this._views).length == 0) {
             this.addReport(
+                parserId,
                 "There needs to be at least one view (perspective or ortho)"
             );
             return;
@@ -78,6 +80,8 @@ export class ViewsParser {
     parsePerspective = (xmlReader, perspectiveNode) => {
         const camId = xmlReader.getString(perspectiveNode, "id", false);
         if (camId == null) return "no 'id' defined for perspective";
+        if (camId in this._views)
+            return `ID must be unique for each perspective (conflict: ID = ${camId})`;
 
         const near = xmlReader.getFloat(perspectiveNode, "near", false);
         if (near == null) return "no 'near' defined for perspective";
@@ -196,20 +200,6 @@ export class ViewsParser {
         );
         return null;
     };
-
-    addReport = (text) => {
-        this._reports.push(`[${parserId}] ${text}`);
-    };
-
-    /**
-     *
-     * @returns true if the parser has reports, false otherwise
-     */
-    hasReports = () => this._reports.length > 0;
-
-    get reports() {
-        return this._reports;
-    }
 
     get views() {
         return this._views;

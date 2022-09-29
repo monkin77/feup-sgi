@@ -6,6 +6,10 @@
             <from x="30" y="15" z="30" />
             <to x="0" y="-2" z="0" />
         </perspective>
+        <perspective id="camera2" near="0.1" far="500" angle="45">
+            <from x="30" y="15" z="30" />
+            <to x="0" y="-2" z="0" />
+        </perspective>
     </views>
 
     <ambient>
@@ -41,19 +45,29 @@
             <rotate axis="x" angle="-45" />
             <rotate axis="z" angle="-45" />
         </transformation>
+        <transformation id="transform2">
+            <scale x="5" y="1" z="5" />
+            <rotate axis="x" angle="-45" />
+            <translate x="2" y="-1" z="1" />
+        </transformation>
     </transformations>
 
     <primitives>
         <primitive id="demoTorus">
             <torus inner="1" outer="5" slices="20" loops="50" />
         </primitive>
+
+        <primitive id="demoRectangle">
+            <rectangle x1="1" y1="1" x2="2" y2="2" />
+        </primitive>
     </primitives>
 
     <components>
-        <component id="demoRoot">
+        <component id="component1">
             <transformation>
-                <translate x="0" y="0" z="1" />
-                <scale x="2" y="1" z="1" />
+                <translate x="3" y="-1" z="1" />
+                <scale x="1" y="1" z="1" />
+                <rotate angle="50" axis="z" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -61,6 +75,34 @@
             <texture id="demoTexture"/>
             <children>
                 <primitiveref id="demoTorus" />
+            </children>
+        </component>
+
+        <component id="component2">
+            <transformation>
+                <translate x="3" y="4" z="3" />
+                <scale x="2" y="1" z="2" />
+                <rotate angle="30" axis="x" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoRectangle" />
+            </children>
+        </component>
+
+        <component id="root">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="component2" />
+                <componentref id="component1" />
             </children>
         </component>
     </components>

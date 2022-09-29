@@ -1,9 +1,11 @@
-import { CGFXMLreader } from '../lib/CGF.js';
-import { MyRectangle } from './primitives/MyRectangle.js';
-import { MyCylinder } from './primitives/MyCylinder.js';
-import { MyTriangle } from './primitives/MyTriangle.js';
-import { MySphere } from './primitives/MySphere.js';
-import { MyTorus } from './primitives/MyTorus.js';
+import { CGFXMLreader } from "../lib/CGF.js";
+import { MyRectangle } from "./primitives/MyRectangle.js";
+import { MyCylinder } from "./primitives/MyCylinder.js";
+import { MyTriangle } from "./primitives/MyTriangle.js";
+import { MySphere } from "./primitives/MySphere.js";
+import { MyTorus } from "./primitives/MyTorus.js";
+import { ComponentsParser } from "./scenes/parser/ComponentsParser.js";
+import { TransformationsParser } from "./scenes/parser/TranformationsParser.js";
 import { ViewsParser } from "./scenes/parser/ViewsParser.js";
 
 // Order of the groups in the XML document.
@@ -228,11 +230,13 @@ export class MySceneGraph {
     /**
      * Parses the <views> block.
      * @param {view block element} viewsNode
+     * @returns null upon success, or an error message upon failure
      */
     parseView(viewsNode) {
         this.viewsParser = new ViewsParser(this.reader, viewsNode);
         if (this.viewsParser.hasReports()) return this.viewsParser.reports[0];
 
+        this.log("Parsed Views");
         return null;
     }
 
@@ -272,6 +276,7 @@ export class MySceneGraph {
      * @param {lights block element} lightsNode
      */
     parseLights(lightsNode) {
+        // TO DO: CONFIRM LIGHTS ARE BEING PARSED CORRECTLY
         var children = lightsNode.children;
 
         this.lights = [];
@@ -472,70 +477,12 @@ export class MySceneGraph {
      * @param {transformations block element} transformationsNode
      */
     parseTransformations(transformationsNode) {
-        var children = transformationsNode.children;
-
-        this.transformations = [];
-
-        var grandChildren = [];
-
-        // Any number of transformations.
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].nodeName != "transformation") {
-                this.onXMLMinorError(
-                    "unknown tag <" + children[i].nodeName + ">"
-                );
-                continue;
-            }
-
-            // Get id of the current transformation.
-            var transformationID = this.reader.getString(children[i], "id", false);
-            if (transformationID == null)
-                return "no ID defined for transformation";
-
-            // Checks for repeated IDs.
-            if (this.transformations[transformationID] != null)
-                return (
-                    "ID must be unique for each transformation (conflict: ID = " +
-                    transformationID +
-                    ")"
-                );
-
-            grandChildren = children[i].children;
-            // Specifications for the current transformation.
-
-            var transfMatrix = mat4.create();
-
-            for (var j = 0; j < grandChildren.length; j++) {
-                switch (grandChildren[j].nodeName) {
-                    case "translate":
-                        var coordinates = this.parseCoordinates3D(
-                            grandChildren[j],
-                            "translate transformation for ID " +
-                            transformationID
-                        );
-                        if (!Array.isArray(coordinates)) return coordinates;
-
-                        transfMatrix = mat4.translate(
-                            transfMatrix,
-                            transfMatrix,
-                            coordinates
-                        );
-                        break;
-                    case "scale":
-                        this.onXMLMinorError(
-                            "To do: Parse scale transformations."
-                        );
-                        break;
-                    case "rotate":
-                        // angle
-                        this.onXMLMinorError(
-                            "To do: Parse rotate transformations."
-                        );
-                        break;
-                }
-            }
-            this.transformations[transformationID] = transfMatrix;
-        }
+        this.transformationsParser = new TransformationsParser(
+            this.reader,
+            transformationsNode
+        );
+        if (this.transformationsParser.hasReports())
+            return this.transformationsParser.reports[0];
 
         this.log("Parsed transformations");
         return null;
@@ -634,7 +581,11 @@ export class MySceneGraph {
                 this.primitives[primitiveId] = rect;
             } else if (primitiveType == "cylinder") {
                 // base
-                var base = this.reader.getFloat(grandChildren[0], "base", false);
+                var base = this.reader.getFloat(
+                    grandChildren[0],
+                    "base",
+                    false
+                );
                 if (!(base != null && !isNaN(base)))
                     return (
                         "unable to parse base of the primitive coordinates for ID = " +
@@ -650,7 +601,11 @@ export class MySceneGraph {
                     );
 
                 // height
-                var height = this.reader.getFloat(grandChildren[0], "height", false);
+                var height = this.reader.getFloat(
+                    grandChildren[0],
+                    "height",
+                    false
+                );
                 if (!(height != null && !isNaN(height)))
                     return (
                         "unable to parse height of the primitive coordinates for ID = " +
@@ -658,7 +613,11 @@ export class MySceneGraph {
                     );
 
                 // slices
-                var slices = this.reader.getFloat(grandChildren[0], "slices", false);
+                var slices = this.reader.getFloat(
+                    grandChildren[0],
+                    "slices",
+                    false
+                );
                 if (!(slices != null && !isNaN(slices)))
                     return (
                         "unable to parse slices of the primitive coordinates for ID = " +
@@ -666,7 +625,11 @@ export class MySceneGraph {
                     );
 
                 // stacks
-                var stacks = this.reader.getFloat(grandChildren[0], "stacks", false);
+                var stacks = this.reader.getFloat(
+                    grandChildren[0],
+                    "stacks",
+                    false
+                );
                 if (!(stacks != null && !isNaN(stacks)))
                     return (
                         "unable to parse stacks of the primitive coordinates for ID = " +
@@ -774,7 +737,11 @@ export class MySceneGraph {
                 this.primitives[primitiveId] = tri;
             } else if (primitiveType == "sphere") {
                 // radius
-                var radius = this.reader.getFloat(grandChildren[0], "radius", false);
+                var radius = this.reader.getFloat(
+                    grandChildren[0],
+                    "radius",
+                    false
+                );
                 if (!(radius != null && !isNaN(radius)))
                     return (
                         "unable to parse radius of the primitive coordinates for ID = " +
@@ -782,7 +749,11 @@ export class MySceneGraph {
                     );
 
                 // slices
-                var slices = this.reader.getFloat(grandChildren[0], "slices", false);
+                var slices = this.reader.getFloat(
+                    grandChildren[0],
+                    "slices",
+                    false
+                );
                 if (!(slices != null && !isNaN(slices)))
                     return (
                         "unable to parse slices of the primitive coordinates for ID = " +
@@ -790,7 +761,11 @@ export class MySceneGraph {
                     );
 
                 // stacks
-                var stacks = this.reader.getFloat(grandChildren[0], "stacks", false);
+                var stacks = this.reader.getFloat(
+                    grandChildren[0],
+                    "stacks",
+                    false
+                );
                 if (!(stacks != null && !isNaN(stacks)))
                     return (
                         "unable to parse stacks of the primitive coordinates for ID = " +
@@ -808,7 +783,11 @@ export class MySceneGraph {
                 this.primitives[primitiveId] = sph;
             } else if (primitiveType == "torus") {
                 // inner
-                var inner = this.reader.getFloat(grandChildren[0], "inner", false);
+                var inner = this.reader.getFloat(
+                    grandChildren[0],
+                    "inner",
+                    false
+                );
                 if (!(inner != null && !isNaN(inner)))
                     return (
                         "unable to parse inner of the primitive coordinates for ID = " +
@@ -816,7 +795,11 @@ export class MySceneGraph {
                     );
 
                 // outer
-                var outer = this.reader.getFloat(grandChildren[0], "outer", false);
+                var outer = this.reader.getFloat(
+                    grandChildren[0],
+                    "outer",
+                    false
+                );
                 if (!(outer != null && !isNaN(outer)))
                     return (
                         "unable to parse outer of the primitive coordinates for ID = " +
@@ -824,7 +807,11 @@ export class MySceneGraph {
                     );
 
                 // slices
-                var slices = this.reader.getFloat(grandChildren[0], "slices", false);
+                var slices = this.reader.getFloat(
+                    grandChildren[0],
+                    "slices",
+                    false
+                );
                 if (!(slices != null && !isNaN(slices)))
                     return (
                         "unable to parse slices of the primitive coordinates for ID = " +
@@ -832,7 +819,11 @@ export class MySceneGraph {
                     );
 
                 // loops
-                var loops = this.reader.getFloat(grandChildren[0], "loops", false);
+                var loops = this.reader.getFloat(
+                    grandChildren[0],
+                    "loops",
+                    false
+                );
                 if (!(loops != null && !isNaN(loops)))
                     return (
                         "unable to parse loops of the primitive coordinates for ID = " +
@@ -863,56 +854,17 @@ export class MySceneGraph {
      * @param {components block element} componentsNode
      */
     parseComponents(componentsNode) {
-        var children = componentsNode.children;
+        this.componentsParser = new ComponentsParser(
+            this.reader,
+            componentsNode,
+            this.transformationsParser.transformations, [], [],
+            this.primitives
+        );
+        if (this.componentsParser.hasReports())
+            return this.componentsParser.reports[0];
 
-        this.components = [];
-
-        var grandChildren = [];
-        var grandgrandChildren = [];
-        var nodeNames = [];
-
-        // Any number of components.
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].nodeName != "component") {
-                this.onXMLMinorError(
-                    "unknown tag <" + children[i].nodeName + ">"
-                );
-                continue;
-            }
-
-            // Get id of the current component.
-            var componentID = this.reader.getString(children[i], "id", false);
-            if (componentID == null) return "no ID defined for componentID";
-
-            // Checks for repeated IDs.
-            if (this.components[componentID] != null)
-                return (
-                    "ID must be unique for each component (conflict: ID = " +
-                    componentID +
-                    ")"
-                );
-
-            grandChildren = children[i].children;
-
-            nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++) {
-                nodeNames.push(grandChildren[j].nodeName);
-            }
-
-            var transformationIndex = nodeNames.indexOf("transformation");
-            var materialsIndex = nodeNames.indexOf("materials");
-            var textureIndex = nodeNames.indexOf("texture");
-            var childrenIndex = nodeNames.indexOf("children");
-
-            this.onXMLMinorError("To do: Parse components.");
-            // Transformations
-
-            // Materials
-
-            // Texture
-
-            // Children
-        }
+        console.log("Parsed Components");
+        return null;
     }
 
     /**
@@ -1029,8 +981,43 @@ export class MySceneGraph {
      */
     displayScene() {
         //To do: Create display loop for transversing the scene graph
-
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives["demoTorus"].display();
+        // this.primitives["demoTorus"].display();
+        // this.primitives["demoRectangle"].display();
+
+        /* 
+        This alternative is to draw all components
+        for (const component of Object.values(
+                this.componentsParser.components
+            )) {
+            this.drawComponent(component);
+        } */
+
+        // Draw components inside the root component
+        this.drawComponent(this.componentsParser.components["root"]);
+    }
+
+    drawComponent(component) {
+        this.scene.pushMatrix();
+
+        if (component.hasTransformation()) {
+            this.scene.multMatrix(
+                this.transformationsParser.transformations[
+                    component.transformation
+                ]
+            );
+        }
+
+        for (const primitive of component.primitives) {
+            this.primitives[primitive].display();
+        }
+
+        for (const childComponent of component.components) {
+            this.drawComponent(
+                this.componentsParser.components[childComponent]
+            );
+        }
+
+        this.scene.popMatrix();
     }
 }
