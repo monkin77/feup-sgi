@@ -84,8 +84,13 @@
             <cylinder base="1" top="1" height="2" slices="20" stacks="20" />
         </primitive>
 
+        <!-- TODO Adjust heights -->
         <primitive id="prismPrimitive">
             <cylinder base="1" top="1" height="2" slices="4" stacks="20" />
+        </primitive>
+
+        <primitive id="trapezium">
+            <cylinder base="1" top="0.75" height="1" slices="4" stacks="20" />
         </primitive>
     </primitives>
 
@@ -300,6 +305,22 @@
             </children>
         </component>
 
+        <component id="waist">
+            <transformation>
+                <translate y="0.1" x="0" z="-0.3" />
+                <scale x="1.1" y="0.7" z="0.5" />
+                <rotate axis="y" angle="45" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="trapezium" />
+            </children>
+        </component>
+
         <component id="torso">
             <transformation>
                 
@@ -311,6 +332,7 @@
             <children>
                 <componentref id="upperBack" />
                 <componentref id="boobies" />
+                <componentref id="waist" />
             </children>
         </component>
 
