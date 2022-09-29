@@ -87,6 +87,7 @@
 
     <components>
         <!-- Custom Shapes -->
+        <!-- Quadrangular Prism -->
         <component id="prismCylinder">
             <transformation>
                 <rotate axis="y" angle="90" />
@@ -101,7 +102,7 @@
             </children>
         </component>
 
-        <component id="prismBase">
+        <component id="quadrangularPrismBase">
             <transformation>
                 <scale x="1" y="1.414" z="1.414" />
                 <translate x="0" y="-0.5" z="-0.5" />
@@ -116,7 +117,7 @@
             </children>
         </component>
 
-         <component id="prismTop">
+         <component id="quadrangularPrismTop">
             <transformation>
                 <scale x="1" y="1.42" z="1.414" />
                 <translate x="2" y="-0.5" z="0.5" />
@@ -131,7 +132,7 @@
             </children>
         </component>
 
-        <component id="prism">
+        <component id="quadrangularPrism">
             <transformation>
             </transformation>
             <materials>
@@ -140,10 +141,25 @@
             <texture id="demoTexture"/>
             <children>
                 <componentref id="prismCylinder" />
-                <componentref id="prismBase" />
-                <componentref id="prismTop" />
+                <componentref id="quadrangularPrismBase" />
+                <componentref id="quadrangularPrismTop" />
             </children>
         </component>
+
+        <!--  Triangular Prism  -->
+        <component id="triangularPrism">
+            <transformation>
+              
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="prismPrimitive" />
+            </children>
+        </component>
+
 
 
          <component id="head">
@@ -185,7 +201,20 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <componentref id="prism" />
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="boobies">
+            <transformation>
+    
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="triangularPrism" />
             </children>
         </component>
 
