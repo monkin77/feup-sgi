@@ -365,6 +365,64 @@
             </children>
         </component>
 
+        <component id="leftWall">
+            <transformation>
+                <translate x="-5" y="-5" z="5" />
+                <scale x="10" y="10" z="10" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+         <component id="rightWall">
+            <transformation>
+                <translate x="-5" y="-5" z="-5" />
+                <scale x="10" y="10" z="10" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+        <component id="floor">
+            <transformation>
+                <translate x="-5" y="-5" z="5" />
+                <scale x="10" y="10" z="10" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+        <component id="background">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="leftWall" />
+                <componentref id="rightWall" />
+                <componentref id="floor" />
+            </children>
+        </component>
+
         <component id="root">
             <transformation>
             </transformation>
@@ -374,6 +432,7 @@
             <texture id="demoTexture"/>
             <children>
                 <componentref id="laraCroft" />
+                <componentref id="background" />
             </children>
         </component>
     </components>
