@@ -966,10 +966,13 @@ export class MySceneGraph {
         }
 
         // TODO: Change this afterwards to cycle materials
-        const appearenceId =
+        let appearenceId =
             component.materials.length > 0 ?
             component.materials[0] :
             prevAppearenceId;
+        if (appearenceId == "inherit") {
+            appearenceId = prevAppearenceId;
+        }
 
         if (appearenceId) {
             const appearance = this.materialsParser.materials[appearenceId];
