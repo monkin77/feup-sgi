@@ -7,6 +7,9 @@ import { MyTorus } from "./primitives/MyTorus.js";
 import { ComponentsParser } from "./scenes/parser/ComponentsParser.js";
 import { TransformationsParser } from "./scenes/parser/TranformationsParser.js";
 import { ViewsParser } from "./scenes/parser/ViewsParser.js";
+import { parseColor } from "./scenes/parser/utils.js";
+import { MaterialsParser } from "./scenes/parser/MaterialsParser.js";
+import { Component } from "./scenes/model/Component.js";
 
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
@@ -258,11 +261,15 @@ export class MySceneGraph {
         var ambientIndex = nodeNames.indexOf("ambient");
         var backgroundIndex = nodeNames.indexOf("background");
 
-        var color = this.parseColor(children[ambientIndex], "ambient");
+        var color = parseColor(this.reader, children[ambientIndex], "ambient");
         if (!Array.isArray(color)) return color;
         else this.ambient = color;
 
-        color = this.parseColor(children[backgroundIndex], "background");
+        color = parseColor(
+            this.reader,
+            children[backgroundIndex],
+            "background"
+        );
         if (!Array.isArray(color)) return color;
         else this.background = color;
 
@@ -354,7 +361,8 @@ export class MySceneGraph {
                             "light position for ID" + lightId
                         );
                     else
-                        var aux = this.parseColor(
+                        var aux = parseColor(
+                            this.reader,
                             grandChildren[attributeIndex],
                             attributeNames[j] + " illumination for ID" + lightId
                         );
@@ -436,39 +444,15 @@ export class MySceneGraph {
      * @param {materials block element} materialsNode
      */
     parseMaterials(materialsNode) {
-        var children = materialsNode.children;
+        this.materialsParser = new MaterialsParser(
+            this.scene,
+            this.reader,
+            materialsNode
+        );
+        if (this.materialsParser.hasReports())
+            return this.materialsParser.reports[0];
 
-        this.materials = [];
-
-        var grandChildren = [];
-        var nodeNames = [];
-
-        // Any number of materials.
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].nodeName != "material") {
-                this.onXMLMinorError(
-                    "unknown tag <" + children[i].nodeName + ">"
-                );
-                continue;
-            }
-
-            // Get id of the current material.
-            var materialID = this.reader.getString(children[i], "id", false);
-            if (materialID == null) return "no ID defined for material";
-
-            // Checks for repeated IDs.
-            if (this.materials[materialID] != null)
-                return (
-                    "ID must be unique for each light (conflict: ID = " +
-                    materialID +
-                    ")"
-                );
-
-            //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
-        }
-
-        //this.log("Parsed materials");
+        this.log("Parsed Materials");
         return null;
     }
 
@@ -857,7 +841,8 @@ export class MySceneGraph {
         this.componentsParser = new ComponentsParser(
             this.reader,
             componentsNode,
-            this.transformationsParser.transformations, [], [],
+            this.transformationsParser.transformations,
+            this.materialsParser.materials, [],
             this.primitives
         );
         if (this.componentsParser.hasReports())
@@ -918,39 +903,6 @@ export class MySceneGraph {
         return position;
     }
 
-    /**
-     * Parse the color components from a node
-     * @param {block element} node
-     * @param {message to be displayed in case of error} messageError
-     */
-    parseColor(node, messageError) {
-        var color = [];
-
-        // R
-        var r = this.reader.getFloat(node, "r", false);
-        if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
-            return "unable to parse R component of the " + messageError;
-
-        // G
-        var g = this.reader.getFloat(node, "g", false);
-        if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
-            return "unable to parse G component of the " + messageError;
-
-        // B
-        var b = this.reader.getFloat(node, "b", false);
-        if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
-            return "unable to parse B component of the " + messageError;
-
-        // A
-        var a = this.reader.getFloat(node, "a", false);
-        if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
-            return "unable to parse A component of the " + messageError;
-
-        color.push(...[r, g, b, a]);
-
-        return color;
-    }
-
     /*
      * Callback to be executed on any read error, showing an error on the console.
      * @param {string} message
@@ -994,10 +946,15 @@ export class MySceneGraph {
         } */
 
         // Draw components inside the root component
-        this.drawComponent(this.componentsParser.components["root"]);
+        this.drawComponent(this.componentsParser.components["root"], null);
     }
 
-    drawComponent(component) {
+    /**
+     *
+     * @param {Component} component
+     * @param {string | null} prevAppearenceId
+     */
+    drawComponent(component, prevAppearenceId = null) {
         this.scene.pushMatrix();
 
         if (component.hasTransformation()) {
@@ -1008,13 +965,25 @@ export class MySceneGraph {
             );
         }
 
+        // TODO: Change this afterwards to cycle materials
+        const appearenceId =
+            component.materials.length > 0 ?
+            component.materials[0] :
+            prevAppearenceId;
+
+        if (appearenceId) {
+            const appearance = this.materialsParser.materials[appearenceId];
+            appearance.apply();
+        }
+
         for (const primitive of component.primitives) {
             this.primitives[primitive].display();
         }
 
         for (const childComponent of component.components) {
             this.drawComponent(
-                this.componentsParser.components[childComponent]
+                this.componentsParser.components[childComponent],
+                appearenceId
             );
         }
 

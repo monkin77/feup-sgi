@@ -1,6 +1,5 @@
-import { CGFscene } from '../lib/CGF.js';
-import { CGFaxis, CGFcamera } from '../lib/CGF.js';
-
+import { CGFscene } from "../lib/CGF.js";
+import { CGFaxis, CGFcamera } from "../lib/CGF.js";
 
 /**
  * XMLscene class, representing the scene that is to be rendered.

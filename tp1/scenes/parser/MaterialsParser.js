@@ -1,5 +1,6 @@
+import { CGFappearance } from "../../../lib/CGF.js";
 import { Parser } from "./Parser.js";
-import { onXMLMinorError } from "./utils.js";
+import { onXMLMinorError, parseColor } from "./utils.js";
 
 export class MaterialsParser extends Parser {
     /**
@@ -7,17 +8,18 @@ export class MaterialsParser extends Parser {
      * @param {CGF xml Reader} xmlReader
      * @param {materials block element} materialsNode
      */
-    constructor(xmlReader, materialsNode) {
+    constructor(scene, xmlReader, materialsNode) {
         super();
+        this._scene = scene;
         this._materials = {};
 
         this.parse(xmlReader, materialsNode);
     }
 
     /**
-     * Parses the <transformations> block.
+     * Parses the <materials> block.
      * @param {CGF xml Reader} xmlReader
-     * @param {transformations block element} materialsNode
+     * @param {materials block element} materialsNode
      */
     parse(xmlReader, materialsNode) {
         const children = materialsNode.children;
@@ -79,6 +81,43 @@ export class MaterialsParser extends Parser {
         ambient = ambient[0];
         diffuse = diffuse[0];
         specular = specular[0];
+
+        const emissionColor = parseColor(
+            xmlReader,
+            emission,
+            `<emission> of material ${materialId}`
+        );
+        if (!Array.isArray(emissionColor)) return color;
+
+        const ambientColor = parseColor(
+            xmlReader,
+            ambient,
+            `<ambient> of material ${materialId}`
+        );
+        if (!Array.isArray(ambientColor)) return color;
+
+        const diffuseColor = parseColor(
+            xmlReader,
+            diffuse,
+            `<diffuse> of material ${materialId}`
+        );
+        if (!Array.isArray(diffuseColor)) return color;
+
+        const specularColor = parseColor(
+            xmlReader,
+            specular,
+            `<specular> of material ${materialId}`
+        );
+        if (!Array.isArray(specularColor)) return color;
+
+        const appearance = new CGFappearance(this._scene);
+        appearance.setShininess(shininess);
+        appearance.setEmission(...emissionColor);
+        appearance.setAmbient(...ambientColor);
+        appearance.setDiffuse(...diffuseColor);
+        appearance.setSpecular(...specularColor);
+
+        this._materials[materialId] = appearance;
 
         return null;
     };
