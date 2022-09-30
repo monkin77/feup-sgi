@@ -1,6 +1,5 @@
-import { CGFscene } from '../lib/CGF.js';
-import { CGFaxis, CGFcamera } from '../lib/CGF.js';
-
+import { CGFscene } from "../lib/CGF.js";
+import { CGFaxis, CGFcamera } from "../lib/CGF.js";
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -127,6 +126,7 @@ export class XMLscene extends CGFscene {
         // Update Cameras (TODO: Currently just 1)
         this.camera =
             this.graph.viewsParser.views[this.graph.viewsParser.defaultViewId];
+        this.interface.setActiveCamera(this.camera);
 
         this.gl.clearColor(
             this.graph.background[0],

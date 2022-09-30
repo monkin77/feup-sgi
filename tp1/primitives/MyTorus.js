@@ -51,8 +51,8 @@ export class MyTorus extends CGFobject {
                 // Last vertices already have indices
                 if (curSlice < this.slices && curLoop < this.loops) {
                     this.indices.push(
-                        idx + this.slices + 1, idx, idx + 1,
-                        idx + 1, idx + 2 + this.slices, idx + this.slices + 1
+                        idx + this.slices + 1, idx + 1, idx,
+                        idx + 1, idx + this.slices + 1, idx + this.slices + 2,
                     );
                 }
 

@@ -94,11 +94,9 @@ export class ComponentsParser extends Parser {
         if (materialsNode.length != 1)
             return `<materials> must be defined inside the component with id = ${componentId}`;
         materialsNode = materialsNode[0];
-        /* 
-        // TO DO: wait for materials to be implemented
         const { error: materialsErr, value: materialsList } =
         this.handleMaterials(xmlReader, materialsNode, componentId);
-        if (materialsErr) return materialsErr; */
+        if (materialsErr) return materialsErr;
 
         let textureNode = componentNode.getElementsByTagName("texture");
         if (textureNode.length != 1)
@@ -123,7 +121,8 @@ export class ComponentsParser extends Parser {
 
         this._components[componentId] = new Component(
             componentId,
-            transfID, [],
+            transfID,
+            materialsList,
             "",
             childrenValue
         );

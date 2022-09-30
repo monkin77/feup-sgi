@@ -146,3 +146,38 @@ export const calculateTransformationMatrix = (
 };
 
 export const buildComponentTransfID = (componentID) => `${componentID}-transf`;
+
+/**
+ * Parse the color components from a node
+ * @param {CGF xml Reader} xmlReader
+ * @param {block element} node
+ * @param {message to be displayed in case of error} messageError
+ * @return {array} color components if successful, an error string otherwise
+ */
+export const parseColor = (xmlReader, node, messageError) => {
+    var color = [];
+
+    // R
+    var r = xmlReader.getFloat(node, "r", false);
+    if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
+        return "unable to parse R component of the " + messageError;
+
+    // G
+    var g = xmlReader.getFloat(node, "g", false);
+    if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
+        return "unable to parse G component of the " + messageError;
+
+    // B
+    var b = xmlReader.getFloat(node, "b", false);
+    if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
+        return "unable to parse B component of the " + messageError;
+
+    // A
+    var a = xmlReader.getFloat(node, "a", false);
+    if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
+        return "unable to parse A component of the " + messageError;
+
+    color.push(...[r, g, b, a]);
+
+    return color;
+};
