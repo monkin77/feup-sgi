@@ -320,7 +320,21 @@
                 <primitiveref id="trapezium" />
             </children>
         </component>
-
+        
+        <component id="lowerBelly">
+            <transformation>
+                <translate x="-0.6" y="-0.7" z="-0.3" />
+                <scale x="0.6" y="0.35" z="0.35" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+        
         <component id="torso">
             <transformation>
                 
@@ -333,6 +347,7 @@
                 <componentref id="upperBack" />
                 <componentref id="boobies" />
                 <componentref id="waist" />
+                <componentref id="lowerBelly" />
             </children>
         </component>
 
