@@ -50,15 +50,14 @@ export class MySphere extends CGFobject {
                 // Last vertices already have indices
 				if (curSlice < this.slices && curStack < this.stacks) {
 					this.indices.push(
-						idx, idx + this.stacks + 1, idx + this.stacks + 2,
-						idx + this.stacks + 2, idx + 1, idx,
+						idx, idx + this.stacks + 2, idx + this.stacks + 1,
+						idx, idx + 1, idx + this.stacks + 2,
 					);
 				}
-                // TODO review normals of sphere and torus
                 this.normals.push(
-                    -stackSin * sliceCos,
-                    -stackSin * sliceSin,
-                    -stackCos,
+                    stackSin * sliceCos,
+                    stackSin * sliceSin,
+                    stackCos,
                 );
                 this.texCoords.push(
                     curSlice / this.slices,
