@@ -61,7 +61,7 @@
 
     <primitives>
         <primitive id="torus">
-            <torus inner="1" outer="5" slices="20" loops="50" />
+            <torus inner="0.4" outer="1" slices="20" loops="50" />
         </primitive>
 
         <primitive id="rectangle">
@@ -366,6 +366,69 @@
             </children>
         </component>
 
+        <!-- 1.2/1.6 x 0.2 x 0.4 -->
+        <component id="belt">
+            <transformation>
+                <translate x="0.6" y="-0.5" z="0" />
+                <scale x="1.6" y="0.2" z="0.4" />
+                <rotate axis="y" angle="45" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="trapezium" />
+            </children>
+        </component>
+
+        <!-- 1.2 x 0.6 x 0.4 -->
+        <component id="innerHip">
+            <transformation>
+                <translate x="0" y="-0.8" z="0" />
+                <scale x="0.6" y="0.6" z="0.4" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <!-- 1.05 x 1.26 x 0.12 -->
+        <component id="outerHip">
+            <transformation>
+                <translate x="0.6" y="-0.8" z="0" />
+                <scale x="0.75" y="0.9" z="0.3" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="torus" />
+            </children>
+        </component>
+
+        <!-- 1.05 x 1.26 x 1.52 -->
+        <component id="hip">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="belt" />
+                <componentref id="innerHip" />
+                <componentref id="outerHip" />
+            </children>
+        </component>
+
         <!-- incomplete -> 1.2 x 3.15 x 0.4 -->
         <component id="laraCroft">
             <transformation>
@@ -378,6 +441,7 @@
                 <componentref id="head" />
                 <componentref id="neck" />
                 <componentref id="torso" />
+                <componentref id="hip" />
             </children>
         </component>
 
