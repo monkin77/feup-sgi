@@ -73,7 +73,7 @@
         </primitive>
 
         <primitive id="isoscelesTriangle">
-            <triangle x1="-0.75" y1="0" z1="0" x2="0.75" y2="0" z2="0" x3="0" y3="1" z3="0" />
+            <triangle x1="-0.5" y1="0" z1="0" x2="0.5" y2="0" z2="0" x3="0" y3="0.75" z3="0" />
         </primitive>
 
         <primitive id="sphere">
@@ -84,19 +84,23 @@
             <cylinder base="1" top="1" height="2" slices="20" stacks="20" />
         </primitive>
 
-        <!-- TODO Adjust heights -->
+        <!-- 2.0 x 1.0 x 1.0 -->
         <primitive id="prismPrimitive">
-            <cylinder base="1" top="1" height="2" slices="4" stacks="20" />
+            <cylinder base="0.707" top="0.707" height="2" slices="4" stacks="20" />
         </primitive>
 
+        <!-- 1.0 x 1.0 x 0.75 -->
         <primitive id="trapezium">
-            <cylinder base="1" top="0.75" height="1" slices="4" stacks="20" />
+            <cylinder base="0.707" top="0.53" height="1" slices="4" stacks="20" />
         </primitive>
     </primitives>
 
     <components>
         <!-- Custom Shapes -->
+
         <!-- Quadrangular Prism -->
+
+        <!-- 2.0 x 1.0 x 1.0 -->
         <component id="prismCylinder">
             <transformation>
                 <rotate axis="y" angle="90" />
@@ -111,9 +115,9 @@
             </children>
         </component>
 
+        <!-- 1.0 x 1.0 x 0.0 -->
         <component id="quadrangularPrismBase">
             <transformation>
-                <scale x="1" y="1.414" z="1.414" />
                 <translate x="0" y="-0.5" z="-0.5" />
                 <rotate axis="y" angle="-90" />
             </transformation>
@@ -126,9 +130,9 @@
             </children>
         </component>
 
+        <!-- 1.0 x 1.0 x 0.0 -->
          <component id="quadrangularPrismTop">
             <transformation>
-                <scale x="1" y="1.42" z="1.414" />
                 <translate x="2" y="-0.5" z="0.5" />
                 <rotate axis="y" angle="90" />
             </transformation>
@@ -141,6 +145,7 @@
             </children>
         </component>
 
+        <!-- 2.0 x 1.0 x 1.0 -->
         <component id="quadrangularPrism">
             <transformation>
             </transformation>
@@ -156,6 +161,8 @@
         </component>
 
         <!--  Triangular Prism  -->
+
+        <!-- 1.0 x 0.75 x 0.0 -->
         <component id="triangularPrismBase">
             <transformation>
                 <rotate axis="y" angle="180" />
@@ -169,6 +176,7 @@
             </children>
         </component>
 
+        <!-- 1.0 x 0.75 x 0.0 -->
          <component id="triangularPrismTop">
             <transformation>
                 <translate x="0" y="0" z="1" />
@@ -182,12 +190,13 @@
             </children>
         </component>
 
+        <!-- 1.0 x 1.0 x 0.9 -->
          <component id="triangularPrismRight">
             <transformation>
-                <translate x="0.75" y="0" z="1" />
+                <translate x="0.5" y="0" z="1" />
                 <rotate axis="y" angle="90" />
-                <rotate axis="x" angle="-36.87" />
-                <scale x="1" y="1.25" z="1" />
+                <rotate axis="x" angle="-33.69" />
+                <scale x="1" y="0.9" z="1" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -198,12 +207,13 @@
             </children>
         </component>
 
+        <!-- 1.0 x 1.0 x 0.9 -->
         <component id="triangularPrismLeft">
             <transformation>
-                <translate x="-0.75" y="0" z="0" />
+                <translate x="-0.5" y="0" z="0" />
                 <rotate axis="y" angle="-90" />
-                <rotate axis="x" angle="-36.87" />
-                <scale x="1" y="1.25" z="1" />
+                <rotate axis="x" angle="-33.69" />
+                <scale x="1" y="0.9" z="1" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -214,11 +224,11 @@
             </children>
         </component>
 
+        <!-- 1.0 x 1.0 x 1.0 -->
         <component id="triangularPrismBot">
             <transformation>
-                <translate x="-0.75" y="0" z="0" />
+                <translate x="-0.5" y="0" z="0" />
                 <rotate axis="x" angle="90" />
-                <scale x="1.5" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -229,6 +239,7 @@
             </children>
         </component>
 
+        <!-- 1.0 x 1.0 x 0.75 -->
         <component id="triangularPrism">
             <transformation>
             </transformation>
@@ -244,11 +255,12 @@
                 <componentref id="triangularPrismBot" />
             </children>
         </component>
-        
+
+        <!-- 0.6 x 0.85 x 0.7-->
          <component id="head">
             <transformation>
-                <translate x="0" y="3" z="0" />
-                <scale x="0.7" y="1" z="0.8" />
+                <translate x="0.6" y="3.2" z="0" />
+                <scale x="0.6" y="0.85" z="0.7" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -259,9 +271,10 @@
             </children>
         </component>
 
+        <!-- 0.25(r) x 0.3 (h)-->
         <component id="neck">
             <transformation>
-                <translate x="0" y="2.1" z="0" />
+                <translate x="0.6" y="2.5" z="0" />
                 <scale x="0.25" y="0.3" z="0.25" />
                 <rotate axis="x" angle="90" />
             </transformation>
@@ -274,10 +287,11 @@
             </children>
         </component>
 
+        <!-- 1.6 x 1.0 x 0.4 -->
         <component id="upperBack">
             <transformation>
-                <translate x="-0.8" y="0.8" z="-0.3" />
-                <scale x="0.8" y="1" z="0.5" />
+                <translate x="-0.2" y="1.4" z="0" />
+                <scale x="0.8" y="1" z="0.4" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -288,11 +302,11 @@
             </children>
         </component>
 
+        <!-- 1.6 x 1.0 x 0.75 -->
         <component id="boobies">
             <transformation>
-                <translate x="0" y="0.8" z="0" />
-                <scale x="1.625" y="0.97" z="1" />
-                <translate x="0.5" y="0" z="0" />
+                <translate x="1.4" y="1.4" z="0.2" />
+                <scale x="1.6" y="1" z="1" />
                 <rotate axis="z" angle="-90" />
                 <rotate axis="x" angle="90" />
             </transformation>
@@ -305,10 +319,11 @@
             </children>
         </component>
 
+        <!-- 1.6/1.2 x 0.6 x 0.4 -->
         <component id="waist">
             <transformation>
-                <translate y="0.1" x="0" z="-0.3" />
-                <scale x="1.1" y="0.7" z="0.5" />
+                <translate x="0.6" y="0.9" z="0" />
+                <scale x="1.6" y="0.6" z="0.4" />
                 <rotate axis="y" angle="45" />
                 <rotate axis="x" angle="90" />
             </transformation>
@@ -320,11 +335,11 @@
                 <primitiveref id="trapezium" />
             </children>
         </component>
-        
+
+        <!-- 1.2 x 0.6 x 0.4 -->
         <component id="lowerBelly">
             <transformation>
-                <translate x="-0.6" y="-0.7" z="-0.3" />
-                <scale x="0.6" y="0.35" z="0.35" />
+                <scale x="0.6" y="0.6" z="0.4" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -334,10 +349,10 @@
                 <componentref id="quadrangularPrism" />
             </children>
         </component>
-        
+
+        <!-- 1.2 x 2.2 x 0.4 -->
         <component id="torso">
             <transformation>
-                
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -351,6 +366,7 @@
             </children>
         </component>
 
+        <!-- incomplete -> 1.2 x 3.15 x 0.4 -->
         <component id="laraCroft">
             <transformation>
             </transformation>
@@ -365,6 +381,7 @@
             </children>
         </component>
 
+        <!-- 10 x 10 x 10 -->
         <component id="leftWall">
             <transformation>
                 <translate x="-5" y="-5" z="5" />
@@ -380,6 +397,7 @@
             </children>
         </component>
 
+        <!-- 10 x 10 x 10 -->
          <component id="rightWall">
             <transformation>
                 <translate x="-5" y="-5" z="-5" />
@@ -394,6 +412,7 @@
             </children>
         </component>
 
+        <!-- 10 x 10 x 10 -->
         <component id="floor">
             <transformation>
                 <translate x="-5" y="-5" z="5" />
