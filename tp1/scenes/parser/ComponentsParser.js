@@ -1,4 +1,5 @@
 import { Component } from "../model/Component.js";
+import { Texture } from "../model/Texture.js";
 import { Parser } from "./Parser.js";
 import {
     onXMLMinorError,
@@ -102,14 +103,17 @@ export class ComponentsParser extends Parser {
         if (textureNode.length != 1)
             return `<texture> must be defined inside the component with id = ${componentId}`;
         textureNode = textureNode[0];
-        /*
-        // TO DO: wait for texture to be implemented 
         const { error: textureErr, value: textureValue } = this.handleTexture(
             xmlReader,
             textureNode,
             componentId
         );
-        if (textureErr) return textureErr; */
+        if (textureErr) return textureErr;
+        const texture = new Texture(
+            textureValue.id,
+            textureValue.lengthS,
+            textureValue.lengthT
+        );
 
         let childrenNode = componentNode.getElementsByTagName("children");
         if (childrenNode.length != 1)
@@ -123,7 +127,7 @@ export class ComponentsParser extends Parser {
             componentId,
             transfID,
             materialsList,
-            "",
+            texture,
             childrenValue
         );
 
@@ -236,26 +240,25 @@ export class ComponentsParser extends Parser {
             return {
                 error: `no 'id' defined for <texture> inside <components> of component with ID = ${componentId}`,
             };
-        if (!(textureId in this._textures) &&
-            textureId != "inherit" &&
-            textureId != "none"
-        )
+        const isCustomTexture = textureId != "inherit" && textureId != "none";
+        if (!(textureId in this._textures) && isCustomTexture)
             return {
                 error: `<texture> contains an invalid id (ID = ${textureId}) inside <components> of component with ID = ${componentId}`,
             };
 
-        const lengthS = xmlReader.getFloat(textureNode, "length_s", false);
-        if (lengthS == null)
-            return {
-                error: `no 'length_s' defined for <texture> inside <components> of component with ID = ${componentId}`,
-            };
-        const lengthT = xmlReader.getFloat(textureNode, "length_t", false);
-        if (lengthT == null)
-            return {
-                error: `no 'length_t' defined for <texture> inside <components> of component with ID = ${componentId}`,
-            };
+        let lengthS = xmlReader.getFloat(textureNode, "length_s", false);
+        let lengthT = xmlReader.getFloat(textureNode, "length_t", false);
 
-        return { value: { textureId, lengthS, lengthT } };
+        if (!isCustomTexture && (lengthS != null || lengthT != null)) {
+            return {
+                error: `length_s and length_t must not be defined if the texture is inherit or none. Component ID = ${componentId}`,
+            };
+        }
+
+        if (!lengthS) lengthS = 1;
+        if (!lengthT) lengthT = 1;
+
+        return { value: { id: textureId, lengthS, lengthT } };
     };
 
     /**
