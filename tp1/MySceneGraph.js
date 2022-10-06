@@ -1011,6 +1011,7 @@ export class MySceneGraph {
         }
 
         for (const primitive of component.primitives) {
+            this.primitives[primitive].scaleTexCoords( /*TODO: add params */ )
             this.primitives[primitive].display();
         }
 
