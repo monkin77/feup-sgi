@@ -34,7 +34,7 @@
     </lights>
 
     <textures>
-        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+        <texture id="vidral" file="scenes/images/vidral.jpg" />
         <texture id="leaves" file="scenes/images/leaves.jpg" />
     </textures>
 
@@ -491,7 +491,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="vidral" length_s="0.5" length_t="0.5" />
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -542,17 +542,33 @@
             </children>
         </component>
 
+        <!-- TOOD: Remove this component that is used to test triangle texCoords  -->
+        <component id="testTriangle">
+            <transformation>
+                <translate y="-5" x="0" z="0" />
+                <scale x="10" y="10" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="vidral" length_s="0.5" length_t="0.5" />
+            <children>
+                <primitiveref id="triangle" />
+            </children>
+        </component>
+
         <component id="root">
             <transformation>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="laraCroft" />
                 <componentref id="background" />
             </children>
         </component>
+        
     </components>
 </sxs>

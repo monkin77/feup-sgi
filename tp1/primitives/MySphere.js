@@ -8,37 +8,29 @@ import { CGFobject } from '../../lib/CGF.js';
  * @param stacks - Number of stacks along Z axis
  */
 export class MySphere extends CGFobject {
-	constructor(scene, id, radius, slices, stacks) {
-		super(scene);
-		this.radius = radius;
+    constructor(scene, id, radius, slices, stacks) {
+        super(scene);
+        this.radius = radius;
         this.slices = slices;
         this.stacks = stacks;
 
-		this.initBuffers();
-	}
+        this.initBuffers();
+    }
 
-	initBuffers() {
-		this.vertices = [];
-		this.indices = [];
-		this.normals = [];
-		this.texCoords = [];
+    initBuffers() {
+        this.vertices = [];
+        this.indices = [];
+        this.normals = [];
+        this.texCoords = [];
 
-        const sliceDelta = 2*Math.PI / this.slices;
+        const sliceDelta = 2 * Math.PI / this.slices;
         const stackDelta = Math.PI / this.stacks;
         let idx = 0;
 
-        for (   let curSlice = 0, sliceAng = 0;
-                curSlice <= this.slices;
-                curSlice++, sliceAng += sliceDelta
-            )
-        {
+        for (let curSlice = 0, sliceAng = 0; curSlice <= this.slices; curSlice++, sliceAng += sliceDelta) {
             const sliceSin = Math.sin(sliceAng);
             const sliceCos = Math.cos(sliceAng);
-            for (   let curStack = 0, stackAng = 0;
-                    curStack <= this.stacks;
-                    curStack++, stackAng += stackDelta
-                )
-            {
+            for (let curStack = 0, stackAng = 0; curStack <= this.stacks; curStack++, stackAng += stackDelta) {
                 const stackSin = Math.sin(stackAng);
                 const stackCos = Math.cos(stackAng);
 
@@ -48,12 +40,12 @@ export class MySphere extends CGFobject {
                     this.radius * stackCos,
                 );
                 // Last vertices already have indices
-				if (curSlice < this.slices && curStack < this.stacks) {
-					this.indices.push(
-						idx, idx + this.stacks + 2, idx + this.stacks + 1,
-						idx, idx + 1, idx + this.stacks + 2,
-					);
-				}
+                if (curSlice < this.slices && curStack < this.stacks) {
+                    this.indices.push(
+                        idx, idx + this.stacks + 2, idx + this.stacks + 1,
+                        idx, idx + 1, idx + this.stacks + 2,
+                    );
+                }
                 this.normals.push(
                     stackSin * sliceCos,
                     stackSin * sliceSin,
@@ -68,17 +60,26 @@ export class MySphere extends CGFobject {
             }
         }
 
-		this.primitiveType = this.scene.gl.TRIANGLES;
-		this.initGLBuffers();
-	}
+        this.primitiveType = this.scene.gl.TRIANGLES;
+        this.initGLBuffers();
+    }
 
-	/**
-	 * @method updateTexCoords
-	 * Updates the list of texture coordinates of the rectangle
-	 * @param {Array} coords - Array of texture coordinates
-	 */
-	updateTexCoords(coords) {
-		this.texCoords = [...coords];
-		this.updateTexCoordsGLBuffers();
-	}
+    /**
+     * @method updateTexCoords
+     * Updates the list of texture coordinates of the rectangle
+     * @param {Array} coords - Array of texture coordinates
+     */
+    updateTexCoords(coords) {
+        this.texCoords = [...coords];
+        this.updateTexCoordsGLBuffers();
+    }
+
+    /**
+     * @method scaleTexCoords scales the texture coordinates taking into account the initial texCoords
+     * @param {*} s 
+     * @param {*} t 
+     */
+    scaleTexCoords(s, t) {
+        return;
+    }
 }

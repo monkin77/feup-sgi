@@ -1,4 +1,4 @@
-import { CGFtexture, CGFXMLreader } from "../lib/CGF.js";
+import { CGFappearance, CGFtexture, CGFXMLreader } from "../lib/CGF.js";
 import { MyRectangle } from "./primitives/MyRectangle.js";
 import { MyCylinder } from "./primitives/MyCylinder.js";
 import { MyTriangle } from "./primitives/MyTriangle.js";
@@ -832,8 +832,6 @@ export class MySceneGraph {
                 );
 
                 this.primitives[primitiveId] = tor;
-            } else {
-                console.warn("To do: Parse other primitives.");
             }
         }
 
@@ -971,6 +969,7 @@ export class MySceneGraph {
     drawComponent(component, prevAppearenceId = null, prevTexture = null) {
         this.scene.pushMatrix();
 
+        if (!component) return;
         if (component.hasTransformation()) {
             this.scene.multMatrix(
                 this.transformationsParser.transformations[
@@ -991,8 +990,9 @@ export class MySceneGraph {
         let texture = component.texture;
         if (texture.inheritTex()) texture = prevTexture;
 
+        let appearance = null;
         if (appearenceId) {
-            const appearance = this.materialsParser.materials[appearenceId];
+            appearance = this.materialsParser.materials[appearenceId];
 
             // Apply texture
             if (texture != null) {
@@ -1006,14 +1006,20 @@ export class MySceneGraph {
                 }
             }
 
-            // TODO: UPDATE length_s and length_t
             appearance.apply();
         }
 
         for (const primitive of component.primitives) {
-            this.primitives[primitive].scaleTexCoords( /*TODO: add params */ )
+            if (texture && texture.needsScaling()) {
+                this.primitives[primitive].scaleTexCoords(texture.length_s, texture.length_t);
+            }
             this.primitives[primitive].display();
         }
+
+        // Clean the Appearance object that is being changed above
+        if (appearance) appearance.setTexture(null);
+
+        // TODO: Confirm that the scene's appearance is being reset after one is selected
 
         for (const childComponent of component.components) {
             this.drawComponent(
