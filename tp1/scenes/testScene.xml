@@ -459,11 +459,11 @@
             </children>
         </component>
 
-        <!-- 1.176 x 1.05 x 0.12 -->
+        <!-- SIZES -->
         <component id="outerHip">
             <transformation>
                 <translate x="0.6" y="-0.8" z="0" />
-                <scale x="0.7" y="0.9" z="0.3" />
+                <scale x="0.8" y="1.0" z="0.4" />
                 <rotate axis="x" angle="90" />
             </transformation>
             <materials>
@@ -475,7 +475,7 @@
             </children>
         </component>
 
-        <!-- 1.26 x 1.05 x 1.52 -->
+        <!-- SIZES -->
         <component id="hip">
             <transformation>
             </transformation>
@@ -786,10 +786,28 @@
         </component>
 
         <!-- 1.75 x 1.5 x 1.6 -->
-        <component id="foot">
+        <component id="footLeft">
             <transformation>
+                <rotate axis="z" angle="5" />
                 <rotate axis="y" angle="-90" />
-                <translate x="0" y="-10.5" z="-0.05" />
+                <translate x="0.0" y="-10.5" z="0.9" />
+            </transformation>
+            <materials>
+                <material id="bootsMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="footFace" />
+                <componentref id="footSole" />
+            </children>
+        </component>
+
+        <!-- 1.75 x 1.5 x 1.6 -->
+        <component id="footRight">
+            <transformation>
+                <rotate axis="z" angle="-5" />
+                <rotate axis="y" angle="-90" />
+                <translate x="0.0" y="-10.5" z="-0.9" />
             </transformation>
             <materials>
                 <material id="bootsMaterial" />
@@ -820,7 +838,7 @@
         </component>
 
         <!-- 1.75 x 1.5 x 10.85 -->
-        <component id="baseLeg">
+        <component id="baseLegRight">
             <transformation>
             </transformation>
             <materials>
@@ -830,14 +848,30 @@
             <children>
                 <componentref id="thigh" />
                 <componentref id="lowerLeg" />
-                <componentref id="foot" />
+                <componentref id="footRight" />
             </children>
         </component>
 
-        <!-- SIZES -->
+        <!-- 1.75 x 1.5 x 10.85 -->
+        <component id="baseLegLeft">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="skinMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="thigh" />
+                <componentref id="lowerLeg" />
+                <componentref id="footLeft" />
+            </children>
+        </component>
+
+        <!-- 0.875 x 0.75 x 5.425 -->
         <component id="legRight">
             <transformation>
-                <translate x="1.0" y="-1.1" z="0" />
+                <rotate axis="z" angle="5" />
+                <translate x="1.0" y="-1.2" z="0" />
                 <scale x="0.5" y="0.5" z="0.5" />
             </transformation>
             <materials>
@@ -845,13 +879,14 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <componentref id="baseLeg" />
+                <componentref id="baseLegRight" />
             </children>
         </component>
 
-        <!-- SIZES -->
+        <!-- 0.875 x 0.75 x 5.425 -->
         <component id="legLeft">
             <transformation>
+                <rotate axis="z" angle="-5" />
                 <translate x="0.2" y="-1.1" z="0" />
                 <scale x="0.5" y="0.5" z="0.5" />
             </transformation>
@@ -860,7 +895,7 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <componentref id="baseLeg" />
+                <componentref id="baseLegLeft" />
             </children>
         </component>
 
@@ -896,11 +931,11 @@
             </children>
         </component>
 
-        <!-- 10 x 10 x 10 -->
+        <!-- 20 x 20 x 20 -->
         <component id="leftWall">
             <transformation>
-                <translate x="-5" y="-5" z="5" />
-                <scale x="10" y="10" z="10" />
+                <translate x="-10" y="-10" z="10" />
+                <scale x="20" y="20" z="20" />
                 <rotate axis="y" angle="90" />
             </transformation>
             <materials>
@@ -912,11 +947,11 @@
             </children>
         </component>
 
-        <!-- 10 x 10 x 10 -->
+        <!-- 20 x 20 x 20 -->
          <component id="rightWall">
             <transformation>
-                <translate x="-5" y="-5" z="-5" />
-                <scale x="10" y="10" z="10" />
+                <translate x="-10" y="-10" z="-10" />
+                <scale x="20" y="20" z="20" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -930,8 +965,8 @@
         <!-- 10 x 10 x 10 -->
         <component id="floor">
             <transformation>
-                <translate x="-5" y="-5" z="5" />
-                <scale x="10" y="10" z="10" />
+                <translate x="-10" y="-10" z="10" />
+                <scale x="20" y="20" z="20" />
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
