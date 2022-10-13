@@ -79,6 +79,20 @@
             <diffuse r="0.35" g="0.35" b="0" a="1.0" />
             <specular r="0.25" g="0.25" b="0" a="1.0" />
         </material>
+
+        <material id="bootsMaterial" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.3" g="0.2" b="0.0" a="1.0" />
+            <diffuse r="0.3" g="0.2" b="0.0" a="1.0" />
+            <specular r="0.3" g="0.2" b="0.0" a="1.0" />
+        </material>
+
+        <material id="socksMaterial" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+            <diffuse r="0.8" g="0.8" b="0.8" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
@@ -121,6 +135,10 @@
 
         <primitive id="decreasingCylinder">
             <cylinder base="1" top="0.7" height="2" slices="20" stacks="20" />
+        </primitive>
+
+        <primitive id="decreasingCylinderLarge">
+            <cylinder base="1" top="0.8" height="2" slices="20" stacks="20" />
         </primitive>
 
         <!-- 2.0 x 1.0 x 1.0 -->
@@ -574,7 +592,7 @@
             </children>
         </component>
 
-        <!-- SIZES -->
+        <!-- 6 x 0.75 (hand, widest) x 0.56 (hand, widest) -->
         <component id="armLeft">
             <transformation>
                 <translate x="-0.1" y="1.7" z="0.1" />
@@ -590,7 +608,7 @@
             </children>
         </component>
 
-        <!-- SIZED -->
+        <!-- armLeft x armRight -->
         <component id="arms">
             <transformation>
             </transformation>
@@ -604,6 +622,219 @@
             </children>
         </component>
 
+        <!-- LEGS -->
+
+        <!-- 1.0 x 1.0 x 1.0 (cylinder) -->
+        <component id="upperThigh">
+            <transformation>
+                <rotate axis="x" angle="90" />
+                <scale x="1" y="1" z="0.5" />
+            </transformation>
+            <materials>
+                <material id="shortsMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="cylinder" />
+            </children>
+        </component>
+
+        <!-- 1.0 x 1.0 x 1.5 (cylinder) -->
+        <component id="middleThigh">
+            <transformation>
+                <translate x="0" y="-1" z="0" />
+                <rotate axis="x" angle="90" />
+                <scale x="1" y="1" z="0.75" />
+            </transformation>
+            <materials>
+                <material id="skinMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="cylinder" />
+            </children>
+        </component>
+
+        <!-- 1.0 x 0.7 x 2.5 (cylinder) -->
+        <component id="lowerThigh">
+            <transformation>
+                <translate x="0" y="-2.5" z="0" />
+                <rotate axis="x" angle="90" />
+                <scale x="1" y="1" z="1.25" />
+            </transformation>
+            <materials>
+                <material id="skinMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="decreasingCylinder" />
+            </children>
+        </component>
+
+        <!-- 1.0 x 1.0 x 5.0 -->
+        <component id="thigh">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="skinMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="upperThigh" />
+                <componentref id="middleThigh" />
+                <componentref id="lowerThigh" />
+            </children>
+        </component>
+
+        <!-- 0.9 x 0.63 x 2.0 (scale on Z because the rest is inside thigh) -->
+        <component id="upperShin">
+            <transformation>
+                <translate x="0" y="-6.7" z="0" />
+                <rotate axis="x" angle="-90" />
+                <scale x="0.9" y="0.9" z="1.15" />
+            </transformation>
+            <materials>
+                <material id="skinMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="decreasingCylinder" />
+            </children>
+        </component>
+
+        <!-- 0.9 x 0.72 x 1.0 (cylinder) -->
+        <component id="lowerShin">
+            <transformation>
+                <translate x="0" y="-6.7" z="0" />
+                <rotate axis="x" angle="90" />
+                <scale x="0.9" y="0.9" z="0.5" />
+            </transformation>
+            <materials>
+                <material id="skinMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="decreasingCylinderLarge" />
+            </children>
+        </component>
+
+        <!-- 0.9 x 0.72 x 3.0 -->
+        <component id="shin">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="skinMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="upperShin" />
+                <componentref id="lowerShin" />
+            </children>
+        </component>
+
+        <!-- 0.9 x 0.576 x 0.5 (cylinder) -->
+        <component id="sock">
+            <transformation>
+                <translate x="0" y="-7.7" z="0" />
+                <rotate axis="x" angle="90" />
+                <scale x="0.72" y="0.72" z="0.25" />
+            </transformation>
+            <materials>
+                <material id="socksMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="decreasingCylinderLarge" />
+            </children>
+        </component>
+
+        <!-- 0.576 x 0.576 x 0.75 (cylinder) -->
+        <component id="upperBoot">
+            <transformation>
+                <translate x="0" y="-8.2" z="0" />
+                <rotate axis="x" angle="90" />
+                <scale x="0.576" y="0.576" z="0.75" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="cylinder" />
+            </children>
+        </component>
+
+        <!-- SIZES -->
+        <component id="foot">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="bootsMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="sock" />
+                <componentref id="upperBoot" />
+                <!-- <componentref id="lowerBoot" /> -->
+            </children>
+        </component>
+
+        <!-- SIZES -->
+        <component id="baseLeg">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="skinMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="thigh" />
+                <componentref id="shin" />
+                <componentref id="foot" />
+            </children>
+        </component>
+
+        <!-- SIZES -->
+        <component id="legRight">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="baseLeg" />
+            </children>
+        </component>
+
+        <!-- SIZES -->
+        <component id="legLeft">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="baseLeg" />
+            </children>
+        </component>
+
+        <!-- legLeft x legRight -->
+        <component id="legs">
+            <transformation>
+                <translate x="0" y="5" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="legLeft" />
+                <componentref id="legRight" />
+            </children>
+        </component>
+
         <!-- incomplete -> 1.2 x 3.15 x 0.4 -->
         <component id="laraCroft">
             <transformation>
@@ -613,11 +844,12 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <componentref id="head" />
+                <!-- <componentref id="head" />
                 <componentref id="neck" />
                 <componentref id="torso" />
                 <componentref id="arms" />
-                <componentref id="hip" />
+                <componentref id="hip" /> -->
+                <componentref id="legs" />
             </children>
         </component>
 
