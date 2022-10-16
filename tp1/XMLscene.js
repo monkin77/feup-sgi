@@ -121,11 +121,15 @@ export class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
+        this.setupInterface();
+
         this.axis = new CGFaxis(this, this.graph.referenceLength);
 
         // Update Cameras (TODO: Currently just 1)
         this.camera =
             this.graph.viewsParser.views[this.graph.viewsParser.defaultViewId];
+
+        // Update the interface's camera
         this.interface.setActiveCamera(this.camera);
 
         this.gl.clearColor(
@@ -148,6 +152,34 @@ export class XMLscene extends CGFscene {
     }
 
     /**
+     * Method called after the graph is loaded to setup the interface
+     */
+    setupInterface() {
+        // Display Axis Toggle
+        this.displayAxis = true;
+
+        // Select the Active Camera
+        this.viewsSelector = Object.keys(this.graph.viewsParser.views).reduce((accumulator, key) => {
+            return {...accumulator, [key]: key }
+        }, {});
+
+        this.selectedView = this.graph.viewsParser.defaultViewId;
+
+        this.interface.onGraphLoaded();
+    }
+
+    /**
+     * Method called when the user selects a new view from the interface
+     */
+    onViewChange = () => {
+        if (this.selectedView) {
+            this.camera = this.graph.viewsParser.views[this.selectedView];
+            // Update the interface's camera
+            this.interface.setActiveCamera(this.camera);
+        } else console.log("[Error] No view selected");
+    }
+
+    /**
      * Displays the scene.
      */
     display() {
@@ -165,7 +197,8 @@ export class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
         this.pushMatrix();
-        this.axis.display();
+
+        if (this.displayAxis) this.axis.display();
 
         for (var i = 0; i < this.lights.length; i++) {
             this.lights[i].setVisible(true);

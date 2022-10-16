@@ -2,7 +2,7 @@
     <scene root="demoRoot" axis_length="5"/>
 
     <views default="defaultCamera">
-        <perspective id="defaultCamera" near="0.1" far="50" angle="30">
+        <perspective id="defaultCamera" near="0.1" far="500" angle="30">
             <from x="20" y="15" z="20" />
             <to x="0" y="-2" z="0" />
         </perspective>
@@ -504,7 +504,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinder" />
             </children>
@@ -520,7 +520,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cylinder" />
             </children>
@@ -537,7 +537,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinder" />
             </children>
@@ -554,7 +554,7 @@
             <materials>
                 <material id="beltMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <!-- Maybe this should use a prism with variable radius -->
                 <componentref id="quadrangularPrism" />
@@ -570,7 +570,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="shoulder" />
                 <componentref id="upperArm" />
@@ -591,7 +591,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="baseArm" />
             </children>
@@ -607,7 +607,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="baseArm" />
             </children>
@@ -620,7 +620,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="armLeft" />
                 <componentref id="armRight" />
@@ -638,7 +638,7 @@
             <materials>
                 <material id="shortsMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cylinder" />
             </children>
@@ -654,7 +654,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cylinder" />
             </children>
@@ -670,7 +670,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinder" />
             </children>
@@ -684,7 +684,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="upperThigh" />
                 <componentref id="middleThigh" />
@@ -702,7 +702,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinder" />
             </children>
@@ -718,7 +718,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinderLarge" />
             </children>
@@ -734,7 +734,7 @@
             <materials>
                 <material id="socksMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinderLarge" />
             </children>
@@ -750,7 +750,7 @@
             <materials>
                 <material id="bootsMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cylinder" />
             </children>
@@ -765,7 +765,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinderNarrow" />
             </children>
@@ -780,7 +780,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="quadrangularPrism" />
             </children>
@@ -796,7 +796,7 @@
             <materials>
                 <material id="bootsMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="footFace" />
                 <componentref id="footSole" />
@@ -813,7 +813,7 @@
             <materials>
                 <material id="bootsMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="footFace" />
                 <componentref id="footSole" />
@@ -829,7 +829,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="upperShin" />
                 <componentref id="lowerShin" />
@@ -845,7 +845,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="thigh" />
                 <componentref id="lowerLeg" />
@@ -860,7 +860,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="thigh" />
                 <componentref id="lowerLeg" />
@@ -878,7 +878,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="baseLegRight" />
             </children>
@@ -894,7 +894,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="baseLegLeft" />
             </children>
@@ -907,7 +907,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="legLeft" />
                 <componentref id="legRight" />
