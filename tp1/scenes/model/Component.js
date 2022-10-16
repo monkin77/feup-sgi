@@ -5,7 +5,7 @@ export class Component {
      * @param {transformation} reference to this component's transformation. If declared inline,
      * the parser is responsible for creating the transformation object and adding it to the exiting ones
      * @param {materials}
-     * @param {texture}
+     * @param {texture: Texture}
      * @param { { components: string[], primitives: string[] } }
      */
     constructor(id, transformation, materials, texture, children) {

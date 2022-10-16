@@ -34,7 +34,8 @@
     </lights>
 
     <textures>
-        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+        <texture id="vidral" file="scenes/images/vidral.jpg" />
+        <texture id="leaves" file="scenes/images/leaves.jpg" />
     </textures>
 
     <materials>
@@ -170,7 +171,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="prismPrimitive" />
             </children>
@@ -185,7 +186,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -200,7 +201,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -213,7 +214,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="prismCylinder" />
                 <componentref id="quadrangularPrismBase" />
@@ -231,7 +232,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="isoscelesTriangle" />
             </children>
@@ -245,7 +246,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="isoscelesTriangle" />
             </children>
@@ -262,7 +263,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -279,7 +280,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -294,7 +295,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -307,7 +308,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="triangularPrismBase" />
                 <componentref id="triangularPrismTop" />
@@ -326,7 +327,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="sphere" />
             </children>
@@ -342,7 +343,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cylinder" />
             </children>
@@ -357,7 +358,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="quadrangularPrism" />
             </children>
@@ -374,7 +375,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="triangularPrism" />
             </children>
@@ -391,7 +392,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="trapezium" />
             </children>
@@ -405,7 +406,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="quadrangularPrism" />
             </children>
@@ -418,7 +419,7 @@
             <materials>
                 <material id="shirtMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="upperBack" />
                 <componentref id="boobies" />
@@ -438,7 +439,7 @@
             <materials>
                 <material id="beltMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="trapezium" />
             </children>
@@ -453,7 +454,7 @@
             <materials>
                 <material id="shortsMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="quadrangularPrism" />
             </children>
@@ -469,7 +470,7 @@
             <materials>
                 <material id="shortsMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="torus" />
             </children>
@@ -482,7 +483,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="belt" />
                 <componentref id="innerHip" />
@@ -920,7 +921,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="leaves"/>
             <children>
                 <componentref id="head" />
                 <componentref id="neck" />
@@ -941,7 +942,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="vidral" length_s="0.5" length_t="0.5" />
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -956,7 +957,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -972,7 +973,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -984,11 +985,26 @@
             <materials>
                 <material id="backgroundMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="leftWall" />
                 <componentref id="rightWall" />
                 <componentref id="floor" />
+            </children>
+        </component>
+
+        <!-- TOOD: Remove this component that is used to test triangle texCoords  -->
+        <component id="testTriangle">
+            <transformation>
+                <translate y="-5" x="0" z="0" />
+                <scale x="10" y="10" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="vidral" length_s="0.5" length_t="0.5" />
+            <children>
+                <primitiveref id="triangle" />
             </children>
         </component>
 
@@ -998,11 +1014,12 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="laraCroft" />
                 <componentref id="background" />
             </children>
         </component>
+        
     </components>
 </sxs>

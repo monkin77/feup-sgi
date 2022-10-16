@@ -9,36 +9,30 @@ import { CGFobject } from '../../lib/CGF.js';
  * @param z - Z component of the triangle's vertices
  */
 export class MyTorus extends CGFobject {
-	constructor(scene, id, inner, outer, slices, loops) {
-		super(scene);
-		this.inner = inner;
+    constructor(scene, id, inner, outer, slices, loops) {
+        super(scene);
+        this.inner = inner;
         this.outer = outer;
         this.slices = slices;
         this.loops = loops;
 
-		this.initBuffers();
-	}
+        this.initBuffers();
+    }
 
-	initBuffers() {
+    initBuffers() {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
         this.texCoords = [];
 
-        const sliceAngle = 2*Math.PI / this.slices;
-        const loopAngle = 2*Math.PI / this.loops;
+        const sliceAngle = 2 * Math.PI / this.slices;
+        const loopAngle = 2 * Math.PI / this.loops;
         let idx = 0;
 
-        for (	let curLoop = 0, loopAng = 0;
-                curLoop <= this.loops;
-                curLoop++, loopAng += loopAngle
-            ){
+        for (let curLoop = 0, loopAng = 0; curLoop <= this.loops; curLoop++, loopAng += loopAngle) {
             const loopSin = Math.sin(loopAng);
             const loopCos = Math.cos(loopAng);
-            for (	let curSlice = 0, sliceAng = 0;
-                    curSlice <= this.slices;
-                    curSlice++, sliceAng += sliceAngle
-                ) {
+            for (let curSlice = 0, sliceAng = 0; curSlice <= this.slices; curSlice++, sliceAng += sliceAngle) {
                 const sliceSin = Math.sin(sliceAng);
                 const sliceCos = Math.cos(sliceAng);
 
@@ -71,17 +65,26 @@ export class MyTorus extends CGFobject {
             }
         }
 
-		this.primitiveType = this.scene.gl.TRIANGLES;
-		this.initGLBuffers();
-	}
+        this.primitiveType = this.scene.gl.TRIANGLES;
+        this.initGLBuffers();
+    }
 
-	/**
-	 * @method updateTexCoords
-	 * Updates the list of texture coordinates of the rectangle
-	 * @param {Array} coords - Array of texture coordinates
-	 */
-	updateTexCoords(coords) {
-		this.texCoords = [...coords];
-		this.updateTexCoordsGLBuffers();
-	}
+    /**
+     * @method updateTexCoords
+     * Updates the list of texture coordinates of the rectangle
+     * @param {Array} coords - Array of texture coordinates
+     */
+    updateTexCoords(coords) {
+        this.texCoords = [...coords];
+        this.updateTexCoordsGLBuffers();
+    }
+
+    /**
+     * @method scaleTexCoords scales the texture coordinates taking into account the initial texCoords
+     * @param {*} s 
+     * @param {*} t 
+     */
+    scaleTexCoords(s, t) {
+        return;
+    }
 }

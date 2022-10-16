@@ -1,4 +1,4 @@
-import { CGFXMLreader } from "../lib/CGF.js";
+import { CGFappearance, CGFtexture, CGFXMLreader } from "../lib/CGF.js";
 import { MyRectangle } from "./primitives/MyRectangle.js";
 import { MyCylinder } from "./primitives/MyCylinder.js";
 import { MyTriangle } from "./primitives/MyTriangle.js";
@@ -10,6 +10,7 @@ import { ViewsParser } from "./scenes/parser/ViewsParser.js";
 import { parseColor } from "./scenes/parser/utils.js";
 import { MaterialsParser } from "./scenes/parser/MaterialsParser.js";
 import { Component } from "./scenes/model/Component.js";
+import { TexturesParser } from "./scenes/parser/TexturesParser.js";
 
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
@@ -434,8 +435,15 @@ export class MySceneGraph {
      * @param {textures block element} texturesNode
      */
     parseTextures(texturesNode) {
-        //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        this.texturesParser = new TexturesParser(
+            this.scene,
+            this.reader,
+            texturesNode
+        );
+        if (this.texturesParser.hasReports())
+            return this.texturesParser.reports[0];
+
+        this.log("Parsed Textures");
         return null;
     }
 
@@ -824,8 +832,6 @@ export class MySceneGraph {
                 );
 
                 this.primitives[primitiveId] = tor;
-            } else {
-                console.warn("To do: Parse other primitives.");
             }
         }
 
@@ -842,7 +848,8 @@ export class MySceneGraph {
             this.reader,
             componentsNode,
             this.transformationsParser.transformations,
-            this.materialsParser.materials, [],
+            this.materialsParser.materials,
+            this.texturesParser.textures,
             this.primitives
         );
         if (this.componentsParser.hasReports())
@@ -946,17 +953,23 @@ export class MySceneGraph {
         } */
 
         // Draw components inside the root component
-        this.drawComponent(this.componentsParser.components["root"], null);
+        this.drawComponent(
+            this.componentsParser.components["root"],
+            null,
+            null
+        );
     }
 
     /**
      *
      * @param {Component} component
      * @param {string | null} prevAppearenceId
+     * @param {Texture | null} prevTexture
      */
-    drawComponent(component, prevAppearenceId = null) {
+    drawComponent(component, prevAppearenceId = null, prevTexture = null) {
         this.scene.pushMatrix();
 
+        if (!component) return;
         if (component.hasTransformation()) {
             this.scene.multMatrix(
                 this.transformationsParser.transformations[
@@ -974,19 +987,45 @@ export class MySceneGraph {
             appearenceId = prevAppearenceId;
         }
 
+        let texture = component.texture;
+        if (texture.inheritTex()) texture = prevTexture;
+
+        let appearance = null;
         if (appearenceId) {
-            const appearance = this.materialsParser.materials[appearenceId];
+            appearance = this.materialsParser.materials[appearenceId];
+
+            // Apply texture
+            if (texture != null) {
+                if (texture.removeTex()) {
+                    appearance.setTexture(null);
+                } else {
+                    const cgfTexture = this.texturesParser.textures[texture.id];
+                    // console.log("settings texture: ", cgfTexture);
+                    appearance.setTexture(cgfTexture);
+                    appearance.setTextureWrap("REPEAT", "REPEAT");
+                }
+            }
+
             appearance.apply();
         }
 
         for (const primitive of component.primitives) {
+            if (texture && texture.needsScaling()) {
+                this.primitives[primitive].scaleTexCoords(texture.length_s, texture.length_t);
+            }
             this.primitives[primitive].display();
         }
+
+        // Clean the Appearance object that is being changed above
+        if (appearance) appearance.setTexture(null);
+
+        // TODO: Confirm that the scene's appearance is being reset after one is selected
 
         for (const childComponent of component.components) {
             this.drawComponent(
                 this.componentsParser.components[childComponent],
-                appearenceId
+                appearenceId,
+                texture
             );
         }
 
