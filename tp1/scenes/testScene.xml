@@ -49,6 +49,7 @@
         <texture id="floorTexture" file="scenes/images/floor.png" />
         <texture id="ceilingTexture" file="scenes/images/ceiling.png" />
         <texture id="pillarTexture" file="scenes/images/pillar.png" />
+        <texture id="pillarTopTexture" file="scenes/images/pillarTop.png" />
     </textures>
 
     <materials>
@@ -150,7 +151,7 @@
             <sphere radius="1" slices="20" stacks="20" />
         </primitive>
 
-        <primitive id="hexagon">
+        <primitive id="hexagonSphere">
             <sphere radius="1" slices="6" stacks="2" />
         </primitive>
 
@@ -1062,11 +1063,11 @@
             </children>
         </component>
 
-        <!-- 4 (radius) x 30 -->
-        <component id="basePillar">
+        <!-- 4 (radius) x 20 -->
+        <component id="middlePillar">
             <transformation>
-                <translate x="0" y="-10" z="0" />
-                <scale x="4" y="15" z="4" />
+                <translate x="0" y="-5" z="0" />
+                <scale x="4" y="10" z="4" />
                 <translate x="0" y="2" z="0" />
                 <rotate axis="x" angle="90" />
             </transformation>
@@ -1076,6 +1077,55 @@
             <texture id="pillarTexture" length_s="0.2" length_t="0.2" />
             <children>
                 <primitiveref id="hexaCylinder" />
+            </children>
+        </component>
+
+        <!-- 4 (radius) x 5 -->
+        <component id="pillarBot">
+            <transformation>
+                <translate x="0" y="-10" z="0" />
+                <scale x="4" y="2.5" z="4" />
+                <translate x="0" y="2" z="0" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="pillarTopTexture" length_s="0.2" length_t="1.0" />
+            <children>
+                <primitiveref id="hexaCylinder" />
+            </children>
+        </component>
+
+        <!-- 4 (radius) x 5 -->
+        <component id="pillarTop">
+            <transformation>
+                <translate x="0" y="15" z="0" />
+                <scale x="4" y="2.5" z="4" />
+                <translate x="0" y="2" z="0" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="pillarTopTexture" length_s="0.2" length_t="1.0" />
+            <children>
+                <primitiveref id="hexaCylinder" />
+            </children>
+        </component>
+
+        <!-- 4 (radius) x 30 -->
+        <component id="basePillar">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="pillarTexture" length_s="0.2" length_t="0.2" />
+            <children>
+                <componentref id="middlePillar" />
+                <componentref id="pillarBot" />
+                <componentref id="pillarTop" />
             </children>
         </component>
 
@@ -1218,23 +1268,53 @@
             </materials>
             <texture id="wallTexture" />
             <children>
-                <primitiveref id="hexagon" />
+                <primitiveref id="hexagonSphere" />
+            </children>
+        </component>
+
+        <!-- 4 (radius) x 1 -->
+        <component id="pillarFallenTop">
+            <transformation>
+                <translate x="0" y="15" z="0" />
+                <rotate axis="x" angle="90" />
+                <scale x="4.0" y="4.0" z="0.01" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="wallTexture" />
+            <children>
+                <primitiveref id="hexagonSphere" />
             </children>
         </component>
 
         <!-- 4 (radius) x 30 -->
-        <component id="pillarSmall">
+        <component id="pillarSmallMiddle">
             <transformation>
-                <translate x="0" y="-10" z="0" />
-                <scale x="1" y="0.3" z="1" />
-                <translate x="0" y="10" z="0" />
+                <translate x="0" y="-5" z="0" />
+                <scale x="1" y="0.2" z="1" />
+                <translate x="0" y="5" z="0" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
-                <componentref id="basePillar" />
+                <componentref id="middlePillar" />
+            </children>
+        </component>
+
+        <!-- 4 (radius) x 30 -->
+        <component id="pillarSmall">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="pillarSmallMiddle" />
+                <componentref id="pillarBot" />
             </children>
         </component>
 
@@ -1250,7 +1330,9 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <componentref id="basePillar" />
+                <componentref id="middlePillar" />
+                <componentref id="pillarBot" />
+                <componentref id="pillarFallenTop" />
             </children>
         </component>
 
