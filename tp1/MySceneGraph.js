@@ -1,4 +1,4 @@
-import { CGFappearance, CGFtexture, CGFXMLreader } from "../lib/CGF.js";
+import { CGFappearance, CGFlight, CGFtexture, CGFXMLreader } from "../lib/CGF.js";
 import { MyRectangle } from "./primitives/MyRectangle.js";
 import { MyCylinder } from "./primitives/MyCylinder.js";
 import { MyTriangle } from "./primitives/MyTriangle.js";
@@ -311,9 +311,9 @@ export class MySceneGraph {
                 continue;
             } else {
                 attributeNames.push(
-                    ...["location", "ambient", "diffuse", "specular"]
+                    ...["location", "ambient", "diffuse", "specular", "attenuation"]
                 );
-                attributeTypes.push(...["position", "color", "color", "color"]);
+                attributeTypes.push(...["position", "color", "color", "color", "attenuation"]);
             }
 
             // Get id of the current light.
@@ -361,7 +361,24 @@ export class MySceneGraph {
                             grandChildren[attributeIndex],
                             "light position for ID" + lightId
                         );
-                    else
+                    else if (attributeTypes[j] == "attenuation") {
+                        const attenuationNode = grandChildren[attributeIndex];
+                        const constantAtten = this.reader.getFloat(attenuationNode, "constant", false);
+                        const linearAtten = this.reader.getFloat(attenuationNode, "linear", false);
+                        const quadraticAtten = this.reader.getFloat(attenuationNode, "quadratic", false);
+                        if (constantAtten == null || linearAtten == null || quadraticAtten == null) {
+                            return "unable to parse attenuation values for ID = " + lightId;
+                        }
+
+                        // Verify that only 1 of the properties = 1
+                        let attenCounter = 0;
+                        if (constantAtten == 1) attenCounter++;
+                        if (linearAtten == 1) attenCounter++;
+                        if (quadraticAtten == 1) attenCounter++;
+                        if (attenCounter != 1) return `Only one of the attenuation values can be 1 for ID = ${lightId}`;
+
+                        aux = [constantAtten, linearAtten, quadraticAtten];
+                    } else
                         var aux = parseColor(
                             this.reader,
                             grandChildren[attributeIndex],
@@ -371,13 +388,14 @@ export class MySceneGraph {
                     if (!Array.isArray(aux)) return aux;
 
                     global.push(aux);
-                } else
+                } else if (attributeNames[j] != "attenuation") {
                     return (
                         "light " +
                         attributeNames[i] +
                         " undefined for ID = " +
                         lightId
                     );
+                }
             }
 
             // Gets the additional attributes of the spot light
@@ -416,7 +434,42 @@ export class MySceneGraph {
                 global.push(...[angle, exponent, targetLight]);
             }
 
-            this.lights[lightId] = global;
+            // Create light Object
+            console.log("light", global);
+            const newLight = new CGFlight(
+                this.scene,
+                lightId
+            );
+            if (global[0] == true) newLight.enable();
+            else newLight.disable();
+
+            newLight.setPosition(...global[2]);
+            newLight.setAmbient(...global[3]);
+            newLight.setDiffuse(...global[4]);
+            newLight.setSpecular(...global[5]);
+
+            if (global.length >= 7 && Array.isArray(global[6])) {
+                if (global[6][0] == 1) {
+                    newLight.setConstantAttenuation(1);
+                    newLight.setLinearAttenuation(0);
+                    newLight.setQuadraticAttenuation(0);
+                } else if (global[6][1] == 1) {
+                    newLight.setLinearAttenuation(1);
+                    newLight.setConstantAttenuation(0);
+                    newLight.setQuadraticAttenuation(0);
+                } else {
+                    newLight.setQuadraticAttenuation(1);
+                    newLight.setConstantAttenuation(0);
+                    newLight.setLinearAttenuation(0);
+                }
+            }
+
+            if (global[1] == "omni") {
+                // Set OMNI properties
+            }
+
+            console.log("saving light: ", newLight);
+            this.lights[lightId] = newLight;
             numLights++;
         }
 
