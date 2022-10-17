@@ -959,6 +959,8 @@ export class MySceneGraph {
                 this.primitives[primitive].scaleTexCoords(texture.length_s, texture.length_t);
             }
             this.primitives[primitive].display();
+            // Reset texture coords scale
+            this.primitives[primitive].scaleTexCoords(1.0, 1.0);
         }
 
         // Clean the Appearance object that is being changed above

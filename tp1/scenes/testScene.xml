@@ -1081,7 +1081,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="pillarTexture" length_s="0.2" length_t="0.2" />
+            <texture id="pillarTexture" length_s="0.33" length_t="0.5" />
             <children>
                 <primitiveref id="hexaCylinder" />
             </children>
@@ -1098,7 +1098,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="pillarTopTexture" length_s="0.2" length_t="1.0" />
+            <texture id="pillarTopTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="hexaCylinder" />
             </children>
@@ -1115,7 +1115,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="pillarTopTexture" length_s="0.2" length_t="1.0" />
+            <texture id="pillarTopTexture" length_s="1.0" length_t="1.0" />
             <children>
                 <primitiveref id="hexaCylinder" />
             </children>
@@ -1128,7 +1128,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="pillarTexture" length_s="0.2" length_t="0.2" />
+            <texture id="inherit" />
             <children>
                 <componentref id="middlePillar" />
                 <componentref id="pillarBot" />
