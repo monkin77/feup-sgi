@@ -21,7 +21,7 @@ export class MySphere extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
-        this.texCoords = [];
+        this.initialTexCoords = [];
 
         const sliceDelta = 2 * Math.PI / this.slices;
         const stackDelta = Math.PI / this.stacks;
@@ -51,7 +51,7 @@ export class MySphere extends CGFobject {
                     stackSin * sliceSin,
                     stackCos,
                 );
-                this.texCoords.push(
+                this.initialTexCoords.push(
                     curSlice / this.slices,
                     curStack / this.stacks,
                 );
@@ -61,6 +61,7 @@ export class MySphere extends CGFobject {
         }
 
         this.primitiveType = this.scene.gl.TRIANGLES;
+        this.texCoords = [...this.initialTexCoords];
         this.initGLBuffers();
     }
 
@@ -80,6 +81,11 @@ export class MySphere extends CGFobject {
      * @param {*} t 
      */
     scaleTexCoords(s, t) {
-        return;
+        for (let i = 0; i < this.texCoords.length; i += 2) {
+            this.texCoords[i] = this.initialTexCoords[i] / s;
+            this.texCoords[i + 1] = this.initialTexCoords[i + 1] / t;
+        }
+
+        this.updateTexCoordsGLBuffers();
     }
 }

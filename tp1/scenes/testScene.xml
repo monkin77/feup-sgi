@@ -45,7 +45,7 @@
 
     <textures>
         <texture id="wallTexture" file="scenes/images/wall.png" />
-        <texture id="faceTexture" file="scenes/images/lara2.png" />
+        <texture id="faceTexture" file="scenes/images/lara.png" />
         <texture id="floorTexture" file="scenes/images/floor.png" />
         <texture id="ceilingTexture" file="scenes/images/ceiling.png" />
         <texture id="pillarTexture" file="scenes/images/pillar.png" />
@@ -358,14 +358,13 @@
          <component id="head">
             <transformation>
                 <translate x="0.6" y="3.2" z="0" />
-                <scale x="0.6" y="0.85" z="0.7" />
+                <scale x="0.7" y="0.9" z="0.7" />
                 <rotate axis="z" angle="90" />
                 <rotate axis="y" angle="90" />
             </transformation>
             <materials>
                 <material id="headMaterial" />
             </materials>
-            <!-- TODO: Use length_s and length_t to scale properly -->
             <texture id="faceTexture"/>
             <children>
                 <primitiveref id="sphere" />

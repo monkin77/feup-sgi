@@ -23,7 +23,7 @@ export class MyTorus extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
-        this.texCoords = [];
+        this.initialTexCoords = [];
 
         const sliceAngle = 2 * Math.PI / this.slices;
         const loopAngle = 2 * Math.PI / this.loops;
@@ -56,7 +56,7 @@ export class MyTorus extends CGFobject {
                     sliceSin,
                 );
 
-                this.texCoords.push(
+                this.initialTexCoords.push(
                     curSlice / this.slices,
                     curLoop / this.loops,
                 );
@@ -66,6 +66,7 @@ export class MyTorus extends CGFobject {
         }
 
         this.primitiveType = this.scene.gl.TRIANGLES;
+        this.texCoords = [...this.initialTexCoords];
         this.initGLBuffers();
     }
 
@@ -85,6 +86,11 @@ export class MyTorus extends CGFobject {
      * @param {*} t 
      */
     scaleTexCoords(s, t) {
-        return;
+        for (let i = 0; i < this.texCoords.length; i += 2) {
+            this.texCoords[i] = this.initialTexCoords[i] / s;
+            this.texCoords[i + 1] = this.initialTexCoords[i + 1] / t;
+        }
+
+        this.updateTexCoordsGLBuffers();
     }
 }
