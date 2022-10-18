@@ -59,6 +59,7 @@ export class XMLscene extends CGFscene {
         for (const light of Object.values(this.graph.lights)) {
             updateLight(this.lights[light[0]], light);
         }
+        // console.log(this.lights)
     }
 
     setDefaultAppearance() {
@@ -72,8 +73,6 @@ export class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-        this.setupInterface();
-
         this.axis = new CGFaxis(this, this.graph.referenceLength);
 
         // Update Cameras (TODO: Currently just 1)
@@ -99,6 +98,8 @@ export class XMLscene extends CGFscene {
 
         this.initLights();
 
+        this.setupInterface();
+
         this.sceneInited = true;
     }
 
@@ -108,6 +109,9 @@ export class XMLscene extends CGFscene {
     setupInterface() {
         // Display Axis Toggle
         this.displayAxis = true;
+
+        // Display Lights Toggle
+        this.displayLights = false;
 
         // Select the Active Camera
         this.viewsSelector = Object.keys(this.graph.viewsParser.views).reduce((accumulator, key) => {
@@ -132,6 +136,9 @@ export class XMLscene extends CGFscene {
 
     updateAllLights() {
         for (const light of this.lights) {
+            // Update visibility of the light. Disabled lights are not visible
+            light.setVisible(this.displayLights && light.enabled);
+
             light.update();
         }
     }
