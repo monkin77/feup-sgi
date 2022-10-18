@@ -285,22 +285,24 @@ export class MySceneGraph {
      */
     parseLights(lightsNode) {
         // TO DO: CONFIRM LIGHTS ARE BEING PARSED CORRECTLY
-        var children = lightsNode.children;
+        let children = lightsNode.children;
 
-        this.lights = [];
-        var numLights = 0;
+        this.lights = {};
+        let numLights = 0;
 
-        var grandChildren = [];
-        var nodeNames = [];
+        let grandChildren = [];
+        let nodeNames = [];
 
         // Any number of lights.
-        for (var i = 0; i < children.length; i++) {
-            // Storing light information [enabled, type, location, ambient, diffuse, specular, attenuation, angle, exponent, target]
-            // Note that the last 3 elements are only defined for spotlights, while the 4th last is optional
-            var global = [];
+        for (let i = 0; i < children.length; i++) {
+            if (numLights >= 8) break; // Ignore additional lights if more than 8
 
-            var attributeNames = [];
-            var attributeTypes = [];
+            // Storing light information [sceneIdx, enabled, type, location, ambient, diffuse, specular, attenuation, angle, exponent, target]
+            // Note that the last 3 elements are only defined for spotlights, while the 4th last is optional
+            let global = [numLights];
+
+            let attributeNames = [];
+            let attributeTypes = [];
 
             //Check type of light
             if (
@@ -436,48 +438,7 @@ export class MySceneGraph {
                 global.push(...[angle, exponent, targetLight]);
             }
 
-            // Create light Object
-            const newLight = new CGFlight(
-                this.scene,
-                lightId
-            );
-            newLight.setVisible(true);
-
-            if (global[0] == true) newLight.enable();
-            else newLight.disable();
-
-            newLight.setPosition(...global[2]);
-            newLight.setAmbient(...global[3]);
-            newLight.setDiffuse(...global[4]);
-            newLight.setSpecular(...global[5]);
-
-            let attenOffset = 0;
-            if (global.length >= 7 && Array.isArray(global[6])) {
-                attenOffset = 1;
-                if (global[6][0] == 1) {
-                    newLight.setConstantAttenuation(1);
-                    newLight.setLinearAttenuation(0);
-                    newLight.setQuadraticAttenuation(0);
-                } else if (global[6][1] == 1) {
-                    newLight.setLinearAttenuation(1);
-                    newLight.setConstantAttenuation(0);
-                    newLight.setQuadraticAttenuation(0);
-                } else {
-                    newLight.setQuadraticAttenuation(1);
-                    newLight.setConstantAttenuation(0);
-                    newLight.setLinearAttenuation(0);
-                }
-            }
-
-            if (global[1] == "spot") {
-                newLight.setSpotCutOff(global[6 + attenOffset]);
-                newLight.setSpotExponent(global[7 + attenOffset]);
-                newLight.setSpotDirection(...global[8 + attenOffset]);
-            }
-
-            newLight.update();
-
-            this.lights[lightId] = newLight;
+            this.lights[lightId] = global;
             numLights++;
         }
 

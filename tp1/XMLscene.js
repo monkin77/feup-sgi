@@ -1,5 +1,6 @@
 import { CGFscene } from "../lib/CGF.js";
 import { CGFaxis, CGFcamera } from "../lib/CGF.js";
+import { updateLight } from "./scenes/parser/utils.js";
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -54,15 +55,21 @@ export class XMLscene extends CGFscene {
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
-        var i = 0;
-        // Lights index.
-
+        console.log("Scene Lights before: ", this.lights);
         // Reads the lights from the scene graph.
-        for (var key in this.graph.lights) {
+        for (const light of Object.values(this.graph.lights)) {
+            updateLight(this.lights[light[0]], light);
+        }
+
+        console.log("Scene Lights after: ", this.lights);
+
+        // console.log("lights:", this.lights);
+        // Reads the lights from the scene graph.
+        /* for (const key in this.graph.lights) {
             if (i >= 8) break; // Only eight lights allowed by WebGL.
 
             if (this.graph.lights.hasOwnProperty(key)) {
-                var light = this.graph.lights[key];
+                const light = this.graph.lights[key];
 
                 this.lights[i].setPosition(
                     light[2][0],
@@ -107,7 +114,7 @@ export class XMLscene extends CGFscene {
 
                 i++;
             }
-        }
+        } */
     }
 
     setDefaultAppearance() {
@@ -200,6 +207,7 @@ export class XMLscene extends CGFscene {
 
         if (this.displayAxis) this.axis.display();
 
+        // TODO: This should be removed? 
         for (var i = 0; i < this.lights.length; i++) {
             this.lights[i].setVisible(true);
             this.lights[i].enable();
