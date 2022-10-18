@@ -295,8 +295,10 @@ export class MySceneGraph {
 
         // Any number of lights.
         for (var i = 0; i < children.length; i++) {
-            // Storing light information
+            // Storing light information [enabled, type, location, ambient, diffuse, specular, attenuation, angle, exponent, target]
+            // Note that the last 3 elements are only defined for spotlights, while the 4th last is optional
             var global = [];
+
             var attributeNames = [];
             var attributeTypes = [];
 
@@ -435,11 +437,12 @@ export class MySceneGraph {
             }
 
             // Create light Object
-            console.log("light", global);
             const newLight = new CGFlight(
                 this.scene,
                 lightId
             );
+            newLight.setVisible(true);
+
             if (global[0] == true) newLight.enable();
             else newLight.disable();
 
@@ -448,7 +451,9 @@ export class MySceneGraph {
             newLight.setDiffuse(...global[4]);
             newLight.setSpecular(...global[5]);
 
+            let attenOffset = 0;
             if (global.length >= 7 && Array.isArray(global[6])) {
+                attenOffset = 1;
                 if (global[6][0] == 1) {
                     newLight.setConstantAttenuation(1);
                     newLight.setLinearAttenuation(0);
@@ -464,16 +469,21 @@ export class MySceneGraph {
                 }
             }
 
-            if (global[1] == "omni") {
-                // Set OMNI properties
+            if (global[1] == "spot") {
+                newLight.setSpotCutOff(global[6 + attenOffset]);
+                newLight.setSpotExponent(global[7 + attenOffset]);
+                newLight.setSpotDirection(...global[8 + attenOffset]);
             }
 
-            console.log("saving light: ", newLight);
+            newLight.update();
+
             this.lights[lightId] = newLight;
             numLights++;
         }
 
         if (numLights == 0) return "at least one light must be defined";
+
+        // TODO: Check what should happen in this case
         else if (numLights > 8)
             this.onXMLMinorError(
                 "too many lights defined; WebGL imposes a limit of 8 lights"
