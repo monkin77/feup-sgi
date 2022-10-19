@@ -1,4 +1,4 @@
-import { CGFappearance, CGFlight, CGFtexture, CGFXMLreader } from "../lib/CGF.js";
+import { CGFXMLreader } from "../lib/CGF.js";
 import { MyRectangle } from "./primitives/MyRectangle.js";
 import { MyCylinder } from "./primitives/MyCylinder.js";
 import { MyTriangle } from "./primitives/MyTriangle.js";
@@ -7,7 +7,7 @@ import { MyTorus } from "./primitives/MyTorus.js";
 import { ComponentsParser } from "./scenes/parser/ComponentsParser.js";
 import { TransformationsParser } from "./scenes/parser/TranformationsParser.js";
 import { ViewsParser } from "./scenes/parser/ViewsParser.js";
-import { parseColor } from "./scenes/parser/utils.js";
+import { log, onXMLMinorError, parseColor, parseCoordinates3D, parseCoordinates4D } from "./scenes/parser/utils.js";
 import { MaterialsParser } from "./scenes/parser/MaterialsParser.js";
 import { Component } from "./scenes/model/Component.js";
 import { TexturesParser } from "./scenes/parser/TexturesParser.js";
@@ -63,7 +63,7 @@ export class MySceneGraph {
      * Callback to be executed after successful reading
      */
     onXMLReady() {
-        this.log("XML Loading finished.");
+        log("XML Loading finished.");
         var rootElement = this.reader.xmlDoc.documentElement;
 
         // Here should go the calls for different functions to parse the various blocks
@@ -106,7 +106,7 @@ export class MySceneGraph {
             return "tag <scene> missing";
         else {
             if (index != SCENE_INDEX)
-                this.onXMLMinorError("tag <scene> out of order " + index);
+                onXMLMinorError("tag <scene> out of order " + index);
 
             //Parse scene block
             if ((error = this.parseScene(nodes[index])) != null) return error;
@@ -117,7 +117,7 @@ export class MySceneGraph {
             return "tag <views> missing";
         else {
             if (index != VIEWS_INDEX)
-                this.onXMLMinorError("tag <views> out of order");
+                onXMLMinorError("tag <views> out of order");
 
             //Parse views block
             if ((error = this.parseView(nodes[index])) != null) return error;
@@ -128,7 +128,7 @@ export class MySceneGraph {
             return "tag <ambient> missing";
         else {
             if (index != AMBIENT_INDEX)
-                this.onXMLMinorError("tag <ambient> out of order");
+                onXMLMinorError("tag <ambient> out of order");
 
             //Parse ambient block
             if ((error = this.parseAmbient(nodes[index])) != null) return error;
@@ -139,7 +139,7 @@ export class MySceneGraph {
             return "tag <lights> missing";
         else {
             if (index != LIGHTS_INDEX)
-                this.onXMLMinorError("tag <lights> out of order");
+                onXMLMinorError("tag <lights> out of order");
 
             //Parse lights block
             if ((error = this.parseLights(nodes[index])) != null) return error;
@@ -149,7 +149,7 @@ export class MySceneGraph {
             return "tag <textures> missing";
         else {
             if (index != TEXTURES_INDEX)
-                this.onXMLMinorError("tag <textures> out of order");
+                onXMLMinorError("tag <textures> out of order");
 
             //Parse textures block
             if ((error = this.parseTextures(nodes[index])) != null)
@@ -161,7 +161,7 @@ export class MySceneGraph {
             return "tag <materials> missing";
         else {
             if (index != MATERIALS_INDEX)
-                this.onXMLMinorError("tag <materials> out of order");
+                onXMLMinorError("tag <materials> out of order");
 
             //Parse materials block
             if ((error = this.parseMaterials(nodes[index])) != null)
@@ -173,7 +173,7 @@ export class MySceneGraph {
             return "tag <transformations> missing";
         else {
             if (index != TRANSFORMATIONS_INDEX)
-                this.onXMLMinorError("tag <transformations> out of order");
+                onXMLMinorError("tag <transformations> out of order");
 
             //Parse transformations block
             if ((error = this.parseTransformations(nodes[index])) != null)
@@ -185,7 +185,7 @@ export class MySceneGraph {
             return "tag <primitives> missing";
         else {
             if (index != PRIMITIVES_INDEX)
-                this.onXMLMinorError("tag <primitives> out of order");
+                onXMLMinorError("tag <primitives> out of order");
 
             //Parse primitives block
             if ((error = this.parsePrimitives(nodes[index])) != null)
@@ -197,13 +197,13 @@ export class MySceneGraph {
             return "tag <components> missing";
         else {
             if (index != COMPONENTS_INDEX)
-                this.onXMLMinorError("tag <components> out of order");
+                onXMLMinorError("tag <components> out of order");
 
             //Parse components block
             if ((error = this.parseComponents(nodes[index])) != null)
                 return error;
         }
-        this.log("all parsed");
+        log("all parsed");
     }
 
     /**
@@ -220,13 +220,13 @@ export class MySceneGraph {
         // Get axis length
         var axis_length = this.reader.getFloat(sceneNode, "axis_length", false);
         if (axis_length == null)
-            this.onXMLMinorError(
+            onXMLMinorError(
                 "no axis_length defined for scene; assuming 'length = 1'"
             );
 
         this.referenceLength = axis_length || 1;
 
-        this.log("Parsed scene");
+        log("Parsed scene");
 
         return null;
     }
@@ -240,7 +240,7 @@ export class MySceneGraph {
         this.viewsParser = new ViewsParser(this.reader, viewsNode);
         if (this.viewsParser.hasReports()) return this.viewsParser.reports[0];
 
-        this.log("Parsed Views");
+        log("Parsed Views");
         return null;
     }
 
@@ -274,7 +274,7 @@ export class MySceneGraph {
         if (!Array.isArray(color)) return color;
         else this.background = color;
 
-        this.log("Parsed ambient");
+        log("Parsed ambient");
 
         return null;
     }
@@ -284,7 +284,6 @@ export class MySceneGraph {
      * @param {lights block element} lightsNode
      */
     parseLights(lightsNode) {
-        // TO DO: CONFIRM LIGHTS ARE BEING PARSED CORRECTLY
         let children = lightsNode.children;
 
         this.lights = {};
@@ -295,7 +294,12 @@ export class MySceneGraph {
 
         // Any number of lights.
         for (let i = 0; i < children.length; i++) {
-            if (numLights >= 8) break; // Ignore additional lights if more than 8
+            if (numLights >= 8) {
+                onXMLMinorError(
+                    "too many lights defined; WebGL imposes a limit of 8 lights. Only the first 8 lights will be used"
+                );
+                break; // Ignore additional lights if more than 8
+            }
 
             // Storing light information [sceneIdx, enabled, type, location, ambient, diffuse, specular, attenuation, angle, exponent, target]
             // Note that the last 3 elements are only defined for spotlights, while the 4th last is optional
@@ -309,7 +313,7 @@ export class MySceneGraph {
                 children[i].nodeName != "omni" &&
                 children[i].nodeName != "spot"
             ) {
-                this.onXMLMinorError(
+                onXMLMinorError(
                     "unknown tag <" + children[i].nodeName + ">"
                 );
                 continue;
@@ -336,7 +340,7 @@ export class MySceneGraph {
             var enableLight = true;
             var aux = this.reader.getBoolean(children[i], "enabled", false);
             if (aux == null) {
-                this.onXMLMinorError(
+                onXMLMinorError(
                     "unable to parse value component of the 'enable light' field for ID = " +
                     lightId +
                     "; assuming 'value = 1'"
@@ -364,7 +368,8 @@ export class MySceneGraph {
 
                 if (attributeIndex != -1) {
                     if (attributeTypes[j] == "position")
-                        var aux = this.parseCoordinates4D(
+                        var aux = parseCoordinates4D(
+                            this.reader,
                             grandChildren[attributeIndex],
                             "light position for ID" + lightId
                         );
@@ -429,7 +434,8 @@ export class MySceneGraph {
                 // Retrieves the light target.
                 var targetLight = [];
                 if (targetIndex != -1) {
-                    var aux = this.parseCoordinates3D(
+                    var aux = parseCoordinates3D(
+                        this.reader,
                         grandChildren[targetIndex],
                         "target light for ID " + lightId
                     );
@@ -447,13 +453,7 @@ export class MySceneGraph {
 
         if (numLights == 0) return "at least one light must be defined";
 
-        // TODO: Check what should happen in this case
-        else if (numLights > 8)
-            this.onXMLMinorError(
-                "too many lights defined; WebGL imposes a limit of 8 lights"
-            );
-
-        this.log("Parsed lights");
+        log("Parsed lights");
         return null;
     }
 
@@ -470,7 +470,7 @@ export class MySceneGraph {
         if (this.texturesParser.hasReports())
             return this.texturesParser.reports[0];
 
-        this.log("Parsed Textures");
+        log("Parsed Textures");
         return null;
     }
 
@@ -487,7 +487,7 @@ export class MySceneGraph {
         if (this.materialsParser.hasReports())
             return this.materialsParser.reports[0];
 
-        this.log("Parsed Materials");
+        log("Parsed Materials");
         return null;
     }
 
@@ -503,7 +503,7 @@ export class MySceneGraph {
         if (this.transformationsParser.hasReports())
             return this.transformationsParser.reports[0];
 
-        this.log("Parsed transformations");
+        log("Parsed transformations");
         return null;
     }
 
@@ -519,7 +519,7 @@ export class MySceneGraph {
         // Any number of primitives.
         for (var i = 0; i < children.length; i++) {
             if (children[i].nodeName != "primitive") {
-                this.onXMLMinorError(
+                onXMLMinorError(
                     "unknown tag <" + children[i].nodeName + ">"
                 );
                 continue;
@@ -862,7 +862,7 @@ export class MySceneGraph {
             }
         }
 
-        this.log("Parsed primitives");
+        log("Parsed primitives");
         return null;
     }
 
@@ -882,59 +882,8 @@ export class MySceneGraph {
         if (this.componentsParser.hasReports())
             return this.componentsParser.reports[0];
 
-        console.log("Parsed Components");
+        log("Parsed Components");
         return null;
-    }
-
-    /**
-     * Parse the coordinates from a node with ID = id
-     * @param {block element} node
-     * @param {message to be displayed in case of error} messageError
-     */
-    parseCoordinates3D(node, messageError) {
-        var position = [];
-
-        // x
-        var x = this.reader.getFloat(node, "x", false);
-        if (!(x != null && !isNaN(x)))
-            return "unable to parse x-coordinate of the " + messageError;
-
-        // y
-        var y = this.reader.getFloat(node, "y", false);
-        if (!(y != null && !isNaN(y)))
-            return "unable to parse y-coordinate of the " + messageError;
-
-        // z
-        var z = this.reader.getFloat(node, "z", false);
-        if (!(z != null && !isNaN(z)))
-            return "unable to parse z-coordinate of the " + messageError;
-
-        position.push(...[x, y, z]);
-
-        return position;
-    }
-
-    /**
-     * Parse the coordinates from a node with ID = id
-     * @param {block element} node
-     * @param {message to be displayed in case of error} messageError
-     */
-    parseCoordinates4D(node, messageError) {
-        var position = [];
-
-        //Get x, y, z
-        position = this.parseCoordinates3D(node, messageError);
-
-        if (!Array.isArray(position)) return position;
-
-        // w
-        var w = this.reader.getFloat(node, "w", false);
-        if (!(w != null && !isNaN(w)))
-            return "unable to parse w-coordinate of the " + messageError;
-
-        position.push(w);
-
-        return position;
     }
 
     /*
@@ -944,22 +893,6 @@ export class MySceneGraph {
     onXMLError(message) {
         console.error("XML Loading Error: " + message);
         this.loadedOk = false;
-    }
-
-    /**
-     * Callback to be executed on any minor error, showing a warning on the console.
-     * @param {string} message
-     */
-    onXMLMinorError(message) {
-        console.warn("Warning: " + message);
-    }
-
-    /**
-     * Callback to be executed on any message.
-     * @param {string} message
-     */
-    log(message) {
-        console.log("   " + message);
     }
 
     /**
@@ -991,7 +924,6 @@ export class MySceneGraph {
             );
         }
 
-        // TODO: Change this afterwards to cycle materials
         let appearenceId =
             component.materials.length > 0 ?
             component.materials[component.currMaterial] :
@@ -1014,7 +946,6 @@ export class MySceneGraph {
                     appearance.setTexture(null);
                 } else {
                     const cgfTexture = this.texturesParser.textures[texture.id];
-                    // console.log("settings texture: ", cgfTexture);
                     appearance.setTexture(cgfTexture);
                     appearance.setTextureWrap("REPEAT", "REPEAT");
                 }

@@ -2,10 +2,6 @@ import { CGFcamera, CGFcameraOrtho } from "../../../lib/CGF.js";
 import { Parser } from "./Parser.js";
 import { DEGREE_TO_RAD, onXMLMinorError, parseCoordinates3D } from "./utils.js";
 
-/**
- * TODO: Add cameras to the scene in the onGraphLoaded method of XMLScene
- * TODO: Extract common code of the Parsers to a parent parser class
- */
 export class ViewsParser extends Parser {
     /**
      * Constructor for the ViewsParser object.

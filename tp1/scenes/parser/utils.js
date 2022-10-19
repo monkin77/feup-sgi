@@ -47,6 +47,30 @@ export const parseCoordinates3D = (xmlReader, node, messageError) => {
 };
 
 /**
+ * Parse the coordinates from a node with ID = id
+ * @param {CGF xml Reader} xmlReader
+ * @param {block element} node
+ * @param {message to be displayed in case of error} messageError
+ */
+export const parseCoordinates4D = (xmlReader, node, messageError) => {
+    var position = [];
+
+    //Get x, y, z
+    position = parseCoordinates3D(xmlReader, node, messageError);
+
+    if (!Array.isArray(position)) return position;
+
+    // w
+    var w = xmlReader.getFloat(node, "w", false);
+    if (!(w != null && !isNaN(w)))
+        return "unable to parse w-coordinate of the " + messageError;
+
+    position.push(w);
+
+    return position;
+}
+
+/**
  * Converts an axis name to vec3 representation
  * @param {*} axis
  * @returns array representing the axis

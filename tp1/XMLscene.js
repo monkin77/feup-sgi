@@ -75,7 +75,6 @@ export class XMLscene extends CGFscene {
     onGraphLoaded() {
         this.axis = new CGFaxis(this, this.graph.referenceLength);
 
-        // Update Cameras (TODO: Currently just 1)
         this.camera =
             this.graph.viewsParser.views[this.graph.viewsParser.defaultViewId];
 
