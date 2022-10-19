@@ -144,6 +144,18 @@ export class XMLscene extends CGFscene {
     }
 
     /**
+     * @brief Method called periodically by the scene
+     * @param {*} t timestamp
+     */
+    update(t) {
+        if (this.interface.isKeyPressed("KeyM")) {
+            for (const component of Object.values(this.graph.componentsParser.components)) {
+                component.nextMaterial();
+            }
+        }
+    }
+
+    /**
      * Displays the scene.
      */
     display() {

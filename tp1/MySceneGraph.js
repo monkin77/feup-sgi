@@ -966,20 +966,6 @@ export class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        //To do: Create display loop for transversing the scene graph
-        //To test the parsing/creation of the primitives, call the display function directly
-        // this.primitives["demoTorus"].display();
-        // this.primitives["demoRectangle"].display();
-
-        /* 
-        This alternative is to draw all components
-        for (const component of Object.values(
-                this.componentsParser.components
-            )) {
-            this.drawComponent(component);
-        } */
-
-        // Draw components inside the root component
         this.drawComponent(
             this.componentsParser.components["root"],
             null,
@@ -1008,8 +994,9 @@ export class MySceneGraph {
         // TODO: Change this afterwards to cycle materials
         let appearenceId =
             component.materials.length > 0 ?
-            component.materials[0] :
+            component.materials[component.currMaterial] :
             prevAppearenceId;
+
         if (appearenceId == "inherit") {
             appearenceId = prevAppearenceId;
         }
