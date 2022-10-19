@@ -900,7 +900,7 @@ export class MySceneGraph {
      */
     displayScene() {
         this.drawComponent(
-            this.componentsParser.components["root"],
+            this.componentsParser.components[this.idRoot],
             null,
             null
         );
