@@ -1,8 +1,8 @@
 import { CGFinterface, CGFapplication, dat } from '../lib/CGF.js';
 
 /**
-* MyInterface class, creating a GUI interface.
-*/
+ * MyInterface class, creating a GUI interface.
+ */
 
 export class MyInterface extends CGFinterface {
     /**
@@ -31,20 +31,40 @@ export class MyInterface extends CGFinterface {
     }
 
     /**
+     * Method that setups the interface after the graph has been loaded.
+     */
+    onGraphLoaded() {
+        this.gui.add(this.scene, 'displayAxis').name("Display Axis");
+
+        // Lights
+        this.gui.add(this.scene, 'displayLights').name("Display Lights");
+
+        const folder = this.gui.addFolder('Lights');
+        const lightsProperties = this.scene.graph.lights;
+        for (let i = 0; i < Object.keys(lightsProperties).length; i++) {
+            folder.add(this.scene.lights[i], 'enabled').name(Object.keys(lightsProperties)[i]);
+        }
+
+        // Selected View
+        this.gui.add(this.scene, 'selectedView', this.scene.viewsSelector).name('Active View').onChange(this.scene.onViewChange);
+
+    }
+
+    /**
      * initKeys
      */
     initKeys() {
-        this.scene.gui=this;
-        this.processKeyboard=function(){};
-        this.activeKeys={};
+        this.scene.gui = this;
+        this.processKeyboard = function() {};
+        this.activeKeys = {};
     }
 
     processKeyDown(event) {
-        this.activeKeys[event.code]=true;
+        this.activeKeys[event.code] = true;
     };
 
     processKeyUp(event) {
-        this.activeKeys[event.code]=false;
+        this.activeKeys[event.code] = false;
     };
 
     isKeyPressed(keyCode) {

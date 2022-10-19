@@ -1,5 +1,6 @@
 import { CGFscene } from "../lib/CGF.js";
 import { CGFaxis, CGFcamera } from "../lib/CGF.js";
+import { updateLight } from "./scenes/parser/utils.js";
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -54,60 +55,11 @@ export class XMLscene extends CGFscene {
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
-        var i = 0;
-        // Lights index.
-
         // Reads the lights from the scene graph.
-        for (var key in this.graph.lights) {
-            if (i >= 8) break; // Only eight lights allowed by WebGL.
-
-            if (this.graph.lights.hasOwnProperty(key)) {
-                var light = this.graph.lights[key];
-
-                this.lights[i].setPosition(
-                    light[2][0],
-                    light[2][1],
-                    light[2][2],
-                    light[2][3]
-                );
-                this.lights[i].setAmbient(
-                    light[3][0],
-                    light[3][1],
-                    light[3][2],
-                    light[3][3]
-                );
-                this.lights[i].setDiffuse(
-                    light[4][0],
-                    light[4][1],
-                    light[4][2],
-                    light[4][3]
-                );
-                this.lights[i].setSpecular(
-                    light[5][0],
-                    light[5][1],
-                    light[5][2],
-                    light[5][3]
-                );
-
-                if (light[1] == "spot") {
-                    this.lights[i].setSpotCutOff(light[6]);
-                    this.lights[i].setSpotExponent(light[7]);
-                    this.lights[i].setSpotDirection(
-                        light[8][0],
-                        light[8][1],
-                        light[8][2]
-                    );
-                }
-
-                this.lights[i].setVisible(true);
-                if (light[0]) this.lights[i].enable();
-                else this.lights[i].disable();
-
-                this.lights[i].update();
-
-                i++;
-            }
+        for (const light of Object.values(this.graph.lights)) {
+            updateLight(this.lights[light[0]], light);
         }
+        // console.log(this.lights)
     }
 
     setDefaultAppearance() {
@@ -123,9 +75,10 @@ export class XMLscene extends CGFscene {
     onGraphLoaded() {
         this.axis = new CGFaxis(this, this.graph.referenceLength);
 
-        // Update Cameras (TODO: Currently just 1)
         this.camera =
             this.graph.viewsParser.views[this.graph.viewsParser.defaultViewId];
+
+        // Update the interface's camera
         this.interface.setActiveCamera(this.camera);
 
         this.gl.clearColor(
@@ -144,7 +97,61 @@ export class XMLscene extends CGFscene {
 
         this.initLights();
 
+        this.setupInterface();
+
         this.sceneInited = true;
+    }
+
+    /**
+     * Method called after the graph is loaded to setup the interface
+     */
+    setupInterface() {
+        // Display Axis Toggle
+        this.displayAxis = true;
+
+        // Display Lights Toggle
+        this.displayLights = false;
+
+        // Select the Active Camera
+        this.viewsSelector = Object.keys(this.graph.viewsParser.views).reduce((accumulator, key) => {
+            return {...accumulator, [key]: key }
+        }, {});
+
+        this.selectedView = this.graph.viewsParser.defaultViewId;
+
+        this.interface.onGraphLoaded();
+    }
+
+    /**
+     * Method called when the user selects a new view from the interface
+     */
+    onViewChange = () => {
+        if (this.selectedView) {
+            this.camera = this.graph.viewsParser.views[this.selectedView];
+            // Update the interface's camera
+            this.interface.setActiveCamera(this.camera);
+        } else console.log("[Error] No view selected");
+    }
+
+    updateAllLights() {
+        for (const light of this.lights) {
+            // Update visibility of the light. Disabled lights are not visible
+            light.setVisible(this.displayLights && light.enabled);
+
+            light.update();
+        }
+    }
+
+    /**
+     * @brief Method called periodically by the scene
+     * @param {*} t timestamp
+     */
+    update(t) {
+        if (this.interface.isKeyPressed("KeyM")) {
+            for (const component of Object.values(this.graph.componentsParser.components)) {
+                component.nextMaterial();
+            }
+        }
     }
 
     /**
@@ -165,16 +172,14 @@ export class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
         this.pushMatrix();
-        this.axis.display();
 
-        for (var i = 0; i < this.lights.length; i++) {
-            this.lights[i].setVisible(true);
-            this.lights[i].enable();
-        }
+        if (this.displayAxis) this.axis.display();
 
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
+
+            this.updateAllLights();
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();

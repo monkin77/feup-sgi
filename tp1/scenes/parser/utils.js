@@ -47,6 +47,30 @@ export const parseCoordinates3D = (xmlReader, node, messageError) => {
 };
 
 /**
+ * Parse the coordinates from a node with ID = id
+ * @param {CGF xml Reader} xmlReader
+ * @param {block element} node
+ * @param {message to be displayed in case of error} messageError
+ */
+export const parseCoordinates4D = (xmlReader, node, messageError) => {
+    var position = [];
+
+    //Get x, y, z
+    position = parseCoordinates3D(xmlReader, node, messageError);
+
+    if (!Array.isArray(position)) return position;
+
+    // w
+    var w = xmlReader.getFloat(node, "w", false);
+    if (!(w != null && !isNaN(w)))
+        return "unable to parse w-coordinate of the " + messageError;
+
+    position.push(w);
+
+    return position;
+}
+
+/**
  * Converts an axis name to vec3 representation
  * @param {*} axis
  * @returns array representing the axis
@@ -181,3 +205,48 @@ export const parseColor = (xmlReader, node, messageError) => {
 
     return color;
 };
+
+/**
+ * @param cgfLight {CGFlight}
+ * @param properties {properties} Storing light information [sceneIdx, enabled, type, location, ambient, diffuse, specular, attenuation, angle, exponent, target]
+        // Note that the last 3 elements are only defined for spotlights, while the 4th last is optional
+ */
+export const updateLight = (cgfLight, properties) => {
+    // console.log("Updating light: ", cgfLight, " with properties: ", properties);
+
+    cgfLight.setVisible(true);
+
+    if (properties[1] == true) cgfLight.enable();
+    else cgfLight.disable();
+
+    cgfLight.setPosition(...properties[3]);
+    cgfLight.setAmbient(...properties[4]);
+    cgfLight.setDiffuse(...properties[5]);
+    cgfLight.setSpecular(...properties[6]);
+
+    let attenOffset = 0;
+    if (properties.length >= 8 && Array.isArray(properties[7])) {
+        attenOffset = 1;
+        if (properties[7][0] == 1) {
+            cgfLight.setConstantAttenuation(1);
+            cgfLight.setLinearAttenuation(0);
+            cgfLight.setQuadraticAttenuation(0);
+        } else if (properties[7][1] == 1) {
+            cgfLight.setLinearAttenuation(1);
+            cgfLight.setConstantAttenuation(0);
+            cgfLight.setQuadraticAttenuation(0);
+        } else {
+            cgfLight.setQuadraticAttenuation(1);
+            cgfLight.setConstantAttenuation(0);
+            cgfLight.setLinearAttenuation(0);
+        }
+    }
+
+    if (properties[2] == "spot") {
+        cgfLight.setSpotCutOff(properties[7 + attenOffset]);
+        cgfLight.setSpotExponent(properties[8 + attenOffset]);
+        cgfLight.setSpotDirection(...properties[9 + attenOffset]);
+    }
+
+    cgfLight.update();
+}

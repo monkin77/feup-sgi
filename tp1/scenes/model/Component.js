@@ -15,6 +15,7 @@ export class Component {
         this._texture = texture;
         this._primitives = children.primitives;
         this._components = children.components;
+        this._currMaterial = 0;
     }
 
     get id() {
@@ -34,6 +35,13 @@ export class Component {
     }
     get components() {
         return this._components;
+    }
+    get currMaterial() {
+        return this._currMaterial;
+    }
+
+    nextMaterial() {
+        this._currMaterial = (this._currMaterial + 1) % this.materials.length;
     }
 
     hasTransformation = () => this._transformation != "";

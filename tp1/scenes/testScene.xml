@@ -2,7 +2,7 @@
     <scene root="demoRoot" axis_length="5"/>
 
     <views default="defaultCamera">
-        <perspective id="defaultCamera" near="0.1" far="50" angle="30">
+        <perspective id="defaultCamera" near="0.1" far="500" angle="30">
             <from x="20" y="15" z="20" />
             <to x="0" y="-2" z="0" />
         </perspective>
@@ -26,11 +26,21 @@
 
     <lights>
         <omni id="demoLight" enabled="1">
-            <location x="9.8" y="5" z="5" w="1.0" />
+            <location x="6" y="2" z="5" w="0.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
-            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <diffuse r="1" g="1" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="0" linear="1" quadratic="0" />  
         </omni>
+
+        <spot id="spotLight1" enabled="0" angle="0" exponent="1" >
+            <location x="0" y="0" z="5" w="0.0" />
+            <target x="0" y="0" z="0" />
+            <ambient r="1" g="1" b="1" a="1.0" />
+            <diffuse r="0" g="0" b="0" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+            <attenuation constant="0" linear="0" quadratic="1" />  
+        </spot>
     </lights>
 
     <textures>
@@ -49,8 +59,8 @@
         <material id="backgroundMaterial" shininess="10">
             <emission r="0" g="0" b="0" a="1.0" />
             <ambient r="0.2" g="0.4" b="0.8" a="1.0" />
-            <diffuse r="0.2" g="0.4" b="0.8" a="1.0" />
-            <specular r="0.2" g="0.4" b="0.8" a="1.0" />
+            <diffuse r="0" g="0.4" b="0.8" a="1.0" />
+            <specular r="0" g="0.4" b="0.8" a="1.0" />
         </material>
 
         <material id="skinMaterial" shininess="10">
@@ -94,11 +104,18 @@
             <diffuse r="0.8" g="0.8" b="0.8" a="1.0" />
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
+
+        <material id="blackMat" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="0" g="0" b="0" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
         <transformation id="demoTransform">
-            <scale x="5" y="1" z="5" />
+            <scale x="10" y="1" z="15" />
             <rotate axis="x" angle="-45" />
             <rotate axis="z" angle="-45" />
         </transformation>
@@ -504,7 +521,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinder" />
             </children>
@@ -520,7 +537,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cylinder" />
             </children>
@@ -537,7 +554,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinder" />
             </children>
@@ -554,7 +571,7 @@
             <materials>
                 <material id="beltMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <!-- Maybe this should use a prism with variable radius -->
                 <componentref id="quadrangularPrism" />
@@ -570,7 +587,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="shoulder" />
                 <componentref id="upperArm" />
@@ -591,7 +608,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="baseArm" />
             </children>
@@ -607,7 +624,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="baseArm" />
             </children>
@@ -620,7 +637,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="armLeft" />
                 <componentref id="armRight" />
@@ -638,7 +655,7 @@
             <materials>
                 <material id="shortsMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cylinder" />
             </children>
@@ -654,7 +671,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cylinder" />
             </children>
@@ -670,7 +687,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinder" />
             </children>
@@ -684,7 +701,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="upperThigh" />
                 <componentref id="middleThigh" />
@@ -702,7 +719,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinder" />
             </children>
@@ -718,7 +735,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinderLarge" />
             </children>
@@ -734,7 +751,7 @@
             <materials>
                 <material id="socksMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinderLarge" />
             </children>
@@ -750,7 +767,7 @@
             <materials>
                 <material id="bootsMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cylinder" />
             </children>
@@ -765,7 +782,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="decreasingCylinderNarrow" />
             </children>
@@ -780,7 +797,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="quadrangularPrism" />
             </children>
@@ -796,7 +813,7 @@
             <materials>
                 <material id="bootsMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="footFace" />
                 <componentref id="footSole" />
@@ -813,7 +830,7 @@
             <materials>
                 <material id="bootsMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="footFace" />
                 <componentref id="footSole" />
@@ -829,7 +846,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="upperShin" />
                 <componentref id="lowerShin" />
@@ -845,7 +862,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="thigh" />
                 <componentref id="lowerLeg" />
@@ -860,7 +877,7 @@
             <materials>
                 <material id="skinMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="thigh" />
                 <componentref id="lowerLeg" />
@@ -878,7 +895,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="baseLegRight" />
             </children>
@@ -894,7 +911,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="baseLegLeft" />
             </children>
@@ -907,7 +924,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="legLeft" />
                 <componentref id="legRight" />
@@ -956,6 +973,7 @@
             </transformation>
             <materials>
                 <material id="inherit" />
+                <material id="blackMat" />
             </materials>
             <texture id="inherit"/>
             <children>
