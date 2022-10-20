@@ -882,6 +882,10 @@ export class MySceneGraph {
         if (this.componentsParser.hasReports())
             return this.componentsParser.reports[0];
 
+        if (!(this.idRoot in this.componentsParser.components)) {
+            return `Root component(${this.idRoot}) referenced in the  <scene /> does not exist.`
+        }
+
         log("Parsed Components");
         return null;
     }
