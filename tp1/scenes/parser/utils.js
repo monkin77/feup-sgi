@@ -8,6 +8,14 @@ export const onXMLMinorError = (message) => {
     console.warn("[Warning]: " + message);
 };
 
+/*
+* Callback to be executed on any read error, showing an error on the console.
+* @param {string} message
+*/
+export const onXMLError = (message) => {
+    console.error("XML Loading Error: " + message);
+}
+
 /**
  * Callback to be executed on any message.
  * @param {string} message

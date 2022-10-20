@@ -400,10 +400,10 @@ export class MySceneGraph {
                     if (!Array.isArray(aux)) return aux;
 
                     global.push(aux);
-                } else if (attributeNames[j] != "attenuation") {
+                } else {
                     return (
                         "light " +
-                        attributeNames[i] +
+                        attributeNames[j] +
                         " undefined for ID = " +
                         lightId
                     );
