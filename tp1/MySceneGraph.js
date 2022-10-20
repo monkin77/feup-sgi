@@ -400,6 +400,10 @@ export class MySceneGraph {
                     if (!Array.isArray(aux)) return aux;
 
                     global.push(aux);
+                } else if (attributeNames[j] == "attenuation") {
+                    onXMLMinorError(`Attenuation attribute missing in Light: ${lightId}. Assuming Constant Attenuation`);
+                    // Adding constant attenuation to the array
+                    global.push([1, 0, 0]);
                 } else {
                     return (
                         "light " +
