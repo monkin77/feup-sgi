@@ -142,17 +142,15 @@ export class XMLscene extends CGFscene {
         }
     }
 
-    /**
-     * @brief Method called periodically by the scene
-     * @param {*} t timestamp
+     /**
+     * Iterate all the materials and change the active material to the next one
      */
-    update(t) {
-        if (this.interface.isKeyPressed("KeyM")) {
-            for (const component of Object.values(this.graph.componentsParser.components)) {
-                component.nextMaterial();
-            }
+    cycleMaterials() {
+        for (const component of Object.values(this.graph.componentsParser.components)) {
+            component.nextMaterial();
         }
     }
+
 
     /**
      * Displays the scene.

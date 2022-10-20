@@ -7,7 +7,7 @@ import { MyTorus } from "./primitives/MyTorus.js";
 import { ComponentsParser } from "./scenes/parser/ComponentsParser.js";
 import { TransformationsParser } from "./scenes/parser/TranformationsParser.js";
 import { ViewsParser } from "./scenes/parser/ViewsParser.js";
-import { log, onXMLMinorError, parseColor, parseCoordinates3D, parseCoordinates4D } from "./scenes/parser/utils.js";
+import { invalidFloat, log, onXMLMinorError, parseColor, parseCoordinates3D, parseCoordinates4D } from "./scenes/parser/utils.js";
 import { MaterialsParser } from "./scenes/parser/MaterialsParser.js";
 import { Component } from "./scenes/model/Component.js";
 import { TexturesParser } from "./scenes/parser/TexturesParser.js";
@@ -400,10 +400,14 @@ export class MySceneGraph {
                     if (!Array.isArray(aux)) return aux;
 
                     global.push(aux);
-                } else if (attributeNames[j] != "attenuation") {
+                } else if (attributeNames[j] == "attenuation") {
+                    onXMLMinorError(`Attenuation attribute missing in Light: ${lightId}. Assuming Constant Attenuation`);
+                    // Adding constant attenuation to the array
+                    global.push([1, 0, 0]);
+                } else {
                     return (
                         "light " +
-                        attributeNames[i] +
+                        attributeNames[j] +
                         " undefined for ID = " +
                         lightId
                     );
@@ -413,7 +417,7 @@ export class MySceneGraph {
             // Gets the additional attributes of the spot light
             if (children[i].nodeName == "spot") {
                 var angle = this.reader.getFloat(children[i], "angle", false);
-                if (!(angle != null && !isNaN(angle)))
+                if (invalidFloat(angle))
                     return (
                         "unable to parse angle of the light for ID = " + lightId
                     );
@@ -423,7 +427,7 @@ export class MySceneGraph {
                     "exponent",
                     false
                 );
-                if (!(exponent != null && !isNaN(exponent)))
+                if (invalidFloat(exponent))
                     return (
                         "unable to parse exponent of the light for ID = " +
                         lightId
@@ -558,7 +562,7 @@ export class MySceneGraph {
             if (primitiveType == "rectangle") {
                 // x1
                 var x1 = this.reader.getFloat(grandChildren[0], "x1", false);
-                if (!(x1 != null && !isNaN(x1)))
+                if (invalidFloat(x1))
                     return (
                         "unable to parse x1 of the primitive coordinates for ID = " +
                         primitiveId
@@ -566,7 +570,7 @@ export class MySceneGraph {
 
                 // y1
                 var y1 = this.reader.getFloat(grandChildren[0], "y1", false);
-                if (!(y1 != null && !isNaN(y1)))
+                if (invalidFloat(y1))
                     return (
                         "unable to parse y1 of the primitive coordinates for ID = " +
                         primitiveId
@@ -605,7 +609,7 @@ export class MySceneGraph {
                     "base",
                     false
                 );
-                if (!(base != null && !isNaN(base)))
+                if (invalidFloat(base))
                     return (
                         "unable to parse base of the primitive coordinates for ID = " +
                         primitiveId
@@ -613,7 +617,7 @@ export class MySceneGraph {
 
                 // top
                 var top = this.reader.getFloat(grandChildren[0], "top", false);
-                if (!(top != null && !isNaN(top)))
+                if (invalidFloat(top))
                     return (
                         "unable to parse top of the primitive coordinates for ID = " +
                         primitiveId
@@ -625,31 +629,31 @@ export class MySceneGraph {
                     "height",
                     false
                 );
-                if (!(height != null && !isNaN(height)))
+                if (invalidFloat(height))
                     return (
                         "unable to parse height of the primitive coordinates for ID = " +
                         primitiveId
                     );
 
                 // slices
-                var slices = this.reader.getFloat(
+                var slices = this.reader.getInteger(
                     grandChildren[0],
                     "slices",
                     false
                 );
-                if (!(slices != null && !isNaN(slices)))
+                if (invalidFloat(slices))
                     return (
                         "unable to parse slices of the primitive coordinates for ID = " +
                         primitiveId
                     );
 
                 // stacks
-                var stacks = this.reader.getFloat(
+                var stacks = this.reader.getInteger(
                     grandChildren[0],
                     "stacks",
                     false
                 );
-                if (!(stacks != null && !isNaN(stacks)))
+                if (invalidFloat(stacks))
                     return (
                         "unable to parse stacks of the primitive coordinates for ID = " +
                         primitiveId
@@ -669,7 +673,7 @@ export class MySceneGraph {
             } else if (primitiveType == "triangle") {
                 // x1
                 var x1 = this.reader.getFloat(grandChildren[0], "x1", false);
-                if (!(x1 != null && !isNaN(x1)))
+                if (invalidFloat(x1))
                     return (
                         "unable to parse x1 of the primitive coordinates for ID = " +
                         primitiveId
@@ -677,7 +681,7 @@ export class MySceneGraph {
 
                 // y1
                 var y1 = this.reader.getFloat(grandChildren[0], "y1", false);
-                if (!(y1 != null && !isNaN(y1)))
+                if (invalidFloat(y1))
                     return (
                         "unable to parse y1 of the primitive coordinates for ID = " +
                         primitiveId
@@ -685,7 +689,7 @@ export class MySceneGraph {
 
                 // z1
                 var z1 = this.reader.getFloat(grandChildren[0], "z1", false);
-                if (!(z1 != null && !isNaN(z1)))
+                if (invalidFloat(z1))
                     return (
                         "unable to parse z1 of the primitive coordinates for ID = " +
                         primitiveId
@@ -693,7 +697,7 @@ export class MySceneGraph {
 
                 // x2
                 var x2 = this.reader.getFloat(grandChildren[0], "x2", false);
-                if (!(x2 != null && !isNaN(x2)))
+                if (invalidFloat(x2))
                     return (
                         "unable to parse x2 of the primitive coordinates for ID = " +
                         primitiveId
@@ -701,7 +705,7 @@ export class MySceneGraph {
 
                 // y2
                 var y2 = this.reader.getFloat(grandChildren[0], "y2", false);
-                if (!(y2 != null && !isNaN(y2)))
+                if (invalidFloat(y2))
                     return (
                         "unable to parse y2 of the primitive coordinates for ID = " +
                         primitiveId
@@ -709,7 +713,7 @@ export class MySceneGraph {
 
                 // z2
                 var z2 = this.reader.getFloat(grandChildren[0], "z2", false);
-                if (!(z2 != null && !isNaN(z2)))
+                if (invalidFloat(z2))
                     return (
                         "unable to parse z2 of the primitive coordinates for ID = " +
                         primitiveId
@@ -717,7 +721,7 @@ export class MySceneGraph {
 
                 // x3
                 var x3 = this.reader.getFloat(grandChildren[0], "x3", false);
-                if (!(x3 != null && !isNaN(x3)))
+                if (invalidFloat(x3))
                     return (
                         "unable to parse x3 of the primitive coordinates for ID = " +
                         primitiveId
@@ -725,7 +729,7 @@ export class MySceneGraph {
 
                 // y3
                 var y3 = this.reader.getFloat(grandChildren[0], "y3", false);
-                if (!(y3 != null && !isNaN(y3)))
+                if (invalidFloat(y3))
                     return (
                         "unable to parse y3 of the primitive coordinates for ID = " +
                         primitiveId
@@ -733,7 +737,7 @@ export class MySceneGraph {
 
                 // z3
                 var z3 = this.reader.getFloat(grandChildren[0], "z3", false);
-                if (!(z3 != null && !isNaN(z3)))
+                if (invalidFloat(z3))
                     return (
                         "unable to parse z3 of the primitive coordinates for ID = " +
                         primitiveId
@@ -761,31 +765,31 @@ export class MySceneGraph {
                     "radius",
                     false
                 );
-                if (!(radius != null && !isNaN(radius)))
+                if (invalidFloat(radius))
                     return (
                         "unable to parse radius of the primitive coordinates for ID = " +
                         primitiveId
                     );
 
                 // slices
-                var slices = this.reader.getFloat(
+                var slices = this.reader.getInteger(
                     grandChildren[0],
                     "slices",
                     false
                 );
-                if (!(slices != null && !isNaN(slices)))
+                if (invalidFloat(slices))
                     return (
                         "unable to parse slices of the primitive coordinates for ID = " +
                         primitiveId
                     );
 
                 // stacks
-                var stacks = this.reader.getFloat(
+                var stacks = this.reader.getInteger(
                     grandChildren[0],
                     "stacks",
                     false
                 );
-                if (!(stacks != null && !isNaN(stacks)))
+                if (invalidFloat(stacks))
                     return (
                         "unable to parse stacks of the primitive coordinates for ID = " +
                         primitiveId
@@ -807,7 +811,7 @@ export class MySceneGraph {
                     "inner",
                     false
                 );
-                if (!(inner != null && !isNaN(inner)))
+                if (invalidFloat(inner))
                     return (
                         "unable to parse inner of the primitive coordinates for ID = " +
                         primitiveId
@@ -819,31 +823,31 @@ export class MySceneGraph {
                     "outer",
                     false
                 );
-                if (!(outer != null && !isNaN(outer)))
+                if (invalidFloat(outer))
                     return (
                         "unable to parse outer of the primitive coordinates for ID = " +
                         primitiveId
                     );
 
                 // slices
-                var slices = this.reader.getFloat(
+                var slices = this.reader.getInteger(
                     grandChildren[0],
                     "slices",
                     false
                 );
-                if (!(slices != null && !isNaN(slices)))
+                if (invalidFloat(slices))
                     return (
                         "unable to parse slices of the primitive coordinates for ID = " +
                         primitiveId
                     );
 
                 // loops
-                var loops = this.reader.getFloat(
+                var loops = this.reader.getInteger(
                     grandChildren[0],
                     "loops",
                     false
                 );
-                if (!(loops != null && !isNaN(loops)))
+                if (invalidFloat(loops))
                     return (
                         "unable to parse loops of the primitive coordinates for ID = " +
                         primitiveId
@@ -881,6 +885,10 @@ export class MySceneGraph {
         );
         if (this.componentsParser.hasReports())
             return this.componentsParser.reports[0];
+
+        if (!(this.idRoot in this.componentsParser.components)) {
+            return `Root component(${this.idRoot}) referenced in the  <scene /> does not exist.`
+        }
 
         log("Parsed Components");
         return null;

@@ -8,6 +8,14 @@ export const onXMLMinorError = (message) => {
     console.warn("[Warning]: " + message);
 };
 
+/*
+ * Callback to be executed on any read error, showing an error on the console.
+ * @param {string} message
+ */
+export const onXMLError = (message) => {
+    console.error("XML Loading Error: " + message);
+}
+
 /**
  * Callback to be executed on any message.
  * @param {string} message
@@ -15,6 +23,15 @@ export const onXMLMinorError = (message) => {
 export const log = (message) => {
     console.log("[Log] " + message);
 };
+
+/**
+ * 
+ * @param {*} val 
+ * @returns true if received value is NOT a valid float
+ */
+export const invalidFloat = (val) => {
+    return (val == null) || isNaN(val);
+}
 
 /**
  * Parse the coordinates from a node with ID = id
@@ -28,17 +45,17 @@ export const parseCoordinates3D = (xmlReader, node, messageError) => {
 
     // x
     var x = xmlReader.getFloat(node, "x", false);
-    if (!(x != null && !isNaN(x)))
+    if (invalidFloat(x))
         return "unable to parse x-coordinate of the " + messageError;
 
     // y
     var y = xmlReader.getFloat(node, "y", false);
-    if (!(y != null && !isNaN(y)))
+    if (invalidFloat(y))
         return "unable to parse y-coordinate of the " + messageError;
 
     // z
     var z = xmlReader.getFloat(node, "z", false);
-    if (!(z != null && !isNaN(z)))
+    if (invalidFloat(z))
         return "unable to parse z-coordinate of the " + messageError;
 
     position.push(...[x, y, z]);
@@ -62,7 +79,7 @@ export const parseCoordinates4D = (xmlReader, node, messageError) => {
 
     // w
     var w = xmlReader.getFloat(node, "w", false);
-    if (!(w != null && !isNaN(w)))
+    if (invalidFloat(w))
         return "unable to parse w-coordinate of the " + messageError;
 
     position.push(w);
@@ -73,7 +90,7 @@ export const parseCoordinates4D = (xmlReader, node, messageError) => {
 /**
  * Converts an axis name to vec3 representation
  * @param {*} axis
- * @returns array representing the axis
+ * @returns {int[] | null} array representing the axis if valid. Null otherwise
  */
 export const axisToVec = (axis) => {
     switch (axis) {
@@ -84,7 +101,7 @@ export const axisToVec = (axis) => {
         case "z":
             return [0, 0, 1];
         default:
-            return [0, 0, 0];
+            return null;
     }
 };
 
@@ -130,8 +147,12 @@ export const calculateTransformationMatrix = (
                     };
                 axis = axisToVec(axis);
 
+                if (!axis) return {
+                    error: `Invalid 'axis' value provided for rotation in transformation: ${transformationId}`,
+                };
+
                 const angle = xmlReader.getFloat(child, "angle", false);
-                if (angle == null)
+                if (invalidFloat(angle))
                     return {
                         error: `no 'angle' defined for rotation in transformation ${transformationId}`,
                     };
@@ -207,6 +228,16 @@ export const parseColor = (xmlReader, node, messageError) => {
 };
 
 /**
+ * 
+ * @param {float[]} src Source point
+ * @param {float[]} target Target Point
+ * @returns 3D array representing vector
+ */
+export const calcVector = (src, target) => {
+    return [target[0] - src[0], target[1] - src[1], target[2] - src[2]];
+}
+
+/**
  * @param cgfLight {CGFlight}
  * @param properties {properties} Storing light information [sceneIdx, enabled, type, location, ambient, diffuse, specular, attenuation, angle, exponent, target]
         // Note that the last 3 elements are only defined for spotlights, while the 4th last is optional
@@ -245,7 +276,7 @@ export const updateLight = (cgfLight, properties) => {
     if (properties[2] == "spot") {
         cgfLight.setSpotCutOff(properties[7 + attenOffset]);
         cgfLight.setSpotExponent(properties[8 + attenOffset]);
-        cgfLight.setSpotDirection(...properties[9 + attenOffset]);
+        cgfLight.setSpotDirection(calcVector(properties[3], properties[9 + attenOffset]));
     }
 
     cgfLight.update();
