@@ -1014,8 +1014,7 @@
         <!-- TOOD: Remove this component that is used to test triangle texCoords  -->
         <component id="testTriangle">
             <transformation>
-                <translate y="-5" x="0" z="0" />
-                <scale x="10" y="10" z="10" />
+                <transformationref id="demoTransform" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1036,6 +1035,7 @@
             <children>
                 <componentref id="laraCroft" />
                 <componentref id="background" />
+                <componentref id="testTriangle" />
             </children>
         </component>
         

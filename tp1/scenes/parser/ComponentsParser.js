@@ -158,7 +158,7 @@ export class ComponentsParser extends Parser {
                     error: `<tranformationref> cannot be coupled with other transformations in component with ID = ${componentId}`,
                 };
 
-            const transfId = xmlReader.getString(transfRefNode, "id", false);
+            const transfId = xmlReader.getString(transfRefNode[0], "id", false);
             if (transfId == null)
                 return { error: "no 'id' defined for <transformationref>" };
             if (!(transfId in this._transformations))
