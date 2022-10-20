@@ -28,6 +28,9 @@ export class ComponentsParser extends Parser {
         this._textures = textures;
         this._primitives = primitives;
 
+        this._componentIds = new Set(); // save compononentIds for Reference verification
+
+
         this.parse(xmlReader, componentsNode);
     }
 
@@ -40,6 +43,13 @@ export class ComponentsParser extends Parser {
         const children = componentsNode.children;
 
         let err;
+
+        // Fetch all componentIds and save them in "this._componentIds"
+        if ((err = this.parseComponentIds(xmlReader, children)) != null) {
+            this.addReport(parserId, err);
+            return;
+        }
+
         for (const child of children) {
             if (child.nodeName != "component") {
                 onXMLMinorError(
@@ -64,6 +74,24 @@ export class ComponentsParser extends Parser {
             return;
         } */
 
+        return null;
+    }
+
+    /**
+     *  Method that parses all components ids for further reference check
+     * @param {*} xmlReader
+     * @param {} componentNodes
+     * @returns {null | string } null if successful, an error string otherwise
+     */
+    parseComponentIds = (xmlReader, componentNodes) => {
+        for (const component of componentNodes) {
+            const componentId = xmlReader.getString(component, "id", false);
+            if (componentId == null) return "no 'id' defined for component";
+            if (this._componentIds.has(componentId))
+                return `ID must be unique for each component (conflict: ID = ${componentId})`;
+
+            this._componentIds.add(componentId);
+        }
         return null;
     }
 
@@ -285,7 +313,7 @@ export class ComponentsParser extends Parser {
                         return {
                             error: `no 'id' defined for <componentref> inside <children> of component with ID = ${componentId}`,
                         };
-                    if (!(childComponentId in this._components))
+                    if (!this._componentIds.has(childComponentId))
                         return {
                             error: `<componentref> contains an invalid id (ID = ${childComponentId}) inside <children> of component with ID = ${componentId}`,
                         };

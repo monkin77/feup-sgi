@@ -1035,7 +1035,6 @@
             <children>
                 <componentref id="laraCroft" />
                 <componentref id="background" />
-                <componentref id="testTriangle" />
             </children>
         </component>
         
