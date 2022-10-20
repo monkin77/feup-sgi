@@ -881,7 +881,8 @@ export class MySceneGraph {
             this.transformationsParser.transformations,
             this.materialsParser.materials,
             this.texturesParser.textures,
-            this.primitives
+            this.primitives,
+            this.idRoot
         );
         if (this.componentsParser.hasReports())
             return this.componentsParser.reports[0];
