@@ -146,7 +146,6 @@ export class XMLscene extends CGFscene {
      * Iterate all the materials and change the active material to the next one
      */
     cycleMaterials() {
-        console.log("here")
         for (const component of Object.values(this.graph.componentsParser.components)) {
             component.nextMaterial();
         }
