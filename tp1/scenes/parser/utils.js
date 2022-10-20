@@ -207,6 +207,16 @@ export const parseColor = (xmlReader, node, messageError) => {
 };
 
 /**
+ * 
+ * @param {float[]} src Source point
+ * @param {float[]} target Target Point
+ * @returns 3D array representing vector
+ */
+export const calcVector = (src, target) => {
+    return [target[0] - src[0], target[1] - src[1], target[2] - src[2]];
+}
+
+/**
  * @param cgfLight {CGFlight}
  * @param properties {properties} Storing light information [sceneIdx, enabled, type, location, ambient, diffuse, specular, attenuation, angle, exponent, target]
         // Note that the last 3 elements are only defined for spotlights, while the 4th last is optional
@@ -245,7 +255,7 @@ export const updateLight = (cgfLight, properties) => {
     if (properties[2] == "spot") {
         cgfLight.setSpotCutOff(properties[7 + attenOffset]);
         cgfLight.setSpotExponent(properties[8 + attenOffset]);
-        cgfLight.setSpotDirection(...properties[9 + attenOffset]);
+        cgfLight.setSpotDirection(calcVector(properties[3], properties[9 + attenOffset]));
     }
 
     cgfLight.update();
