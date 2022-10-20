@@ -61,6 +61,9 @@ export class MyInterface extends CGFinterface {
 
     processKeyDown(event) {
         this.activeKeys[event.code] = true;
+        if (event.code == "KeyM" && this.scene.sceneInited) {
+            this.scene.cycleMaterials();
+        }
     };
 
     processKeyUp(event) {
