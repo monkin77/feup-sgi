@@ -107,7 +107,7 @@ export class XMLscene extends CGFscene {
      */
     setupInterface() {
         // Display Axis Toggle
-        this.displayAxis = true;
+        this.displayAxis = false;
 
         // Display Lights Toggle
         this.displayLights = false;
