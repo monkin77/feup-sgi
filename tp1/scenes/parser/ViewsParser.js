@@ -159,6 +159,7 @@ export class ViewsParser extends Parser {
 
         from = from[0];
         to = to[0];
+        up = up[0];
 
         const fromCoords = parseCoordinates3D(
             xmlReader,
@@ -175,7 +176,7 @@ export class ViewsParser extends Parser {
         if (!Array.isArray(toCoords)) return toCoords;
 
         const upCoords =
-            up.length != 1 ?
+            !up ?
             defaultOrthoUp :
             parseCoordinates3D(
                 xmlReader,
