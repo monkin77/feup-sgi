@@ -20,7 +20,8 @@ export class ComponentsParser extends Parser {
         transformations,
         materials,
         textures,
-        primitives
+        primitives,
+        idRoot
     ) {
         super();
         this._components = {};
@@ -28,6 +29,7 @@ export class ComponentsParser extends Parser {
         this._materials = materials;
         this._textures = textures;
         this._primitives = primitives;
+        this._idRoot = idRoot;
 
         this._componentIds = new Set(); // save compononentIds for Reference verification
 
@@ -67,14 +69,41 @@ export class ComponentsParser extends Parser {
             }
         }
 
-        /* if (Object.keys(this._components).length == 0) {
-            this.addReport(
-                parserId,
-                "There needs to be at least one component"
-            );
+        if ((err = this.verifyReferences()) != null) {
+            this.addReport(parserId, err);
             return;
-        } */
+        }
 
+        return null;
+    }
+
+    /**
+     * Method that verifies the references in this._components.
+     * Return an error if it contains any circular reference.
+     */
+    verifyReferences = () => this.verifyReferencesComponent(this._idRoot);
+
+    /**
+     * Method that verifies the references in a given component and all its children.
+     * Return an error if it contains any circular reference.
+     */
+    verifyReferencesComponent = (componentId) => {
+        const component = this._components[componentId];
+
+        if (component.visited) {
+            return "Circular reference detected in component " + componentId;
+        }
+
+        component.visited = true;
+
+        for (const childId of component.components) {
+            const err = this.verifyReferencesComponent(childId);
+            if (err != null) {
+                return err;
+            }
+        }
+
+        component.visited = false;
         return null;
     }
 
@@ -149,7 +178,7 @@ export class ComponentsParser extends Parser {
             return `<children> must be defined inside the component with id = ${componentId}`;
         childrenNode = childrenNode[0];
         const { error: childrenErr, value: childrenValue } =
-        this.handleChildren(xmlReader, childrenNode, componentId);
+            this.handleChildren(xmlReader, childrenNode, componentId);
         if (childrenErr) return childrenErr;
 
         this._components[componentId] = new Component(
