@@ -12,10 +12,22 @@
 
 ### [TP1 - Scene Graph](tp1)
 
-- (items briefly describing main strong points)
+The project's scene is based on the famous video-game character Lara Croft, inspired by the original game from 1996.
+The character is displayed in a temple, a very iconic theme across the Tomb Raider games.
+
+The scene contains a few lights and views which can be controlled by the given interface.
+
+- Robust parser capable of analyzing a XML and subsequently display the scene described in it.
+- Base WebGL primitives powering the developed scenes.
+- Effort to make the code organized and as modular as possible.
+- Scene capable of properly displaying the project's features.
+- The code is regularly documented.
+- There is an interface to control the scene's views and lights.
 - Scene
-  - (Brief description of the created scene)
-  - (relative link to the scene)
+  - Inspired by the 1996 Tomb Raider.
+  - Focused on the main charater, Lara Croft.
+  - Displays an ancient temple full of pillars.
+  - Makes use of several textures to recreate the aspect of the original game.
 
 -----
 
