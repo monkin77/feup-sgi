@@ -31,3 +31,9 @@ The scene contains a few lights and views which can be controlled by the given i
 - We think we did everything in the specification. However, we were afraid of certain scenarios where the parser
 could supposedly be more robust instead of displaying an error and aborting.
 - The scene was difficul to recreate at times.
+
+## Screenshots
+
+![Screenshot 1](./screenshots/screenshot1.png)
+![Screenshot 1](./screenshots/screenshot2.png)
+![Screenshot 1](./screenshots/screenshot3.png)
