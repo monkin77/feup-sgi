@@ -13,15 +13,15 @@ import { Component } from "./scenes/model/Component.js";
 import { TexturesParser } from "./scenes/parser/TexturesParser.js";
 
 // Order of the groups in the XML document.
-var SCENE_INDEX = 0;
-var VIEWS_INDEX = 1;
-var AMBIENT_INDEX = 2;
-var LIGHTS_INDEX = 3;
-var TEXTURES_INDEX = 4;
-var MATERIALS_INDEX = 5;
-var TRANSFORMATIONS_INDEX = 6;
-var PRIMITIVES_INDEX = 7;
-var COMPONENTS_INDEX = 8;
+const SCENE_INDEX = 0;
+const VIEWS_INDEX = 1;
+const AMBIENT_INDEX = 2;
+const LIGHTS_INDEX = 3;
+const TEXTURES_INDEX = 4;
+const MATERIALS_INDEX = 5;
+const TRANSFORMATIONS_INDEX = 6;
+const PRIMITIVES_INDEX = 7;
+const COMPONENTS_INDEX = 8;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -863,11 +863,39 @@ export class MySceneGraph {
                 );
 
                 this.primitives[primitiveId] = tor;
-            }
-        }
+            } else if (primitiveType == "patch") {
+                const degree_u = this.reader.getInteger(grandChildren[0], "degree_u", false);
+                if (invalidFloat(degree_u))
+                    return (
+                        "unable to parse degree_u of the primitive coordinates for ID = " +
+                        primitiveId
+                    );
 
-        log("Parsed primitives");
-        return null;
+                const degree_v = this.reader.getInteger(grandChildren[0], "degree_v", false);
+                if (invalidFloat(degree_v))
+                    return (
+                        "unable to parse degree_v of the primivite coordinates for ID = " +
+                        primitiveId
+                    );
+
+                const parts_u = this.reader.getInteger(grandChildren[0], "parts_u", false);
+                if (invalidFloat(parts_u))
+                    return (
+                        "unable to parse parts_u of the primitive coordinates for ID = " +
+                        primitiveId
+                    );
+
+                const parts_v = this.reader.getInteger(grandChildren[0], "parts_v", false);
+                if (invalidFloat(parts_v))
+                    return (
+                        "unable to parse parts_v of the primitive coordinates for ID = " +
+                        primitiveId
+                    );
+            }
+
+            log("Parsed primitives");
+            return null;
+        }
     }
 
     /**

@@ -199,6 +199,16 @@
         <primitive id="trapezium">
             <cylinder base="0.707" top="0.53" height="1" slices="4" stacks="20" />
         </primitive>
+
+        <primitive id="patchTest">
+            <patch degree_u="1" parts_u="20" degree_v="1" parts_v="20" >
+                <controlpoint x="0" y="0" z="0" />
+                <controlpoint x="0" y="1" z="0" />
+
+                <controlpoint x="1" y="0" z="0" />
+                <controlpoint x="1" y="1" z="0" />
+            </patch>
+        </primitive>
     </primitives>
 
     <components>
