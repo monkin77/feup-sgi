@@ -8,57 +8,20 @@ export class MyPatch extends CGFobject {
         this.degreeV = degreeV;
         this.partsU = partsU;
         this.partsV = partsV;
-        this.controlPoints = controlPoints;
+        this.controlPoints = [];
 
-        this.initialTexCoords = [
-            0, 0,
-            1, 0,
-            0, 1,
-            1, 1
-        ];
+        for (let u = 0; u < degreeU + 1; u++) {
+            const fixedUPoints = controlPoints.slice(u * (degreeV + 1), (u + 1) * (degreeV + 1));
+            this.controlPoints.push(fixedUPoints);
+        }
+        console.log("control points: ", this.controlPoints);
 
-        this.initBuffers();
+        this.init();
     }
 
-    initBuffers() {
+    init() {
         this.patch = new CGFnurbsSurface(this.degreeU - 1, this.degreeV - 1, this.controlPoints);
         this.obj = new CGFnurbsObject(this.scene, this.partsU, this.partsV, this.patch);
-
-        this.vertices = [
-            this.x1, this.y1, 0, //0
-            this.x2, this.y1, 0, //1
-            this.x1, this.y2, 0, //2
-            this.x2, this.y2, 0 //3
-        ];
-
-        //Counter-clockwise reference of vertices
-        this.indices = [
-            0, 1, 2,
-            1, 3, 2
-        ];
-
-        //Facing Z positive
-        this.normals = [
-            0, 0, 1,
-            0, 0, 1,
-            0, 0, 1,
-            0, 0, 1
-        ];
-
-
-        this.texCoords = Array.from(this.initialTexCoords);
-        this.primitiveType = this.scene.gl.TRIANGLES;
-        this.initGLBuffers();
-    }
-
-    /**
-     * @method updateTexCoords
-     * Updates the list of texture coordinates of the rectangle
-     * @param {Array} coords - Array of texture coordinates
-     */
-    updateTexCoords(coords) {
-        this.texCoords = [...coords];
-        this.updateTexCoordsGLBuffers();
     }
 
     /**
@@ -67,16 +30,11 @@ export class MyPatch extends CGFobject {
      * @param {*} t 
      */
     scaleTexCoords(s, t) {
-        // TODO: Verify if this is correct
-        for (let i = 0; i < this.texCoords.length; i += 2) {
-            this.texCoords[i] = this.initialTexCoords[i] / s;
-            this.texCoords[i + 1] = this.initialTexCoords[i + 1] / t;
-        }
-
-        this.updateTexCoordsGLBuffers();
+        return;
     }
 
-    drawElements(mode) {
+    display() {
+        console.log("drawing patch " + this.id);
         this.obj.display();
     }
 }

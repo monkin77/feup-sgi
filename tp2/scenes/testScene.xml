@@ -200,15 +200,29 @@
             <cylinder base="0.707" top="0.53" height="1" slices="4" stacks="20" />
         </primitive>
 
-        <primitive id="patchTest">
-            <patch degree_u="1" parts_u="20" degree_v="1" parts_v="20" >
+        <primitive id="rectPatch">
+            <patch degree_u="1" degree_v="1" parts_u="20" parts_v="20" >
                 <controlpoint x="0" y="0" z="0" />
-                <controlpoint x="0" y="1" z="0" />
+                <controlpoint x="0" y="10" z="0" />
 
-                <controlpoint x="1" y="0" z="0" />
-                <controlpoint x="1" y="1" z="0" />
+                <controlpoint x="10" y="0" z="0" />
+                <controlpoint x="10" y="10" z="0" />
             </patch>
         </primitive>
+
+        <primitive id="3dPatch">
+            <patch degree_u="2" degree_v="1" parts_u="20" parts_v="20" >
+                <controlpoint x="-1.5" y="-1.5" z="0" />
+                <controlpoint x="-1.5" y="1.5" z="0" />
+
+                <controlpoint x="0" y="-1.5" z="3" />
+                <controlpoint x="0" y="1.5" z="3" />
+
+                <controlpoint x="1.5" y="-1.5" z="0" />
+                <controlpoint x="1.5" y="1.5" z="0" />
+            </patch>
+        </primitive>
+
     </primitives>
 
     <components>
@@ -1418,14 +1432,16 @@
 
         <component id="patchComponent">
             <transformation>
-                <scale x="5" y="5" z="5" />
+                <scale x="10" y="10" z="10" />
+                <translate x="5" y="0" z="5" />
             </transformation>
             <materials>
                 <material id="backgroundMaterial" />
             </materials>
             <texture id="wallTexture" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="patchTest" />
+                <primitiveref id="rectPatch" />
+                <primitiveref id="3dPatch" />
             </children>
         </component>
 

@@ -891,6 +891,13 @@ export class MySceneGraph {
 
                 const controlPoints = [];
                 const controlPointNodes = grandChildren[0].children;
+                if (controlPointNodes.length != (degree_u + 1) * (degree_v + 1)) {
+                    return (
+                        "unable to parse control points of the primitive coordinates for ID = " +
+                        primitiveId + ". Expected " + (degree_u + 1) * (degree_v + 1) + " control points, found " + controlPointNodes.length
+                    );
+                }
+
                 for (const controlNode of controlPointNodes) {
                     const control_x = this.reader.getFloat(controlNode, "x", false);
                     if (invalidNumber(control_x))
@@ -913,7 +920,7 @@ export class MySceneGraph {
                             primitiveId
                         );
 
-                    controlPoints.push([control_x, control_y, control_z]);
+                    controlPoints.push([control_x, control_y, control_z, 1]);
                 }
 
                 const currPatch = new MyPatch(
