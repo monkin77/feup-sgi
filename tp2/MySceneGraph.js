@@ -882,12 +882,50 @@ export class MySceneGraph {
                     );
 
                 const parts_v = this.reader.getInteger(grandChildren[0], "parts_v", false);
-                console.log("parts_v: " + parts_v);
                 if (invalidNumber(parts_v))
                     return (
                         "unable to parse parts_v of the primitive coordinates for ID = " +
                         primitiveId
                     );
+
+                const controlPoints = [];
+                const controlPointNodes = grandChildren[0].children;
+                for (const controlNode of controlPointNodes) {
+                    const control_x = this.reader.getFloat(controlNode, "x", false);
+                    if (invalidNumber(control_x))
+                        return (
+                            "unable to parse x coordinate of the control point from primitive with ID = " +
+                            primitiveId
+                        );
+
+                    const control_y = this.reader.getFloat(controlNode, "y", false);
+                    if (invalidNumber(control_y))
+                        return (
+                            "unable to parse y coordinate of the control point from primitive with ID = " +
+                            primitiveId
+                        );
+
+                    const control_z = this.reader.getFloat(controlNode, "z", false);
+                    if (invalidNumber(control_z))
+                        return (
+                            "unable to parse z coordinate of the control point from primitive with ID = " +
+                            primitiveId
+                        );
+
+                    controlPoints.push([control_x, control_y, control_z]);
+                }
+                console.log("Parsed control points", controlPoints);
+
+                const currPatch = new MyPatch(
+                    this.scene,
+                    primitiveId,
+                    degree_u,
+                    degree_v,
+                    parts_u,
+                    parts_v,
+                    controlPoints
+                );
+                this.primitives[primitiveId] = currPatch;
             }
         }
 
