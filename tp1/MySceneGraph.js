@@ -7,7 +7,7 @@ import { MyTorus } from "./primitives/MyTorus.js";
 import { ComponentsParser } from "./scenes/parser/ComponentsParser.js";
 import { TransformationsParser } from "./scenes/parser/TranformationsParser.js";
 import { ViewsParser } from "./scenes/parser/ViewsParser.js";
-import { invalidFloat, log, onXMLMinorError, parseColor, parseCoordinates3D, parseCoordinates4D } from "./scenes/parser/utils.js";
+import { invalidNumber, log, onXMLMinorError, parseColor, parseCoordinates3D, parseCoordinates4D } from "./scenes/parser/utils.js";
 import { MaterialsParser } from "./scenes/parser/MaterialsParser.js";
 import { Component } from "./scenes/model/Component.js";
 import { TexturesParser } from "./scenes/parser/TexturesParser.js";
@@ -417,7 +417,7 @@ export class MySceneGraph {
             // Gets the additional attributes of the spot light
             if (children[i].nodeName == "spot") {
                 var angle = this.reader.getFloat(children[i], "angle", false);
-                if (invalidFloat(angle))
+                if (invalidNumber(angle))
                     return (
                         "unable to parse angle of the light for ID = " + lightId
                     );
@@ -427,7 +427,7 @@ export class MySceneGraph {
                     "exponent",
                     false
                 );
-                if (invalidFloat(exponent))
+                if (invalidNumber(exponent))
                     return (
                         "unable to parse exponent of the light for ID = " +
                         lightId
@@ -562,7 +562,7 @@ export class MySceneGraph {
             if (primitiveType == "rectangle") {
                 // x1
                 var x1 = this.reader.getFloat(grandChildren[0], "x1", false);
-                if (invalidFloat(x1))
+                if (invalidNumber(x1))
                     return (
                         "unable to parse x1 of the primitive coordinates for ID = " +
                         primitiveId
@@ -570,7 +570,7 @@ export class MySceneGraph {
 
                 // y1
                 var y1 = this.reader.getFloat(grandChildren[0], "y1", false);
-                if (invalidFloat(y1))
+                if (invalidNumber(y1))
                     return (
                         "unable to parse y1 of the primitive coordinates for ID = " +
                         primitiveId
@@ -609,7 +609,7 @@ export class MySceneGraph {
                     "base",
                     false
                 );
-                if (invalidFloat(base))
+                if (invalidNumber(base))
                     return (
                         "unable to parse base of the primitive coordinates for ID = " +
                         primitiveId
@@ -617,7 +617,7 @@ export class MySceneGraph {
 
                 // top
                 var top = this.reader.getFloat(grandChildren[0], "top", false);
-                if (invalidFloat(top))
+                if (invalidNumber(top))
                     return (
                         "unable to parse top of the primitive coordinates for ID = " +
                         primitiveId
@@ -629,7 +629,7 @@ export class MySceneGraph {
                     "height",
                     false
                 );
-                if (invalidFloat(height))
+                if (invalidNumber(height))
                     return (
                         "unable to parse height of the primitive coordinates for ID = " +
                         primitiveId
@@ -641,7 +641,7 @@ export class MySceneGraph {
                     "slices",
                     false
                 );
-                if (invalidFloat(slices))
+                if (invalidNumber(slices))
                     return (
                         "unable to parse slices of the primitive coordinates for ID = " +
                         primitiveId
@@ -653,7 +653,7 @@ export class MySceneGraph {
                     "stacks",
                     false
                 );
-                if (invalidFloat(stacks))
+                if (invalidNumber(stacks))
                     return (
                         "unable to parse stacks of the primitive coordinates for ID = " +
                         primitiveId
@@ -673,7 +673,7 @@ export class MySceneGraph {
             } else if (primitiveType == "triangle") {
                 // x1
                 var x1 = this.reader.getFloat(grandChildren[0], "x1", false);
-                if (invalidFloat(x1))
+                if (invalidNumber(x1))
                     return (
                         "unable to parse x1 of the primitive coordinates for ID = " +
                         primitiveId
@@ -681,7 +681,7 @@ export class MySceneGraph {
 
                 // y1
                 var y1 = this.reader.getFloat(grandChildren[0], "y1", false);
-                if (invalidFloat(y1))
+                if (invalidNumber(y1))
                     return (
                         "unable to parse y1 of the primitive coordinates for ID = " +
                         primitiveId
@@ -689,7 +689,7 @@ export class MySceneGraph {
 
                 // z1
                 var z1 = this.reader.getFloat(grandChildren[0], "z1", false);
-                if (invalidFloat(z1))
+                if (invalidNumber(z1))
                     return (
                         "unable to parse z1 of the primitive coordinates for ID = " +
                         primitiveId
@@ -697,7 +697,7 @@ export class MySceneGraph {
 
                 // x2
                 var x2 = this.reader.getFloat(grandChildren[0], "x2", false);
-                if (invalidFloat(x2))
+                if (invalidNumber(x2))
                     return (
                         "unable to parse x2 of the primitive coordinates for ID = " +
                         primitiveId
@@ -705,7 +705,7 @@ export class MySceneGraph {
 
                 // y2
                 var y2 = this.reader.getFloat(grandChildren[0], "y2", false);
-                if (invalidFloat(y2))
+                if (invalidNumber(y2))
                     return (
                         "unable to parse y2 of the primitive coordinates for ID = " +
                         primitiveId
@@ -713,7 +713,7 @@ export class MySceneGraph {
 
                 // z2
                 var z2 = this.reader.getFloat(grandChildren[0], "z2", false);
-                if (invalidFloat(z2))
+                if (invalidNumber(z2))
                     return (
                         "unable to parse z2 of the primitive coordinates for ID = " +
                         primitiveId
@@ -721,7 +721,7 @@ export class MySceneGraph {
 
                 // x3
                 var x3 = this.reader.getFloat(grandChildren[0], "x3", false);
-                if (invalidFloat(x3))
+                if (invalidNumber(x3))
                     return (
                         "unable to parse x3 of the primitive coordinates for ID = " +
                         primitiveId
@@ -729,7 +729,7 @@ export class MySceneGraph {
 
                 // y3
                 var y3 = this.reader.getFloat(grandChildren[0], "y3", false);
-                if (invalidFloat(y3))
+                if (invalidNumber(y3))
                     return (
                         "unable to parse y3 of the primitive coordinates for ID = " +
                         primitiveId
@@ -737,7 +737,7 @@ export class MySceneGraph {
 
                 // z3
                 var z3 = this.reader.getFloat(grandChildren[0], "z3", false);
-                if (invalidFloat(z3))
+                if (invalidNumber(z3))
                     return (
                         "unable to parse z3 of the primitive coordinates for ID = " +
                         primitiveId
@@ -765,7 +765,7 @@ export class MySceneGraph {
                     "radius",
                     false
                 );
-                if (invalidFloat(radius))
+                if (invalidNumber(radius))
                     return (
                         "unable to parse radius of the primitive coordinates for ID = " +
                         primitiveId
@@ -777,7 +777,7 @@ export class MySceneGraph {
                     "slices",
                     false
                 );
-                if (invalidFloat(slices))
+                if (invalidNumber(slices))
                     return (
                         "unable to parse slices of the primitive coordinates for ID = " +
                         primitiveId
@@ -789,7 +789,7 @@ export class MySceneGraph {
                     "stacks",
                     false
                 );
-                if (invalidFloat(stacks))
+                if (invalidNumber(stacks))
                     return (
                         "unable to parse stacks of the primitive coordinates for ID = " +
                         primitiveId
@@ -811,7 +811,7 @@ export class MySceneGraph {
                     "inner",
                     false
                 );
-                if (invalidFloat(inner))
+                if (invalidNumber(inner))
                     return (
                         "unable to parse inner of the primitive coordinates for ID = " +
                         primitiveId
@@ -823,7 +823,7 @@ export class MySceneGraph {
                     "outer",
                     false
                 );
-                if (invalidFloat(outer))
+                if (invalidNumber(outer))
                     return (
                         "unable to parse outer of the primitive coordinates for ID = " +
                         primitiveId
@@ -835,7 +835,7 @@ export class MySceneGraph {
                     "slices",
                     false
                 );
-                if (invalidFloat(slices))
+                if (invalidNumber(slices))
                     return (
                         "unable to parse slices of the primitive coordinates for ID = " +
                         primitiveId
@@ -847,7 +847,7 @@ export class MySceneGraph {
                     "loops",
                     false
                 );
-                if (invalidFloat(loops))
+                if (invalidNumber(loops))
                     return (
                         "unable to parse loops of the primitive coordinates for ID = " +
                         primitiveId

@@ -29,7 +29,7 @@ export const log = (message) => {
  * @param {*} val 
  * @returns true if received value is NOT a valid float
  */
-export const invalidFloat = (val) => {
+export const invalidNumber = (val) => {
     return (val == null) || isNaN(val);
 }
 
@@ -45,17 +45,17 @@ export const parseCoordinates3D = (xmlReader, node, messageError) => {
 
     // x
     var x = xmlReader.getFloat(node, "x", false);
-    if (invalidFloat(x))
+    if (invalidNumber(x))
         return "unable to parse x-coordinate of the " + messageError;
 
     // y
     var y = xmlReader.getFloat(node, "y", false);
-    if (invalidFloat(y))
+    if (invalidNumber(y))
         return "unable to parse y-coordinate of the " + messageError;
 
     // z
     var z = xmlReader.getFloat(node, "z", false);
-    if (invalidFloat(z))
+    if (invalidNumber(z))
         return "unable to parse z-coordinate of the " + messageError;
 
     position.push(...[x, y, z]);
@@ -79,7 +79,7 @@ export const parseCoordinates4D = (xmlReader, node, messageError) => {
 
     // w
     var w = xmlReader.getFloat(node, "w", false);
-    if (invalidFloat(w))
+    if (invalidNumber(w))
         return "unable to parse w-coordinate of the " + messageError;
 
     position.push(w);
@@ -152,7 +152,7 @@ export const calculateTransformationMatrix = (
                 };
 
                 const angle = xmlReader.getFloat(child, "angle", false);
-                if (invalidFloat(angle))
+                if (invalidNumber(angle))
                     return {
                         error: `no 'angle' defined for rotation in transformation ${transformationId}`,
                     };

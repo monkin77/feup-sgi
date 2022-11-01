@@ -1,6 +1,6 @@
 import { CGFcamera, CGFcameraOrtho } from "../../../lib/CGF.js";
 import { Parser } from "./Parser.js";
-import { DEGREE_TO_RAD, onXMLMinorError, parseCoordinates3D, invalidFloat } from "./utils.js";
+import { DEGREE_TO_RAD, onXMLMinorError, parseCoordinates3D, invalidNumber } from "./utils.js";
 
 export class ViewsParser extends Parser {
     /**
@@ -80,13 +80,13 @@ export class ViewsParser extends Parser {
             return `ID must be unique for each perspective (conflict: ID = ${camId})`;
 
         const near = xmlReader.getFloat(perspectiveNode, "near", false);
-        if (invalidFloat(near)) return "no 'near' defined for perspective";
+        if (invalidNumber(near)) return "no 'near' defined for perspective";
 
         const far = xmlReader.getFloat(perspectiveNode, "far", false);
-        if (invalidFloat(far)) return "no 'far' defined for perspective";
+        if (invalidNumber(far)) return "no 'far' defined for perspective";
 
         const angle = xmlReader.getFloat(perspectiveNode, "angle", false);
-        if (invalidFloat(angle)) return "no 'angle' defined for perspective";
+        if (invalidNumber(angle)) return "no 'angle' defined for perspective";
 
         let from = perspectiveNode.getElementsByTagName("from");
         let to = perspectiveNode.getElementsByTagName("to");
@@ -133,22 +133,22 @@ export class ViewsParser extends Parser {
         if (camId == null) return "no 'id' defined for ortho";
 
         const near = xmlReader.getFloat(orthoNode, "near", false);
-        if (invalidFloat(near)) return "no 'near' defined for ortho";
+        if (invalidNumber(near)) return "no 'near' defined for ortho";
 
         const far = xmlReader.getFloat(orthoNode, "far", false);
-        if (invalidFloat(far)) return "no 'far' defined for ortho";
+        if (invalidNumber(far)) return "no 'far' defined for ortho";
 
         const left = xmlReader.getFloat(orthoNode, "left", false);
-        if (invalidFloat(left)) return "no 'left' defined for ortho";
+        if (invalidNumber(left)) return "no 'left' defined for ortho";
 
         const right = xmlReader.getFloat(orthoNode, "right", false);
-        if (invalidFloat(right)) return "no 'right' defined for ortho";
+        if (invalidNumber(right)) return "no 'right' defined for ortho";
 
         const top = xmlReader.getFloat(orthoNode, "top", false);
-        if (invalidFloat(top)) return "no 'top' defined for ortho";
+        if (invalidNumber(top)) return "no 'top' defined for ortho";
 
         const bottom = xmlReader.getFloat(orthoNode, "bottom", false);
-        if (invalidFloat(bottom)) return "no 'bottom' defined for ortho";
+        if (invalidNumber(bottom)) return "no 'bottom' defined for ortho";
 
         let from = orthoNode.getElementsByTagName("from");
         let to = orthoNode.getElementsByTagName("to");
@@ -175,8 +175,7 @@ export class ViewsParser extends Parser {
         );
         if (!Array.isArray(toCoords)) return toCoords;
 
-        const upCoords =
-            !up ?
+        const upCoords = !up ?
             defaultOrthoUp :
             parseCoordinates3D(
                 xmlReader,

@@ -5,7 +5,7 @@ import {
     onXMLMinorError,
     calculateTransformationMatrix,
     buildComponentTransfID,
-    invalidFloat,
+    invalidNumber,
 } from "./utils.js";
 
 export class ComponentsParser extends Parser {
@@ -178,7 +178,7 @@ export class ComponentsParser extends Parser {
             return `<children> must be defined inside the component with id = ${componentId}`;
         childrenNode = childrenNode[0];
         const { error: childrenErr, value: childrenValue } =
-            this.handleChildren(xmlReader, childrenNode, componentId);
+        this.handleChildren(xmlReader, childrenNode, componentId);
         if (childrenErr) return childrenErr;
 
         this._components[componentId] = new Component(
@@ -311,7 +311,7 @@ export class ComponentsParser extends Parser {
             onXMLMinorError(`length_s and length_t must not be defined if the texture is inherit or none. Assuming value 1.0 for both in Component with ID = ${componentId}`);
             lengthS = 1;
             lengthT = 1;
-        } else if (isCustomTexture && (invalidFloat(lengthS) || invalidFloat(lengthT))) {
+        } else if (isCustomTexture && (invalidNumber(lengthS) || invalidNumber(lengthT))) {
             onXMLMinorError(`length_s and length_t must be defined for texture with id: ${textureId}. Assuming value 1.0 for both in component with ID = ${componentId}`);
             lengthS = 1;
             lengthT = 1;

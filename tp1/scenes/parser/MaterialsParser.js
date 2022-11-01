@@ -1,6 +1,6 @@
 import { CGFappearance } from "../../../lib/CGF.js";
 import { Parser } from "./Parser.js";
-import { invalidFloat, onXMLMinorError, parseColor } from "./utils.js";
+import { invalidNumber, onXMLMinorError, parseColor } from "./utils.js";
 
 export class MaterialsParser extends Parser {
     /**
@@ -58,7 +58,7 @@ export class MaterialsParser extends Parser {
             return `ID must be unique for each material (conflict: ID = ${materialId})`;
 
         const shininess = xmlReader.getFloat(materialNode, "shininess", false);
-        if (invalidFloat(shininess))
+        if (invalidNumber(shininess))
             return `no 'shininess' defined for material ${materialId}`;
 
         let emission = materialNode.getElementsByTagName("emission");
