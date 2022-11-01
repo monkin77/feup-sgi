@@ -1416,6 +1416,19 @@
             </children>
         </component>
 
+        <component id="patchComponent">
+            <transformation>
+                <scale x="5" y="5" z="5" />
+            </transformation>
+            <materials>
+                <material id="backgroundMaterial" />
+            </materials>
+            <texture id="wallTexture" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="patchTest" />
+            </children>
+        </component>
+
         <component id="root">
             <transformation>
             </transformation>
@@ -1426,6 +1439,7 @@
             <children>
                 <componentref id="laraCroft" />
                 <componentref id="temple" />
+                <componentref id="patchComponent" />
             </children>
         </component>
         

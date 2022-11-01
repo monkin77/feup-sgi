@@ -4,6 +4,7 @@ import { MyCylinder } from "./primitives/MyCylinder.js";
 import { MyTriangle } from "./primitives/MyTriangle.js";
 import { MySphere } from "./primitives/MySphere.js";
 import { MyTorus } from "./primitives/MyTorus.js";
+import { MyPatch } from "./primitives/MyPatch.js";
 import { ComponentsParser } from "./scenes/parser/ComponentsParser.js";
 import { TransformationsParser } from "./scenes/parser/TranformationsParser.js";
 import { ViewsParser } from "./scenes/parser/ViewsParser.js";
@@ -914,7 +915,6 @@ export class MySceneGraph {
 
                     controlPoints.push([control_x, control_y, control_z]);
                 }
-                console.log("Parsed control points", controlPoints);
 
                 const currPatch = new MyPatch(
                     this.scene,
