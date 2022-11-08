@@ -1454,7 +1454,7 @@
             <texture id="none"/>
             <children>
                 <componentref id="laraCroft" />
-                <componentref id="temple" />
+                <!-- <componentref id="temple" /> -->
                 <componentref id="patchComponent" />
             </children>
         </component>

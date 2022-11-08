@@ -20,7 +20,7 @@ export class MyPatch extends CGFobject {
     }
 
     init() {
-        this.patch = new CGFnurbsSurface(this.degreeU - 1, this.degreeV - 1, this.controlPoints);
+        this.patch = new CGFnurbsSurface(this.degreeU, this.degreeV, this.controlPoints);
         this.obj = new CGFnurbsObject(this.scene, this.partsU, this.partsV, this.patch);
     }
 
@@ -34,7 +34,6 @@ export class MyPatch extends CGFobject {
     }
 
     display() {
-        console.log("drawing patch " + this.id);
         this.obj.display();
     }
 }
