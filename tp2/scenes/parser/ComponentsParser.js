@@ -178,7 +178,7 @@ export class ComponentsParser extends Parser {
             return `<children> must be defined inside the component with id = ${componentId}`;
         childrenNode = childrenNode[0];
         const { error: childrenErr, value: childrenValue } =
-            this.handleChildren(xmlReader, childrenNode, componentId);
+        this.handleChildren(xmlReader, childrenNode, componentId);
         if (childrenErr) return childrenErr;
 
         this._components[componentId] = new Component(

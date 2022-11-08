@@ -4,6 +4,7 @@ import { MyCylinder } from "./primitives/MyCylinder.js";
 import { MyTriangle } from "./primitives/MyTriangle.js";
 import { MySphere } from "./primitives/MySphere.js";
 import { MyTorus } from "./primitives/MyTorus.js";
+import { MyPatch } from "./primitives/MyPatch.js";
 import { ComponentsParser } from "./scenes/parser/ComponentsParser.js";
 import { TransformationsParser } from "./scenes/parser/TranformationsParser.js";
 import { ViewsParser } from "./scenes/parser/ViewsParser.js";
@@ -13,15 +14,15 @@ import { Component } from "./scenes/model/Component.js";
 import { TexturesParser } from "./scenes/parser/TexturesParser.js";
 
 // Order of the groups in the XML document.
-var SCENE_INDEX = 0;
-var VIEWS_INDEX = 1;
-var AMBIENT_INDEX = 2;
-var LIGHTS_INDEX = 3;
-var TEXTURES_INDEX = 4;
-var MATERIALS_INDEX = 5;
-var TRANSFORMATIONS_INDEX = 6;
-var PRIMITIVES_INDEX = 7;
-var COMPONENTS_INDEX = 8;
+const SCENE_INDEX = 0;
+const VIEWS_INDEX = 1;
+const AMBIENT_INDEX = 2;
+const LIGHTS_INDEX = 3;
+const TEXTURES_INDEX = 4;
+const MATERIALS_INDEX = 5;
+const TRANSFORMATIONS_INDEX = 6;
+const PRIMITIVES_INDEX = 7;
+const COMPONENTS_INDEX = 8;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -546,13 +547,9 @@ export class MySceneGraph {
             // Validate the primitive type
             if (
                 grandChildren.length != 1 ||
-                (grandChildren[0].nodeName != "rectangle" &&
-                    grandChildren[0].nodeName != "triangle" &&
-                    grandChildren[0].nodeName != "cylinder" &&
-                    grandChildren[0].nodeName != "sphere" &&
-                    grandChildren[0].nodeName != "torus")
+                (!["rectangle", "triangle", "cylinder", "sphere", "torus", "patch"].includes(grandChildren[0].nodeName))
             ) {
-                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)";
+                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus or patch)";
             }
 
             // Specifications for the current primitive.
@@ -863,6 +860,79 @@ export class MySceneGraph {
                 );
 
                 this.primitives[primitiveId] = tor;
+            } else if (primitiveType == "patch") {
+                const degree_u = this.reader.getInteger(grandChildren[0], "degree_u", false);
+                if (invalidNumber(degree_u))
+                    return (
+                        "unable to parse degree_u of the primitive coordinates for ID = " +
+                        primitiveId
+                    );
+
+                const degree_v = this.reader.getInteger(grandChildren[0], "degree_v", false);
+                if (invalidNumber(degree_v))
+                    return (
+                        "unable to parse degree_v of the primivite coordinates for ID = " +
+                        primitiveId
+                    );
+
+                const parts_u = this.reader.getInteger(grandChildren[0], "parts_u", false);
+                if (invalidNumber(parts_u))
+                    return (
+                        "unable to parse parts_u of the primitive coordinates for ID = " +
+                        primitiveId
+                    );
+
+                const parts_v = this.reader.getInteger(grandChildren[0], "parts_v", false);
+                if (invalidNumber(parts_v))
+                    return (
+                        "unable to parse parts_v of the primitive coordinates for ID = " +
+                        primitiveId
+                    );
+
+                const controlPoints = [];
+                const controlPointNodes = grandChildren[0].children;
+                if (controlPointNodes.length != (degree_u + 1) * (degree_v + 1)) {
+                    return (
+                        "unable to parse control points of the primitive coordinates for ID = " +
+                        primitiveId + ". Expected " + (degree_u + 1) * (degree_v + 1) + " control points, found " + controlPointNodes.length
+                    );
+                }
+
+                for (const controlNode of controlPointNodes) {
+                    const control_x = this.reader.getFloat(controlNode, "x", false);
+                    if (invalidNumber(control_x))
+                        return (
+                            "unable to parse x coordinate of the control point from primitive with ID = " +
+                            primitiveId
+                        );
+
+                    const control_y = this.reader.getFloat(controlNode, "y", false);
+                    if (invalidNumber(control_y))
+                        return (
+                            "unable to parse y coordinate of the control point from primitive with ID = " +
+                            primitiveId
+                        );
+
+                    const control_z = this.reader.getFloat(controlNode, "z", false);
+                    if (invalidNumber(control_z))
+                        return (
+                            "unable to parse z coordinate of the control point from primitive with ID = " +
+                            primitiveId
+                        );
+
+                    controlPoints.push([control_x, control_y, control_z, 1]);
+                }
+
+                const currPatch = new MyPatch(
+                    this.scene,
+                    primitiveId,
+                    degree_u,
+                    degree_v,
+                    parts_u,
+                    parts_v,
+                    controlPoints
+                );
+                this.primitives[primitiveId] = currPatch;
             }
         }
 
