@@ -266,6 +266,7 @@
             <cylinder base="0.707" top="0.53" height="1" slices="4" stacks="20" />
         </primitive>
 
+        <!-- 1.0 x 1.0 x 0.0 -->
         <primitive id="rectPatch">
             <patch degree_u="1" degree_v="1" parts_u="20" parts_v="20" >
                 <controlpoint x="0" y="0" z="0" />
@@ -276,16 +277,15 @@
             </patch>
         </primitive>
 
-        <primitive id="3dPatch">
-            <patch degree_u="2" degree_v="1" parts_u="20" parts_v="20" >
-                <controlpoint x="-1.5" y="-1.5" z="0" />
-                <controlpoint x="-1.5" y="1.5" z="0" />
+        <primitive id="tent">
+            <patch degree_u="1" degree_v="2" parts_u="20" parts_v="20" >
+                <controlpoint x="-0.25" y="-0.25" z="0" />
+                <controlpoint x="-0.25" y="0.0" z="1" />
+                <controlpoint x="-0.25" y="0.25" z="0" />
 
-                <controlpoint x="0" y="-1.5" z="3" />
-                <controlpoint x="0" y="1.5" z="3" />
-
-                <controlpoint x="1.5" y="-1.5" z="0" />
-                <controlpoint x="1.5" y="1.5" z="0" />
+                <controlpoint x="0.25" y="-0.25" z="0" />
+                <controlpoint x="0.25" y="0.0" z="1" />
+                <controlpoint x="0.25" y="0.25" z="0" />
             </patch>
         </primitive>
 
@@ -1496,6 +1496,7 @@
             </children>
         </component>
 
+        <!-- 0.0 x 15.0 x 40.0 -->
         <component id="banner">
             <transformation>
                 <translate x="49.9" y="0" z="5" />
@@ -1531,17 +1532,17 @@
             </children>
         </component>
 
-        <component id="patchComponent">
+        <component id="tentComponent">
             <transformation>
+                <translate x="0" y="5" z="0" />
                 <scale x="10" y="10" z="10" />
             </transformation>
             <materials>
-                <material id="backgroundMaterial" />
+                <material id="defaultMaterial" />
             </materials>
-            <texture id="floorTexture" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
-                <primitiveref id="rectPatch" />
-                <!-- <primitiveref id="3dPatch" /> -->
+                <primitiveref id="tent" />
             </children>
         </component>
 
@@ -1555,7 +1556,7 @@
             <children>
                 <componentref id="laraCroft" />
                 <componentref id="temple" />
-                <!-- <componentref id="patchComponent" /> -->
+                <componentref id="tentComponent" />
             </children>
         </component>
         
