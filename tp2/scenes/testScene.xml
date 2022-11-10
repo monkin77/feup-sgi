@@ -1707,7 +1707,7 @@
             <children>
                 <componentref id="laraCroft" />
                 <componentref id="temple" />
-                <componentref id="barrel" />
+                <componentref id="tentComponent" />
             </children>
         </component>
         
