@@ -289,6 +289,46 @@
             </patch>
         </primitive>
 
+        <primitive id="completeBarrel">
+            <patch degree_u="8" degree_v="2" parts_u="20" parts_v="20" >
+                <controlpoint x="-0.25" y="-0.5" z="0" />
+                <controlpoint x="-0.5" y="0.0" z="0" />
+                <controlpoint x="-0.25" y="0.5" z="0" />
+
+                <controlpoint x="-0.25" y="-0.5" z="0.25" />
+                <controlpoint x="-0.5" y="0.0" z="0.5" />
+                <controlpoint x="-0.25" y="0.5" z="0.25" />
+
+                <controlpoint x="0.0" y="-0.5" z="0.25" />
+                <controlpoint x="0.0" y="0.0" z="0.5" />
+                <controlpoint x="0.0" y="0.5" z="0.25" />
+
+                <controlpoint x="0.25" y="-0.5" z="0.25" />
+                <controlpoint x="0.5" y="0.0" z="0.5" />
+                <controlpoint x="0.25" y="0.5" z="0.25" />
+
+                <controlpoint x="0.25" y="-0.5" z="0" />
+                <controlpoint x="0.5" y="0.0" z="0" />
+                <controlpoint x="0.25" y="0.5" z="0" />
+
+                <controlpoint x="0.25" y="-0.5" z="-0.25" />
+                <controlpoint x="0.5" y="0.0" z="-0.5" />
+                <controlpoint x="0.25" y="0.5" z="-0.25" />
+
+                <controlpoint x="0.0" y="-0.5" z="-0.25" />
+                <controlpoint x="0.0" y="0.0" z="-0.5" />
+                <controlpoint x="0.0" y="0.5" z="-0.25" />
+
+                <controlpoint x="-0.25" y="-0.5" z="-0.25" />
+                <controlpoint x="-0.5" y="0.0" z="-0.5" />
+                <controlpoint x="-0.25" y="0.5" z="-0.25" />
+
+                <controlpoint x="-0.25" y="-0.5" z="0" />
+                <controlpoint x="-0.5" y="0.0" z="0" />
+                <controlpoint x="-0.25" y="0.5" z="0" />
+            </patch>
+        </primitive>
+
         <primitive id="barrel">
             <patch degree_u="4" degree_v="2" parts_u="20" parts_v="20" >
                 <controlpoint x="-0.25" y="-0.5" z="0" />
@@ -310,18 +350,6 @@
                 <controlpoint x="0.25" y="-0.5" z="0" />
                 <controlpoint x="0.5" y="0.0" z="0" />
                 <controlpoint x="0.25" y="0.5" z="0" />
-
-                <!-- <controlpoint x="0.25" y="-0.5" z="0" />
-                <controlpoint x="0.5" y="0.0" z="0" />
-                <controlpoint x="0.25" y="0.5" z="0" />
-
-                <controlpoint x="0.0" y="-0.5" z="-0.5" />
-                <controlpoint x="0.0" y="0.0" z="-1.0" />
-                <controlpoint x="0.0" y="0.5" z="-0.5" />
-
-                <controlpoint x="-0.25" y="-0.5" z="0" />
-                <controlpoint x="-0.5" y="0.0" z="0" />
-                <controlpoint x="-0.25" y="0.5" z="0" /> -->
             </patch>
         </primitive>
 
@@ -1619,7 +1647,6 @@
             <children>
                 <componentref id="halfBarrel1" />
                 <componentref id="halfBarrel2" />
-                <!-- <primitiveref id="barrel" /> -->
             </children>
         </component>
 
