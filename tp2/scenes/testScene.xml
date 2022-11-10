@@ -289,6 +289,42 @@
             </patch>
         </primitive>
 
+        <primitive id="barrel">
+            <patch degree_u="4" degree_v="2" parts_u="20" parts_v="20" >
+                <controlpoint x="-0.25" y="-0.5" z="0" />
+                <controlpoint x="-0.5" y="0.0" z="0" />
+                <controlpoint x="-0.25" y="0.5" z="0" />
+
+                <controlpoint x="-0.25" y="-0.5" z="0.3" />
+                <controlpoint x="-0.5" y="0.0" z="0.6" />
+                <controlpoint x="-0.25" y="0.5" z="0.3" />
+
+                <controlpoint x="0.0" y="-0.5" z="0.3" />
+                <controlpoint x="0.0" y="0.0" z="0.6" />
+                <controlpoint x="0.0" y="0.5" z="0.3" />
+
+                <controlpoint x="0.25" y="-0.5" z="0.3" />
+                <controlpoint x="0.5" y="0.0" z="0.6" />
+                <controlpoint x="0.25" y="0.5" z="0.3" />
+
+                <controlpoint x="0.25" y="-0.5" z="0" />
+                <controlpoint x="0.5" y="0.0" z="0" />
+                <controlpoint x="0.25" y="0.5" z="0" />
+
+                <!-- <controlpoint x="0.25" y="-0.5" z="0" />
+                <controlpoint x="0.5" y="0.0" z="0" />
+                <controlpoint x="0.25" y="0.5" z="0" />
+
+                <controlpoint x="0.0" y="-0.5" z="-0.5" />
+                <controlpoint x="0.0" y="0.0" z="-1.0" />
+                <controlpoint x="0.0" y="0.5" z="-0.5" />
+
+                <controlpoint x="-0.25" y="-0.5" z="0" />
+                <controlpoint x="-0.5" y="0.0" z="0" />
+                <controlpoint x="-0.25" y="0.5" z="0" /> -->
+            </patch>
+        </primitive>
+
     </primitives>
 
     <components>
@@ -1546,6 +1582,47 @@
             </children>
         </component>
 
+        <component id="halfBarrel1">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="barrel" />
+            </children>
+        </component>
+
+        <component id="halfBarrel2">
+            <transformation>
+                <rotate axis="y" angle="180" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="barrel" />
+            </children>
+        </component>
+
+        <component id="barrelComponent">
+            <transformation>
+                <translate x="0" y="5" z="0" />
+                <scale x="10" y="10" z="10" />
+            </transformation>
+            <materials>
+                <material id="defaultMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="halfBarrel1" />
+                <componentref id="halfBarrel2" />
+                <!-- <primitiveref id="barrel" /> -->
+            </children>
+        </component>
+
         <component id="root">
             <transformation>
             </transformation>
@@ -1556,7 +1633,7 @@
             <children>
                 <componentref id="laraCroft" />
                 <componentref id="temple" />
-                <componentref id="tentComponent" />
+                <componentref id="barrelComponent" />
             </children>
         </component>
         
