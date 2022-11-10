@@ -210,28 +210,37 @@ export const parseColor = (xmlReader, node, messageError) => {
 
     // R
     var r = xmlReader.getFloat(node, "r", false);
-    if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
+    if (!isValidColor(r))
         return "unable to parse R component of the " + messageError;
 
     // G
     var g = xmlReader.getFloat(node, "g", false);
-    if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
+    if (!isValidColor(g))
         return "unable to parse G component of the " + messageError;
 
     // B
     var b = xmlReader.getFloat(node, "b", false);
-    if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
+    if (!isValidColor(b))
         return "unable to parse B component of the " + messageError;
 
     // A
     var a = xmlReader.getFloat(node, "a", false);
-    if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
+    if (!isValidColor(a))
         return "unable to parse A component of the " + messageError;
 
     color.push(...[r, g, b, a]);
 
     return color;
 };
+
+/**
+ * Verifies if a given value corresponds to a valid color value bettwen 0 and 1
+ * @param {*} colorVal 
+ * @returns true if valid, false otherwise
+ */
+export const isValidColor = (colorVal) => {
+    return (colorVal != null && !isNaN(colorVal) && colorVal >= 0 && colorVal <= 1)
+}
 
 /**
  * 

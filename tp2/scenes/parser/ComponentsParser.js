@@ -6,6 +6,7 @@ import {
     calculateTransformationMatrix,
     buildComponentTransfID,
     invalidNumber,
+    isValidColor,
 } from "./utils.js";
 
 export class ComponentsParser extends Parser {
@@ -183,12 +184,18 @@ export class ComponentsParser extends Parser {
             textureValue.lengthT
         );
 
+        let highlightedNode = componentNode.getElementsByTagName("highlighted");
+        if (highlightedNode.length == 1) {
+            highlightedNode = highlightedNode[0];
+            this.handleHighlighted(xmlReader, highlightedNode, componentId);
+        }
+
         let childrenNode = componentNode.getElementsByTagName("children");
         if (childrenNode.length != 1)
             return `<children> must be defined inside the component with id = ${componentId}`;
         childrenNode = childrenNode[0];
         const { error: childrenErr, value: childrenValue } =
-            this.handleChildren(xmlReader, childrenNode, componentId);
+        this.handleChildren(xmlReader, childrenNode, componentId);
         if (childrenErr) return childrenErr;
 
         this._components[componentId] = new Component(
@@ -333,6 +340,45 @@ export class ComponentsParser extends Parser {
 
         return { value: { id: textureId, lengthS, lengthT } };
     };
+
+    /**
+     *
+     * @param {*} xmlReader
+     * @param {*} highlightedNode
+     * @param {*} componentId
+     * @returns { {value: } | {error: } }
+     */
+    handleHighlighted = (xmlReader, highlightedNode, componentId) => {
+        const red = xmlReader.getFloat(highlightedNode, "r", false);
+        if (!isValidColor(red))
+            return {
+                error: `invalid 'r' property defined for <highlighted> inside <components> of component with ID = ${componentId}`,
+            };
+
+        const green = xmlReader.getFloat(highlightedNode, "g", false);
+        if (!isValidColor(green))
+            return {
+                error: `invalid 'g' property defined for <highlighted> inside <components> of component with ID = ${componentId}`,
+            };
+
+        const blue = xmlReader.getFloat(highlightedNode, "b", false);
+        if (!isValidColor(blue))
+            return {
+                error: `invalid 'b' property defined for <highlighted> inside <components> of component with ID = ${componentId}`,
+            };
+
+        const scaleH = xmlReader.getFloat(highlightedNode, "scale_h", false);
+        if (invalidNumber(scaleH))
+            return {
+                error: `invalid 'scale_h' property defined for <highlighted> inside <components> of component with ID = ${componentId}`,
+            };
+
+
+
+
+        return { value: { id: textureId, lengthS, lengthT } };
+    };
+
 
     /**
      *
