@@ -1607,7 +1607,7 @@
                 <componentref id="ceiling" />
                 <componentref id="pillars" />
                 <componentref id="banner" />
-                <componentref id="cornerBarrel" />
+                <componentref id="barrelSet" />
             </children>
         </component>
 
@@ -1708,10 +1708,9 @@
             </children>
         </component>
 
-        <component id="cornerBarrel">
+        <component id="barrel2">
             <transformation>
-                <translate x="5" y="-5" z="-40" />
-                <scale x="4" y="4" z="4" />
+                <translate x="1.5" y="0" z="0" />
             </transformation>
             <materials>
                 <material id="barrelMaterial" />
@@ -1719,6 +1718,93 @@
             <texture id="inherit" />
             <children>
                 <componentref id="barrel" />
+            </children>
+        </component>
+
+        <component id="barrel3">
+            <transformation>
+                <translate x="-1.5" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+            </children>
+        </component>
+
+        <component id="barrel4">
+            <transformation>
+                <translate x="-0.7" y="2" z="0" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+            </children>
+        </component>
+
+        <component id="barrel5">
+            <transformation>
+                <translate x="0.7" y="2" z="0" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+            </children>
+        </component>
+
+        <component id="barrel6">
+            <transformation>
+                <translate x="0" y="4" z="0" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+            </children>
+        </component>
+
+        <component id="barrel7">
+            <transformation>
+                <translate x="-1" y="-0.3" z="2" />
+                <rotate axis="z" angle="90" />
+                <rotate axis="x" angle="45" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+            </children>
+        </component>
+
+        <component id="barrelSet">
+            <transformation>
+                <translate x="8" y="-6.5" z="-38" />
+                <scale x="3.5" y="3.5" z="3.5" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+                <componentref id="barrel2" />
+                <componentref id="barrel3" />
+                <componentref id="barrel4" />
+                <componentref id="barrel5" />
+                <componentref id="barrel6" />
+                <componentref id="barrel7" />
             </children>
         </component>
 
