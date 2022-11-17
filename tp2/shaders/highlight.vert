@@ -49,6 +49,7 @@ uniform materialProperties uBackMaterial;
 out vec4 vFinalColor;
 out vec2 vTextureCoord;
 
+uniform float timeFactor;
 uniform float highlightScale;
 
 vec4 lighting(vec4 vertex, vec3 E, vec3 N) {
@@ -109,10 +110,14 @@ vec4 lighting(vec4 vertex, vec3 E, vec3 N) {
     return result;
 }
 
+// Calculate angular velocity of the sine function for the scaling
+const float maxTimeFactor = 1000.0;
+const float angVelocity = 2 * Math.PI / maxTimeFactor;
+
 void main() {
 
     // Transformed Vertex position
-    vec4 vertex = uMVMatrix * vec4(aVertexPosition + aVertexNormal*(highlightScale - 1.0), 1.0);
+    vec4 vertex = uMVMatrix * vec4(aVertexPosition + aVertexNormal*(highlightScale - 1.0) * Math.sin(angVelocity * timeFactor), 1.0);
 
     // Transformed normal position
 	vec3 N = normalize(vec3(uNMatrix * vec4(aVertexNormal, 1.0)));
