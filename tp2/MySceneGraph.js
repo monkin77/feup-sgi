@@ -933,7 +933,7 @@ export class MySceneGraph {
                             "unable to parse z coordinate of the control point from primitive with ID = " +
                             primitiveId
                         );
-                    
+
                     const control_w = this.reader.getFloat(controlNode, "w", false);
                     if (control_w && isNaN(control_z))
                         return (
@@ -1038,7 +1038,7 @@ export class MySceneGraph {
         if (component.hasTransformation()) {
             this.scene.multMatrix(
                 this.transformationsParser.transformations[
-                    component.transformation
+                component.transformation
                 ]
             );
         }
@@ -1052,8 +1052,8 @@ export class MySceneGraph {
 
         let appearenceId =
             component.materials.length > 0 ?
-            component.materials[component.currMaterial] :
-            prevAppearenceId;
+                component.materials[component.currMaterial] :
+                prevAppearenceId;
 
         if (appearenceId == "inherit") {
             appearenceId = prevAppearenceId;

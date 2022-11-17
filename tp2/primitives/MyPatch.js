@@ -14,7 +14,6 @@ export class MyPatch extends CGFobject {
             const fixedUPoints = controlPoints.slice(u * (degreeV + 1), (u + 1) * (degreeV + 1));
             this.controlPoints.push(fixedUPoints);
         }
-        console.log("control points: ", this.controlPoints);
 
         this.init();
     }

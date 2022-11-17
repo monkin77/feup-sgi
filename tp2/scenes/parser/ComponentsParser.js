@@ -1,4 +1,5 @@
 import { Component } from "../model/Component.js";
+import { Highlighted } from "../model/Highlighted.js";
 import { Texture } from "../model/Texture.js";
 import { Parser } from "./Parser.js";
 import {
@@ -185,9 +186,13 @@ export class ComponentsParser extends Parser {
         );
 
         let highlightedNode = componentNode.getElementsByTagName("highlighted");
+        let highlighted = null;
         if (highlightedNode.length == 1) {
             highlightedNode = highlightedNode[0];
-            this.handleHighlighted(xmlReader, highlightedNode, componentId);
+            const { error: highlightedErr, value: highlightedValue } = this.handleHighlighted(xmlReader, highlightedNode, componentId);
+            if (highlightedErr) return highlightedErr;
+
+            highlighted = new Highlighted(highlightedValue.red, highlightedValue.green, highlightedValue.blue, highlightedValue.scaleH);
         }
 
         let childrenNode = componentNode.getElementsByTagName("children");
@@ -204,7 +209,8 @@ export class ComponentsParser extends Parser {
             materialsList,
             texture,
             this._animations[animationId] || null,
-            childrenValue
+            childrenValue,
+            highlighted
         );
 
         return null;
@@ -346,7 +352,7 @@ export class ComponentsParser extends Parser {
      * @param {*} xmlReader
      * @param {*} highlightedNode
      * @param {*} componentId
-     * @returns { {value: } | {error: } }
+     * @returns { {value: {red, green, blue, scaleH}} | {error: string} }
      */
     handleHighlighted = (xmlReader, highlightedNode, componentId) => {
         const red = xmlReader.getFloat(highlightedNode, "r", false);
@@ -376,7 +382,7 @@ export class ComponentsParser extends Parser {
 
 
 
-        return { value: { id: textureId, lengthS, lengthT } };
+        return { value: { red, green, blue, scaleH } };
     };
 
 
