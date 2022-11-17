@@ -1,18 +1,18 @@
 <sxs>
     <scene root="root" axis_length="5"/>
 
-    <views default="defaultCamera">
-        <perspective id="defaultCamera" near="0.1" far="500" angle="50">
+    <views default="frontal">
+        <perspective id="frontal" near="0.1" far="500" angle="50">
             <from x="-20" y="15" z="20" />
             <to x="0" y="-2" z="0" />
         </perspective>
 
-        <perspective id="camera2" near="0.1" far="500" angle="45">
+        <perspective id="profile" near="0.1" far="500" angle="45">
             <from x="30" y="15" z="30" />
             <to x="0" y="-2" z="0" />
         </perspective>
 
-        <ortho id="orthoCam" near="1" far="250" left="-30" right="30" top="20" bottom="-11">
+        <ortho id="ortho" near="1" far="250" left="-30" right="30" top="20" bottom="-11">
             <from x="-25" y="0" z="-5" />
             <to x="5" y="1" z="-5" />
         </ortho>
@@ -25,29 +25,38 @@
     </ambient>
 
     <lights>
-        <omni id="light1" enabled="1">
+        <omni id="back" enabled="0">
             <location x="10" y="5" z="5" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
-            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
 
-        <omni id="light2" enabled="1">
+        <omni id="frontal" enabled="0">
             <location x="-20" y="5" z="10" w="1.0" />
-            <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
-            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
+            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
 
-        <spot id="light3" enabled="1" angle="20" exponent="1">
+        <spot id="spot" enabled="1" angle="20" exponent="1">
             <location x="0" y="10" z="0" w="1.0" />
             <target x="0" y="0" z="0" />
             <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
             <attenuation constant="0" linear="1" quadratic="0" />
+        </spot>
+
+        <spot id="banner" enabled="1" angle="40" exponent="0">
+            <location x="30" y="8" z="25" w="1.0" />
+            <target x="50" y="8" z="25" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />
         </spot>
     </lights>
 
@@ -58,6 +67,9 @@
         <texture id="ceilingTexture" file="scenes/images/ceiling.png" />
         <texture id="pillarTexture" file="scenes/images/pillar.png" />
         <texture id="pillarTopTexture" file="scenes/images/pillarTop.png" />
+        <texture id="bannerTexture" file="scenes/images/banner.jpg" />
+        <texture id="barrelTexture" file="scenes/images/barrel.jpeg" />
+        <texture id="barrelCoverTexture" file="scenes/images/barrelCover.jpeg" />
     </textures>
 
     <materials>
@@ -68,17 +80,59 @@
             <specular r="1" g="1" b="1" a="1.0" />
         </material>
 
+        <material id="barrelMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.7" g="0.7" b="0.55" a="1.0" />
+            <diffuse r="0.7" g="0.7" b="0.55" a="1.0" />
+            <specular r="0.7" g="0.7" b="0.55" a="1.0" />
+        </material>
+
         <material id="wallMaterial" shininess="10">
             <emission r="0" g="0" b="0" a="1.0" />
             <ambient r="0.3" g="0.3" b="0.3" a="1.0" />
             <diffuse r="0.6" g="0.6" b="0.6" a="1.0" />
-            <specular r="0" g="0" b="0" a="1.0" />
+            <specular r="0.8" g="0.8" b="0.8" a="1.0" />
+        </material>
+
+        <material id="wallNetherMaterial" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.5" g="0.20" b="0.16" a="1.0" />
+            <diffuse r="0.5" g="0.20" b="0.16" a="1.0" />
+            <specular r="1.0" g="0.20" b="0.16" a="1.0" />
         </material>
 
         <material id="backgroundMaterial" shininess="10">
             <emission r="0" g="0" b="0" a="1.0" />
             <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
+
+        <material id="pillarTopNetherMaterial" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.31" g="0.08" b="0.08" a="1.0" />
+            <diffuse r="0.31" g="0.08" b="0.08" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
+
+        <material id="ceilingNetherMaterial" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.25" g="0.04" b="0.04" a="1.0" />
+            <diffuse r="0.25" g="0.04" b="0.04" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
+
+        <material id="floorNetherMaterial" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.6 " g="0.08" b="0.08" a="1.0" />
+            <diffuse r="0.6 " g="0.08" b="0.08" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
+
+        <material id="pillarNetherMaterial" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="0.2" g="0.2" b="0.2" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
         </material>
 
@@ -96,10 +150,24 @@
             <specular r="0.2" g="0.14" b="0.1" a="1.0" />
         </material>
 
-        <material id="shirtMaterial" shininess="10">
+        <material id="shirtMaterialBlue" shininess="10">
             <emission r="0" g="0" b="0" a="1.0" />
             <ambient r="0.6" g="0.8" b="0.8" a="1.0" />
             <diffuse r="0.25" g="0.35" b="0.45" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="shirtMaterialRed" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.6" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.25" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="shirtMaterialOrange" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.7" g="0.3" b="0.2" a="1.0" />
+            <diffuse r="0.7" g="0.3" b="0.2" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
 
@@ -110,7 +178,14 @@
             <specular r="0" g="0" b="0" a="1.0" />
         </material>
 
-        <material id="shortsMaterial" shininess="10">
+        <material id="shortsMaterialPurple" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.15" g="0.0" b="0.3" a="1.0" />
+            <diffuse r="0.15" g="0.0" b="0.3" a="1.0" />
+            <specular r="0.05" g="0.05" b="0" a="1.0" />
+        </material>
+
+        <material id="shortsMaterialGreen" shininess="10">
             <emission r="0" g="0" b="0" a="1.0" />
             <ambient r="0.1" g="0.1" b="0" a="1.0" />
             <diffuse r="0.25" g="0.25" b="0" a="1.0" />
@@ -200,26 +275,94 @@
             <cylinder base="0.707" top="0.53" height="1" slices="4" stacks="20" />
         </primitive>
 
+        <!-- 1.0 x 1.0 x 0.0 -->
         <primitive id="rectPatch">
             <patch degree_u="1" degree_v="1" parts_u="20" parts_v="20" >
                 <controlpoint x="0" y="0" z="0" />
-                <controlpoint x="0" y="10" z="0" />
+                <controlpoint x="0" y="1" z="0" />
 
-                <controlpoint x="10" y="0" z="0" />
-                <controlpoint x="10" y="10" z="0" />
+                <controlpoint x="1" y="0" z="0" />
+                <controlpoint x="1" y="1" z="0" />
             </patch>
         </primitive>
 
-        <primitive id="3dPatch">
-            <patch degree_u="2" degree_v="1" parts_u="20" parts_v="20" >
-                <controlpoint x="-1.5" y="-1.5" z="0" />
-                <controlpoint x="-1.5" y="1.5" z="0" />
+        <primitive id="tentPatch">
+            <patch degree_u="1" degree_v="2" parts_u="20" parts_v="20" >
+                <controlpoint x="-0.25" y="-0.25" z="0" />
+                <controlpoint x="-0.25" y="0.0" z="1" />
+                <controlpoint x="-0.25" y="0.25" z="0" />
 
-                <controlpoint x="0" y="-1.5" z="3" />
-                <controlpoint x="0" y="1.5" z="3" />
+                <controlpoint x="0.25" y="-0.25" z="0" />
+                <controlpoint x="0.25" y="0.0" z="1" />
+                <controlpoint x="0.25" y="0.25" z="0" />
+            </patch>
+        </primitive>
 
-                <controlpoint x="1.5" y="-1.5" z="0" />
-                <controlpoint x="1.5" y="1.5" z="0" />
+        <primitive id="completeBarrelPatch">
+            <patch degree_u="6" degree_v="2" parts_u="20" parts_v="20" >
+                <controlpoint x="-0.25" y="-0.5" z="0" />
+                <controlpoint x="-0.5" y="0.0" z="0" />
+                <controlpoint x="-0.25" y="0.5" z="0" />
+
+                <controlpoint x="-0.25" y="-0.5" z="0.333333" />
+                <controlpoint x="-0.5" y="0.0" z="0.6666667" />
+                <controlpoint x="-0.25" y="0.5" z="0.333333" />
+
+                <controlpoint x="0.25" y="-0.5" z="0.333333" />
+                <controlpoint x="0.5" y="0.0" z="0.6666667" />
+                <controlpoint x="0.25" y="0.5" z="0.333333" />
+
+                <controlpoint x="0.25" y="-0.5" z="0" />
+                <controlpoint x="0.5" y="0.0" z="0" />
+                <controlpoint x="0.25" y="0.5" z="0" />
+
+                <controlpoint x="0.25" y="-0.5" z="-0.333333" />
+                <controlpoint x="0.5" y="0.0" z="-0.6666667" />
+                <controlpoint x="0.25" y="0.5" z="-0.333333" />
+
+                <controlpoint x="-0.25" y="-0.5" z="-0.333333" />
+                <controlpoint x="-0.5" y="0.0" z="-0.6666667" />
+                <controlpoint x="-0.25" y="0.5" z="-0.333333" />
+
+                <controlpoint x="-0.25" y="-0.5" z="0" />
+                <controlpoint x="-0.5" y="0.0" z="0" />
+                <controlpoint x="-0.25" y="0.5" z="0" />
+            </patch>
+        </primitive>
+
+        <primitive id="barrelPatch">
+            <patch degree_u="3" degree_v="2" parts_u="20" parts_v="20" >
+                <controlpoint x="-0.25" y="-0.5" z="0" />
+                <controlpoint x="-0.5" y="0.0" z="0" />
+                <controlpoint x="-0.25" y="0.5" z="0" />
+
+                <controlpoint x="-0.25" y="-0.5" z="0.333333" />
+                <controlpoint x="-0.5" y="0.0" z="0.6666667" />
+                <controlpoint x="-0.25" y="0.5" z="0.333333" />
+
+                <controlpoint x="0.25" y="-0.5" z="0.333333" />
+                <controlpoint x="0.5" y="0.0" z="0.6666667" />
+                <controlpoint x="0.25" y="0.5" z="0.333333" />
+
+                <controlpoint x="0.25" y="-0.5" z="0" />
+                <controlpoint x="0.5" y="0.0" z="0" />
+                <controlpoint x="0.25" y="0.5" z="0" />
+            </patch>
+        </primitive>
+
+        <primitive id="circlePatch">
+            <patch degree_u="1" degree_v="3" parts_u="20" parts_v="20" >
+                <controlpoint x="0.5" y="0" z="0" />
+                <controlpoint x="0.5" y="-0.6666667" z="0" />
+
+                <controlpoint x="-0.5" y="-0.6666667" z="0" />
+                <controlpoint x="-0.5" y="0" z="0" />
+
+                <controlpoint x="0.5" y="0" z="0" />
+                <controlpoint x="0.5" y="0.6666667" z="0" />
+
+                <controlpoint x="-0.5" y="0.6666667" z="0" />
+                <controlpoint x="-0.5" y="0" z="0" />
             </patch>
         </primitive>
 
@@ -487,7 +630,9 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="shirtMaterial" />
+                <material id="shirtMaterialBlue" />
+                <material id="shirtMaterialRed" />
+                <material id="shirtMaterialOrange" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -522,7 +667,8 @@
                 <scale x="0.6" y="0.6" z="0.4" />
             </transformation>
             <materials>
-                <material id="shortsMaterial" />
+                <material id="shortsMaterialGreen" />
+                <material id="shortsMaterialPurple" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -538,7 +684,8 @@
                 <rotate axis="x" angle="90" />
             </transformation>
             <materials>
-                <material id="shortsMaterial" />
+                <material id="shortsMaterialGreen" />
+                <material id="shortsMaterialPurple" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -706,7 +853,8 @@
                 <scale x="1" y="1" z="0.5" />
             </transformation>
             <materials>
-                <material id="shortsMaterial" />
+                <material id="shortsMaterialGreen" />
+                <material id="shortsMaterialPurple" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -803,6 +951,8 @@
             </transformation>
             <materials>
                 <material id="socksMaterial" />
+                <material id="shirtMaterialOrange" />
+                <material id="shirtMaterialRed" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -819,6 +969,7 @@
             </transformation>
             <materials>
                 <material id="bootsMaterial" />
+                <material id="beltMaterial" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -865,6 +1016,7 @@
             </transformation>
             <materials>
                 <material id="bootsMaterial" />
+                <material id="beltMaterial" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -882,6 +1034,7 @@
             </transformation>
             <materials>
                 <material id="bootsMaterial" />
+                <material id="beltMaterial" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -987,7 +1140,8 @@
         <!-- SIZES -->
         <component id="laraCroft">
             <transformation>
-                <translate x="0" y="-3.3" z="0" />
+                <scale x="1.3" y="1.3" z="1.3" />
+                <translate x="0" y="-1" z="0" />
                 <rotate axis="y" angle="-45" />
             </transformation>
             <materials>
@@ -1013,6 +1167,7 @@
             </transformation>
             <materials>
                 <material id="wallMaterial" />
+                <material id="wallNetherMaterial" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -1028,6 +1183,7 @@
             </transformation>
             <materials>
                 <material id="wallMaterial" />
+                <material id="wallNetherMaterial" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -1044,6 +1200,7 @@
             </transformation>
             <materials>
                 <material id="wallMaterial" />
+                <material id="wallNetherMaterial" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -1060,6 +1217,7 @@
             </transformation>
             <materials>
                 <material id="wallMaterial" />
+                <material id="wallNetherMaterial" />
             </materials>
             <texture id="inherit"/>
             <children>
@@ -1076,6 +1234,7 @@
             </transformation>
             <materials>
                 <material id="inherit" />
+                <material id="floorNetherMaterial" />
             </materials>
             <texture id="floorTexture" length_s="0.2" length_t="0.2" />
             <children>
@@ -1093,6 +1252,7 @@
             </transformation>
             <materials>
                 <material id="inherit" />
+                <material id="ceilingNetherMaterial" />
             </materials>
             <texture id="ceilingTexture" length_s="0.2" length_t="0.2" />
             <children>
@@ -1127,6 +1287,7 @@
             </transformation>
             <materials>
                 <material id="inherit" />
+                <material id="pillarTopNetherMaterial" />
             </materials>
             <texture id="pillarTopTexture" length_s="1.0" length_t="1.0" />
             <children>
@@ -1144,6 +1305,7 @@
             </transformation>
             <materials>
                 <material id="inherit" />
+                <material id="pillarTopNetherMaterial" />
             </materials>
             <texture id="pillarTopTexture" length_s="1.0" length_t="1.0" />
             <children>
@@ -1157,6 +1319,7 @@
             </transformation>
             <materials>
                 <material id="inherit" />
+                <material id="pillarNetherMaterial" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -1411,6 +1574,22 @@
             </children>
         </component>
 
+        <!-- 0.0 x 15.0 x 40.0 -->
+        <component id="banner">
+            <transformation>
+                <translate x="49.9" y="0" z="5" />
+                <scale x="1" y="15" z="40" />
+                <rotate axis="y" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="wallMaterial" />
+            </materials>
+            <texture id="bannerTexture" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rectPatch"/>
+            </children>
+        </component>
+
         <!-- 100 x 100 x 30 -->
         <component id="temple">
             <transformation>
@@ -1427,21 +1606,205 @@
                 <componentref id="floor" />
                 <componentref id="ceiling" />
                 <componentref id="pillars" />
+                <componentref id="banner" />
+                <componentref id="barrelSet" />
             </children>
         </component>
 
-        <component id="patchComponent">
+        <component id="tentComponent">
             <transformation>
+                <translate x="0" y="5" z="0" />
                 <scale x="10" y="10" z="10" />
-                <translate x="5" y="0" z="5" />
             </transformation>
             <materials>
-                <material id="backgroundMaterial" />
+                <material id="inherit" />
             </materials>
-            <texture id="wallTexture" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
-                <primitiveref id="rectPatch" />
-                <primitiveref id="3dPatch" />
+                <primitiveref id="tentPatch" />
+            </children>
+        </component>
+
+        <component id="halfBarrel1">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="barrelPatch" />
+            </children>
+        </component>
+
+        <component id="halfBarrel2">
+            <transformation>
+                <rotate axis="y" angle="180" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="barrelPatch" />
+            </children>
+        </component>
+
+        <component id="barrelComponent">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="barrelTexture" />
+            <children>
+                <componentref id="halfBarrel1" />
+                <componentref id="halfBarrel2" />
+            </children>
+        </component>
+
+        <component id="barrelCover1">
+            <transformation>
+                <translate x="0" y="0.5" z="0" />
+                <rotate axis="x" angle="-90" />
+                <scale x="0.5" y="0.5" z="0.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="barrelCoverTexture" />
+            <children>
+                <primitiveref id="circlePatch" />
+            </children>
+        </component>
+
+        <component id="barrelCover2">
+            <transformation>
+                <translate x="0" y="-0.5" z="0" />
+                <rotate axis="x" angle="90" />
+                <scale x="0.5" y="0.5" z="0.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="barrelCoverTexture" />
+            <children>
+                <primitiveref id="circlePatch" />
+            </children>
+        </component>
+
+        <component id="barrel">
+            <transformation>
+                <scale x="2" y="2" z="2" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrelComponent" />
+                <componentref id="barrelCover1" />
+                <componentref id="barrelCover2" />
+            </children>
+        </component>
+
+        <component id="barrel2">
+            <transformation>
+                <translate x="1.5" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+            </children>
+        </component>
+
+        <component id="barrel3">
+            <transformation>
+                <translate x="-1.5" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+            </children>
+        </component>
+
+        <component id="barrel4">
+            <transformation>
+                <translate x="-0.7" y="2" z="0" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+            </children>
+        </component>
+
+        <component id="barrel5">
+            <transformation>
+                <translate x="0.7" y="2" z="0" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+            </children>
+        </component>
+
+        <component id="barrel6">
+            <transformation>
+                <translate x="0" y="4" z="0" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+            </children>
+        </component>
+
+        <component id="barrel7">
+            <transformation>
+                <translate x="-1" y="-0.3" z="2" />
+                <rotate axis="z" angle="90" />
+                <rotate axis="x" angle="45" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+            </children>
+        </component>
+
+        <component id="barrelSet">
+            <transformation>
+                <translate x="8" y="-6.5" z="-38" />
+                <scale x="3.5" y="3.5" z="3.5" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+                <componentref id="barrel2" />
+                <componentref id="barrel3" />
+                <componentref id="barrel4" />
+                <componentref id="barrel5" />
+                <componentref id="barrel6" />
+                <componentref id="barrel7" />
             </children>
         </component>
 
@@ -1454,8 +1817,7 @@
             <texture id="none"/>
             <children>
                 <componentref id="laraCroft" />
-                <!-- <componentref id="temple" /> -->
-                <componentref id="patchComponent" />
+                <componentref id="temple" />
             </children>
         </component>
         

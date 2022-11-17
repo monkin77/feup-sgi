@@ -919,8 +919,15 @@ export class MySceneGraph {
                             "unable to parse z coordinate of the control point from primitive with ID = " +
                             primitiveId
                         );
+                    
+                    const control_w = this.reader.getFloat(controlNode, "w", false);
+                    if (control_w && isNaN(control_z))
+                        return (
+                            "unable to parse z coordinate of the control point from primitive with ID = " +
+                            primitiveId
+                        );
 
-                    controlPoints.push([control_x, control_y, control_z, 1]);
+                    controlPoints.push([control_x, control_y, control_z, control_w ?? 1]);
                 }
 
                 const currPatch = new MyPatch(
