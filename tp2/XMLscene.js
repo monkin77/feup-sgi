@@ -1,4 +1,4 @@
-import { CGFscene } from "../lib/CGF.js";
+import { CGFscene, CGFshader } from "../lib/CGF.js";
 import { CGFaxis, CGFcamera } from "../lib/CGF.js";
 import { updateLight } from "./scenes/parser/utils.js";
 
@@ -37,6 +37,9 @@ export class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
+
+        this.initShaders();
+
         this.setUpdatePeriod(100);
     }
 
@@ -62,6 +65,14 @@ export class XMLscene extends CGFscene {
             updateLight(this.lights[light[0]], light);
         }
         // console.log(this.lights)
+    }
+
+    /**
+     * Initialize custom shaders
+     */
+    initShaders() {
+        this.highlightShader = new CGFshader(this.gl, './shaders/highlight.vert', './shaders/highlight.frag');
+        this.highlightShader.setUniformsValues({ highlightScale: 1 })
     }
 
     setDefaultAppearance() {
@@ -125,7 +136,7 @@ export class XMLscene extends CGFscene {
 
         /* TODO: Inteface needs to include options for each highlighted component including:
         1. Checkbox for setting ative/inactive
-        2. and 3. are arguable
+        Point 2. and 3. are optional
         2. Select color
         3. Change scale factor
         */
@@ -187,6 +198,8 @@ export class XMLscene extends CGFscene {
             this.setDefaultAppearance();
 
             this.updateAllLights();
+
+            this.setActiveShader(this.highlightShader);
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
