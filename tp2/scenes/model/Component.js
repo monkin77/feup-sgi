@@ -8,7 +8,7 @@ export class Component {
      * @param {texture: Texture}
      * @param { { components: string[], primitives: string[] } }
      */
-    constructor(id, transformation, materials, texture, children) {
+    constructor(id, transformation, materials, texture, children, animation) {
         this._id = id;
         this._transformation = transformation;
         this._materials = materials;
@@ -16,6 +16,7 @@ export class Component {
         this._primitives = children.primitives;
         this._components = children.components;
         this._currMaterial = 0;
+        this._animation = animation;
     }
 
     get id() {
@@ -38,6 +39,9 @@ export class Component {
     }
     get currMaterial() {
         return this._currMaterial;
+    }
+    get animation() {
+        return this._animation;
     }
 
     nextMaterial() {

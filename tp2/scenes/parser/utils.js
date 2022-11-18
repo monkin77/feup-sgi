@@ -105,6 +105,26 @@ export const axisToVec = (axis) => {
     }
 };
 
+export const parseRotation = (xmlReader, node, messageError) => {
+    let axis = xmlReader.getString(node, "axis", false);
+    if (axis == null)
+        return {
+            error: `no 'axis' defined for rotation in ${messageError}`,
+        };
+    axis = axisToVec(axis);
+
+    if (!axis) return {
+        error: `Invalid 'axis' value provided for rotation in ${messageError}`,
+    };
+
+    const angle = xmlReader.getFloat(node, "angle", false);
+    if (invalidNumber(angle))
+        return {
+            error: `no 'angle' defined for rotation in ${messageError}`,
+        };
+    return {axis, angle};
+}
+
 /**
  *
  * @param {*} xmlReader
@@ -140,22 +160,8 @@ export const calculateTransformationMatrix = (
                 transfCounter++;
                 break;
             case "rotate":
-                let axis = xmlReader.getString(child, "axis", false);
-                if (axis == null)
-                    return {
-                        error: `no 'axis' defined for rotation in transformation ${transformationId}`,
-                    };
-                axis = axisToVec(axis);
-
-                if (!axis) return {
-                    error: `Invalid 'axis' value provided for rotation in transformation: ${transformationId}`,
-                };
-
-                const angle = xmlReader.getFloat(child, "angle", false);
-                if (invalidNumber(angle))
-                    return {
-                        error: `no 'angle' defined for rotation in transformation ${transformationId}`,
-                    };
+                const {axis, angle, error} = parseRotation(xmlReader, child, `rotate transformation with ID = ${transformationId}`);
+                if (error) return {error};
 
                 transfMatrix = mat4.rotate(
                     transfMatrix,

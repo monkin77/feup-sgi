@@ -12,6 +12,7 @@ import { invalidNumber, log, onXMLMinorError, parseColor, parseCoordinates3D, pa
 import { MaterialsParser } from "./scenes/parser/MaterialsParser.js";
 import { Component } from "./scenes/model/Component.js";
 import { TexturesParser } from "./scenes/parser/TexturesParser.js";
+import { AnimationsParser } from "./scenes/parser/AnimationsParser.js";
 
 // Order of the groups in the XML document.
 const SCENE_INDEX = 0;
@@ -22,7 +23,8 @@ const TEXTURES_INDEX = 4;
 const MATERIALS_INDEX = 5;
 const TRANSFORMATIONS_INDEX = 6;
 const PRIMITIVES_INDEX = 7;
-const COMPONENTS_INDEX = 8;
+const ANIMATIONS_INDEX = 8;
+const COMPONENTS_INDEX = 9;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -190,6 +192,18 @@ export class MySceneGraph {
 
             //Parse primitives block
             if ((error = this.parsePrimitives(nodes[index])) != null)
+                return error;
+        }
+
+        // <animations>
+        if ((index = nodeNames.indexOf("animations")) == -1)
+            return "tag <animations> missing";
+        else {
+            if (index != ANIMATIONS_INDEX)
+                onXMLMinorError("tag <animations> out of order");
+
+            //Parse animations block
+            if ((error = this.parseAnimations(nodes[index])) != null)
                 return error;
         }
 
@@ -944,6 +958,22 @@ export class MySceneGraph {
         }
 
         log("Parsed primitives");
+        return null;
+    }
+
+    /**
+     * Parses the <animations> block.
+     * @param {animations block element} animationsNode
+     */
+    parseAnimations(animationsNode) {
+        this.animationsParser = new AnimationsParser(
+            this.reader,
+            animationsNode
+        );
+        if (this.animationsParser.hasReports())
+            return this.animationsParser.reports[0];
+
+        log("Parsed animations");
         return null;
     }
 

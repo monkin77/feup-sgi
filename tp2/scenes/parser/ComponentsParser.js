@@ -221,7 +221,7 @@ export class ComponentsParser extends Parser {
                 return { error: "no 'id' defined for <transformationref>" };
             if (!(transfId in this._transformations))
                 return {
-                    error: `{<transformationref> contains an invalid id (ID = ${transfId})}`,
+                    error: `<transformationref> contains an invalid id (ID = ${transfId})`,
                 };
 
             return { value: transfId };
