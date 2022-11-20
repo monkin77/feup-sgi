@@ -966,13 +966,14 @@ export class MySceneGraph {
      * @param {animations block element} animationsNode
      */
     parseAnimations(animationsNode) {
-        this.animationsParser = new AnimationsParser(
+        const animationsParser = new AnimationsParser(
             this.reader,
             animationsNode,
             this.scene
         );
-        if (this.animationsParser.hasReports())
-            return this.animationsParser.reports[0];
+        if (animationsParser.hasReports())
+            return animationsParser.reports[0];
+        this.animations = animationsParser.animations;
 
         log("Parsed animations");
         return null;
@@ -990,7 +991,7 @@ export class MySceneGraph {
             this.materialsParser.materials,
             this.texturesParser.textures,
             this.primitives,
-            this.animationsParser.animations,
+            this.animations,
             this.idRoot
         );
         if (this.componentsParser.hasReports())
@@ -1040,6 +1041,13 @@ export class MySceneGraph {
                     component.transformation
                 ]
             );
+        }
+        if (component.hasAnimation()) {
+            if (!component.animation.hasStarted) {
+                this.scene.popMatrix();
+                return;
+            }
+            component.animation.apply();
         }
 
         let appearenceId =

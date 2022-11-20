@@ -8,6 +8,7 @@ export class MyAnimation {
         if (this.constructor === MyAnimation) {
             throw new Error("Abstract classes can't be instantiated.");
         }
+        this.started = false;
     }
 
     /**
@@ -25,5 +26,13 @@ export class MyAnimation {
      */
     apply() {
         throw new Error("Method 'apply()' must be implemented.");
+    }
+
+    /**
+     * Informs if the animation has started
+     * @returns {boolean} true if the animation has started, false otherwise
+     */
+    hasStarted() {
+        return this.started;
     }
 }

@@ -49,4 +49,5 @@ export class Component {
     }
 
     hasTransformation = () => this._transformation != "";
+    hasAnimation = () => !!this._animation;
 }

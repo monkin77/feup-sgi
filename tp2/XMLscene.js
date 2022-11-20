@@ -193,6 +193,7 @@ export class XMLscene extends CGFscene {
         if (!this.sceneInited) return;
 
         if (this.startTime === null) this.startTime = t;
-        // TODO update components?
+        for (const animation of Object.values(this.graph.animations))
+            animation.update(t - this.startTime);
     }
 }
