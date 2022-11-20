@@ -9,20 +9,20 @@ export class AnimationsParser extends Parser {
     /**
      * Constructor for the AnimationsParser class.
      * @param {CGF xml Reader} xmlReader
-     * @param {animations block element} transformationsNode
+     * @param {animations block element} animationsNode
      */
-     constructor(xmlReader, transformationsNode, scene) {
+     constructor(xmlReader, animationsNode, scene) {
         super();
         this._animations = {};
         this._scene = scene;
 
-        this.parse(xmlReader, transformationsNode);
+        this.parse(xmlReader, animationsNode);
     }
 
     /**
      * Parses the <animations> block.
      * @param {CGF xml Reader} xmlReader
-     * @param {animations block element} transformationsNode
+     * @param {animations block element} animationsNode
      */
      parse(xmlReader, animationsNode) {
         const children = animationsNode.children;
@@ -40,8 +40,6 @@ export class AnimationsParser extends Parser {
                 return;
             }
         }
-
-        console.log("animations", this._animations);
     }
 
     /**

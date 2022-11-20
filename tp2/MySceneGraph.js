@@ -968,7 +968,8 @@ export class MySceneGraph {
     parseAnimations(animationsNode) {
         this.animationsParser = new AnimationsParser(
             this.reader,
-            animationsNode
+            animationsNode,
+            this.scene
         );
         if (this.animationsParser.hasReports())
             return this.animationsParser.reports[0];
@@ -989,6 +990,7 @@ export class MySceneGraph {
             this.materialsParser.materials,
             this.texturesParser.textures,
             this.primitives,
+            this.animationsParser.animations,
             this.idRoot
         );
         if (this.componentsParser.hasReports())
