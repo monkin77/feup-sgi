@@ -2,13 +2,13 @@ export class KeyFrame {
     /**
      * Constructor for the KeyFrame class. It is used to represent a keyframe of an animation.
      * @constructor
-     * @param {number} instant - Keyframe's instant
+     * @param {number} instant - Keyframe's instant in seconds
      * @param {vec3} translation - Keyframe's translation transformation
      * @param {Array} rotation - Keyframe's rotation transformation
      * @param {vec3} scale - Keyframe's scale transformation
      */
     constructor(instant, translation, rotations, scale) {
-        this._instant = instant;
+        this._instant = instant * 1000;
         this._translation = translation;
         this._rotations = rotations;
         this._scale = scale;

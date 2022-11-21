@@ -1043,7 +1043,7 @@ export class MySceneGraph {
             );
         }
         if (component.hasAnimation()) {
-            if (!component.animation.hasStarted) {
+            if (!component.animation.hasStarted()) {
                 this.scene.popMatrix();
                 return;
             }
