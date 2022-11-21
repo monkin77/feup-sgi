@@ -73,7 +73,8 @@ export class XMLscene extends CGFscene {
     initShaders() {
         this.highlightShader = new CGFshader(this.gl, './shaders/highlight.vert', './shaders/highlight.frag');
         this.timeFactor = 0;
-        this.highlightShader.setUniformsValues({ highlightScale: 1, timeFactor: this.timeFactor });
+        this.totalSteps = 100;
+        this.highlightShader.setUniformsValues({ highlightScale: 1.5, timeFactor: this.timeFactor, totalSteps: this.totalSteps });
     }
 
     setDefaultAppearance() {
@@ -173,7 +174,8 @@ export class XMLscene extends CGFscene {
     }
 
     update(t) {
-        this.timeFactor = t / 100 % 1000;
+        this.timeFactor = Math.floor(t / 100 % this.totalSteps);
+        // console.log(t, this.timeFactor);
         this.highlightShader.setUniformsValues({ timeFactor: this.timeFactor });
     }
 
@@ -204,9 +206,6 @@ export class XMLscene extends CGFscene {
             this.setDefaultAppearance();
 
             this.updateAllLights();
-
-            // TODO: Move this to the MySceneGraph.js
-            this.setActiveShader(this.highlightShader);
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();

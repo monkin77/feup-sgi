@@ -584,6 +584,8 @@
             <children>
                 <primitiveref id="sphere" />
             </children>
+
+            <highlighted r="0" g="1" b="1" scale_h="1.5" />
         </component>
 
         <!-- 0.25(r) x 0.3 (h)-->
@@ -632,8 +634,6 @@
             <children>
                 <componentref id="triangularPrism" />
             </children>
-
-            <highlighted r="0" g="1" b="1" scale_h="1" />
         </component>
 
         <!-- 1.6/1.2 x 0.6 x 0.4 -->
