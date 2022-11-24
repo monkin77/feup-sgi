@@ -2,17 +2,18 @@ export class Component {
     /**
      * Constructor for the Component object.
      * @param {id}
-     * @param {transformation} reference to this component's transformation. If declared inline,
+     * @param {transformation} reference to this compnimationNode.length == 0 ? null : onent's transformation. If declared inline,
      * the parser is responsible for creating the transformation object and adding it to the exiting ones
      * @param {materials}
      * @param {texture: Texture}
      * @param { { components: string[], primitives: string[] } }
      */
-    constructor(id, transformation, materials, texture, children) {
+    constructor(id, transformation, materials, texture, animation, children) {
         this._id = id;
         this._transformation = transformation;
         this._materials = materials;
         this._texture = texture;
+        this._animation = animation;
         this._primitives = children.primitives;
         this._components = children.components;
         this._currMaterial = 0;
@@ -39,10 +40,14 @@ export class Component {
     get currMaterial() {
         return this._currMaterial;
     }
+    get animation() {
+        return this._animation;
+    }
 
     nextMaterial() {
         this._currMaterial = (this._currMaterial + 1) % this.materials.length;
     }
 
     hasTransformation = () => this._transformation != "";
+    hasAnimation = () => !!this._animation;
 }

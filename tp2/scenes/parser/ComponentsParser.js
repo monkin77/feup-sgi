@@ -21,6 +21,7 @@ export class ComponentsParser extends Parser {
         materials,
         textures,
         primitives,
+        animations,
         idRoot
     ) {
         super();
@@ -29,6 +30,7 @@ export class ComponentsParser extends Parser {
         this._materials = materials;
         this._textures = textures;
         this._primitives = primitives;
+        this._animations = animations;
         this._idRoot = idRoot;
 
         this._componentIds = new Set(); // save compononentIds for Reference verification
@@ -137,6 +139,14 @@ export class ComponentsParser extends Parser {
         if (componentId in this._components)
             return `ID must be unique for each component (conflict: ID = ${componentId})`;
 
+        const animationNode = componentNode.getElementsByTagName("animation");
+        if (animationNode.length > 1)
+            onXMLMinorError("more than one <animation> blcok in component " + componentId);
+        let animationId = null;
+        if (animationNode.length == 1) {
+            animationId = xmlReader.getString(animationNode[0], "id", false);
+        }
+
         let transformationNode =
             componentNode.getElementsByTagName("transformation");
         if (transformationNode.length != 1)
@@ -186,6 +196,7 @@ export class ComponentsParser extends Parser {
             transfID,
             materialsList,
             texture,
+            this._animations[animationId] || null,
             childrenValue
         );
 
@@ -221,7 +232,7 @@ export class ComponentsParser extends Parser {
                 return { error: "no 'id' defined for <transformationref>" };
             if (!(transfId in this._transformations))
                 return {
-                    error: `{<transformationref> contains an invalid id (ID = ${transfId})}`,
+                    error: `<transformationref> contains an invalid id (ID = ${transfId})`,
                 };
 
             return { value: transfId };

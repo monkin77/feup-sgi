@@ -14,6 +14,8 @@ export class XMLscene extends CGFscene {
         super();
 
         this.interface = myinterface;
+        this.setUpdatePeriod(100);
+        this.startTime = null;
     }
 
     /**
@@ -185,5 +187,13 @@ export class XMLscene extends CGFscene {
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
+    }
+
+    update(t) {
+        if (!this.sceneInited) return;
+
+        if (this.startTime === null) this.startTime = t;
+        for (const animation of Object.values(this.graph.animations))
+            animation.update(t - this.startTime);
     }
 }

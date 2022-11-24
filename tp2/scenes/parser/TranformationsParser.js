@@ -1,15 +1,12 @@
 import { Parser } from "./Parser.js";
 import {
     onXMLMinorError,
-    parseCoordinates3D,
-    DEGREE_TO_RAD,
-    axisToVec,
     calculateTransformationMatrix,
 } from "./utils.js";
 
 export class TransformationsParser extends Parser {
     /**
-     * Constructor for the TransformationsParser object.
+     * Constructor for the TransformationsParser class.
      * @param {CGF xml Reader} xmlReader
      * @param {transformations block element} transformationsNode
      */
@@ -31,7 +28,7 @@ export class TransformationsParser extends Parser {
         let err;
         for (const child of children) {
             if (child.nodeName != "transformation") {
-                onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                onXMLMinorError("unknown tag <" + child.nodeName + ">");
                 continue;
             }
 

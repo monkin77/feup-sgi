@@ -368,6 +368,46 @@
 
     </primitives>
 
+    <animations>
+        <keyframeanim id="testAnimation">        
+            <keyframe instant="1">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="3">
+                <translation x="1.0" y="1.0" z="1.0" />
+                <rotation axis="z" angle="20" />
+                <rotation axis="y" angle="20" />
+                <rotation axis="x" angle="20" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="5">
+                <translation x="1.0" y="1.0" z="1.0" />
+                <rotation axis="z" angle="70" />
+                <rotation axis="y" angle="10" />
+                <rotation axis="x" angle="-50" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="7">
+                <translation x="1.0" y="1.0" z="1.0" />
+                <rotation axis="z" angle="20" />
+                <rotation axis="y" angle="20" />
+                <rotation axis="x" angle="20" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="10">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+        </keyframeanim>
+    </animations>
+
     <components>
         <!-- Custom Shapes -->
 
@@ -1144,6 +1184,7 @@
                 <translate x="0" y="-1" z="0" />
                 <rotate axis="y" angle="-45" />
             </transformation>
+            <animation id="testAnimation" />
             <materials>
                 <material id="skinMaterial" />
             </materials>
