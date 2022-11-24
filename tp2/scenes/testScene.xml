@@ -648,7 +648,7 @@
                 <primitiveref id="sphere" />
             </children>
 
-            <highlighted r="0" g="1" b="1" scale_h="1.5" />
+            <highlighted r="1.0" g="0.75" b="0.60" scale_h="1.5" />
         </component>
 
         <!-- 0.25(r) x 0.3 (h)-->
@@ -797,7 +797,7 @@
                 <primitiveref id="torus" />
             </children>
 
-            <highlighted r="0" g="1" b="1" scale_h="1.5" />
+            <highlighted r="0.15" g="0.15" b="0" scale_h="1.5" />
         </component>
 
         <!-- SIZES -->
@@ -1723,8 +1723,7 @@
 
         <component id="campfire">
             <transformation>
-                <!-- <translate x="-20" y="0" z="-15" /> -->
-                <translate x="0" y="-10" z="0" />
+                <translate x="-20" y="-10" z="-15" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -2020,7 +2019,7 @@
             </materials>
             <texture id="none"/>
             <children>
-                <!-- <componentref id="laraCroft" /> -->
+                <componentref id="laraCroft" />
                 <componentref id="temple" />
             </children>
         </component>
