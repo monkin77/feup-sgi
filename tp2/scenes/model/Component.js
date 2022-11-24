@@ -57,5 +57,5 @@ export class Component {
     hasTransformation = () => this._transformation != "";
     hasAnimation = () => !!this._animation;
 
-    isHighlighted = () => this._highlighted != null;
+    isHighlighted = () => this._highlighted != null && this._highlighted.active;
 }

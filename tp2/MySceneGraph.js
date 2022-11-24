@@ -1164,8 +1164,7 @@ export class MySceneGraph {
         }
 
         if (component.isHighlighted()) {
-            console.log("Highlighting", component.id, "with scale", component.highlighted.scale);
-            this.scene.highlightShader.setUniformsValues({ highlightScale: component.highlighted.scale });
+            this.scene.highlightShader.setUniformsValues({ highlightScale: component.highlighted.scale, highlightColor: component.highlighted.getColor() });
             this.scene.setActiveShader(this.scene.highlightShader);
         }
 

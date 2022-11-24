@@ -4,6 +4,7 @@ export class Highlighted {
         this._green = green;
         this._blue = blue;
         this._scale = scale;
+        this._active = false;
     }
 
     get red() {
@@ -20,5 +21,13 @@ export class Highlighted {
 
     get scale() {
         return this._scale;
+    }
+
+    get active() {
+        return this._active;
+    }
+
+    getColor() {
+        return [this.red, this.green, this.blue, 1.0];
     }
 }
