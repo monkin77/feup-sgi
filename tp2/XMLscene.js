@@ -176,7 +176,12 @@ export class XMLscene extends CGFscene {
     }
 
     update(t) {
-        let currTimeStep = Math.floor(t / 100) % this.totalSteps;
+        if (!this.sceneInited) return;
+        if (this.startTime === null) this.startTime = t;
+        for (const animation of Object.values(this.graph.animations))
+            animation.update(t - this.startTime);
+
+        let currTimeStep = Math.floor(t / 50) % this.totalSteps;
         this.timeFactor = (1 + Math.sin(this.highlightAngVelocity * currTimeStep)) / 2.0;
         // console.log(t, currTimeStep, this.timeFactor);
 
@@ -217,13 +222,5 @@ export class XMLscene extends CGFscene {
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
-    }
-
-    update(t) {
-        if (!this.sceneInited) return;
-
-        if (this.startTime === null) this.startTime = t;
-        for (const animation of Object.values(this.graph.animations))
-            animation.update(t - this.startTime);
     }
 }
