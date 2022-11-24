@@ -1,4 +1,5 @@
 import { Component } from "../model/Component.js";
+import { Highlighted } from "../model/Highlighted.js";
 import { Texture } from "../model/Texture.js";
 import { Parser } from "./Parser.js";
 import {
@@ -6,6 +7,7 @@ import {
     calculateTransformationMatrix,
     buildComponentTransfID,
     invalidNumber,
+    isValidColor,
 } from "./utils.js";
 
 export class ComponentsParser extends Parser {
@@ -34,6 +36,7 @@ export class ComponentsParser extends Parser {
         this._idRoot = idRoot;
 
         this._componentIds = new Set(); // save compononentIds for Reference verification
+        this._highlightedComponents = new Set();
 
 
         this.parse(xmlReader, componentsNode);
@@ -183,12 +186,22 @@ export class ComponentsParser extends Parser {
             textureValue.lengthT
         );
 
+        let highlightedNode = componentNode.getElementsByTagName("highlighted");
+        let highlighted = null;
+        if (highlightedNode.length == 1) {
+            highlightedNode = highlightedNode[0];
+            const { error: highlightedErr, value: highlightedValue } = this.handleHighlighted(xmlReader, highlightedNode, componentId);
+            if (highlightedErr) return highlightedErr;
+
+            highlighted = new Highlighted(highlightedValue.red, highlightedValue.green, highlightedValue.blue, highlightedValue.scaleH);
+        }
+
         let childrenNode = componentNode.getElementsByTagName("children");
         if (childrenNode.length != 1)
             return `<children> must be defined inside the component with id = ${componentId}`;
         childrenNode = childrenNode[0];
         const { error: childrenErr, value: childrenValue } =
-            this.handleChildren(xmlReader, childrenNode, componentId);
+        this.handleChildren(xmlReader, childrenNode, componentId);
         if (childrenErr) return childrenErr;
 
         this._components[componentId] = new Component(
@@ -197,8 +210,13 @@ export class ComponentsParser extends Parser {
             materialsList,
             texture,
             this._animations[animationId] || null,
-            childrenValue
+            childrenValue,
+            highlighted
         );
+
+        if (highlighted != null) {
+            this._highlightedComponents.add(componentId);
+        }
 
         return null;
     };
@@ -337,6 +355,45 @@ export class ComponentsParser extends Parser {
     /**
      *
      * @param {*} xmlReader
+     * @param {*} highlightedNode
+     * @param {*} componentId
+     * @returns { {value: {red, green, blue, scaleH}} | {error: string} }
+     */
+    handleHighlighted = (xmlReader, highlightedNode, componentId) => {
+        const red = xmlReader.getFloat(highlightedNode, "r", false);
+        if (!isValidColor(red))
+            return {
+                error: `invalid 'r' property defined for <highlighted> inside <components> of component with ID = ${componentId}`,
+            };
+
+        const green = xmlReader.getFloat(highlightedNode, "g", false);
+        if (!isValidColor(green))
+            return {
+                error: `invalid 'g' property defined for <highlighted> inside <components> of component with ID = ${componentId}`,
+            };
+
+        const blue = xmlReader.getFloat(highlightedNode, "b", false);
+        if (!isValidColor(blue))
+            return {
+                error: `invalid 'b' property defined for <highlighted> inside <components> of component with ID = ${componentId}`,
+            };
+
+        const scaleH = xmlReader.getFloat(highlightedNode, "scale_h", false);
+        if (invalidNumber(scaleH))
+            return {
+                error: `invalid 'scale_h' property defined for <highlighted> inside <components> of component with ID = ${componentId}`,
+            };
+
+
+
+
+        return { value: { red, green, blue, scaleH } };
+    };
+
+
+    /**
+     *
+     * @param {*} xmlReader
      * @param {*} childrenNode
      * @param {*} componentId
      * @returns {{value: {components: string[], primitives: string[]}} | {error: string}} {value: {<components, primitives>}} if successful, {error: <error string>} otherwise.
@@ -396,6 +453,10 @@ export class ComponentsParser extends Parser {
 
     get components() {
         return this._components;
+    }
+
+    get highlightedComponents() {
+        return this._highlightedComponents;
     }
 }
 

@@ -39,15 +39,22 @@ export class MyInterface extends CGFinterface {
         // Lights
         this.gui.add(this.scene, 'displayLights').name("Display Lights");
 
-        const folder = this.gui.addFolder('Lights');
+        const lightsFolder = this.gui.addFolder('Lights');
         const lightsProperties = this.scene.graph.lights;
         for (let i = 0; i < Object.keys(lightsProperties).length; i++) {
-            folder.add(this.scene.lights[i], 'enabled').name(Object.keys(lightsProperties)[i]);
+            lightsFolder.add(this.scene.lights[i], 'enabled').name(Object.keys(lightsProperties)[i]);
         }
 
         // Selected View
         this.gui.add(this.scene, 'selectedView', this.scene.viewsSelector).name('Active View').onChange(this.scene.onViewChange);
 
+        // Highlighted Components
+        const highlightedComponents = this.scene.graph.componentsParser.highlightedComponents;
+        const highlightedComponentsFolder = this.gui.addFolder('Highlight');
+        for (const componentId of highlightedComponents) {
+            const component = this.scene.graph.componentsParser.components[componentId];
+            highlightedComponentsFolder.add(component.highlighted, 'active').name(componentId);
+        }
     }
 
     /**

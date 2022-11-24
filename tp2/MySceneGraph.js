@@ -8,7 +8,14 @@ import { MyPatch } from "./primitives/MyPatch.js";
 import { ComponentsParser } from "./scenes/parser/ComponentsParser.js";
 import { TransformationsParser } from "./scenes/parser/TranformationsParser.js";
 import { ViewsParser } from "./scenes/parser/ViewsParser.js";
-import { invalidNumber, log, onXMLMinorError, parseColor, parseCoordinates3D, parseCoordinates4D } from "./scenes/parser/utils.js";
+import {
+    invalidNumber,
+    log,
+    onXMLMinorError,
+    parseColor,
+    parseCoordinates3D,
+    parseCoordinates4D,
+} from "./scenes/parser/utils.js";
 import { MaterialsParser } from "./scenes/parser/MaterialsParser.js";
 import { Component } from "./scenes/model/Component.js";
 import { TexturesParser } from "./scenes/parser/TexturesParser.js";
@@ -328,15 +335,21 @@ export class MySceneGraph {
                 children[i].nodeName != "omni" &&
                 children[i].nodeName != "spot"
             ) {
-                onXMLMinorError(
-                    "unknown tag <" + children[i].nodeName + ">"
-                );
+                onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             } else {
                 attributeNames.push(
-                    ...["location", "ambient", "diffuse", "specular", "attenuation"]
+                    ...[
+                        "location",
+                        "ambient",
+                        "diffuse",
+                        "specular",
+                        "attenuation",
+                    ]
                 );
-                attributeTypes.push(...["position", "color", "color", "color", "attenuation"]);
+                attributeTypes.push(
+                    ...["position", "color", "color", "color", "attenuation"]
+                );
             }
 
             // Get id of the current light.
@@ -357,12 +370,11 @@ export class MySceneGraph {
             if (aux == null) {
                 onXMLMinorError(
                     "unable to parse value component of the 'enable light' field for ID = " +
-                    lightId +
-                    "; assuming 'value = 1'"
+                        lightId +
+                        "; assuming 'value = 1'"
                 );
                 aux = true;
             }
-
 
             enableLight = aux;
 
@@ -390,11 +402,30 @@ export class MySceneGraph {
                         );
                     else if (attributeTypes[j] == "attenuation") {
                         const attenuationNode = grandChildren[attributeIndex];
-                        const constantAtten = this.reader.getFloat(attenuationNode, "constant", false);
-                        const linearAtten = this.reader.getFloat(attenuationNode, "linear", false);
-                        const quadraticAtten = this.reader.getFloat(attenuationNode, "quadratic", false);
-                        if (constantAtten == null || linearAtten == null || quadraticAtten == null) {
-                            return "unable to parse attenuation values for ID = " + lightId;
+                        const constantAtten = this.reader.getFloat(
+                            attenuationNode,
+                            "constant",
+                            false
+                        );
+                        const linearAtten = this.reader.getFloat(
+                            attenuationNode,
+                            "linear",
+                            false
+                        );
+                        const quadraticAtten = this.reader.getFloat(
+                            attenuationNode,
+                            "quadratic",
+                            false
+                        );
+                        if (
+                            constantAtten == null ||
+                            linearAtten == null ||
+                            quadraticAtten == null
+                        ) {
+                            return (
+                                "unable to parse attenuation values for ID = " +
+                                lightId
+                            );
                         }
 
                         // Verify that only 1 of the properties = 1
@@ -402,7 +433,8 @@ export class MySceneGraph {
                         if (constantAtten == 1) attenCounter++;
                         if (linearAtten == 1) attenCounter++;
                         if (quadraticAtten == 1) attenCounter++;
-                        if (attenCounter != 1) return `Only one of the attenuation values can be 1 for ID = ${lightId}`;
+                        if (attenCounter != 1)
+                            return `Only one of the attenuation values can be 1 for ID = ${lightId}`;
 
                         aux = [constantAtten, linearAtten, quadraticAtten];
                     } else
@@ -416,7 +448,9 @@ export class MySceneGraph {
 
                     global.push(aux);
                 } else if (attributeNames[j] == "attenuation") {
-                    onXMLMinorError(`Attenuation attribute missing in Light: ${lightId}. Assuming Constant Attenuation`);
+                    onXMLMinorError(
+                        `Attenuation attribute missing in Light: ${lightId}. Assuming Constant Attenuation`
+                    );
                     // Adding constant attenuation to the array
                     global.push([1, 0, 0]);
                 } else {
@@ -538,9 +572,7 @@ export class MySceneGraph {
         // Any number of primitives.
         for (var i = 0; i < children.length; i++) {
             if (children[i].nodeName != "primitive") {
-                onXMLMinorError(
-                    "unknown tag <" + children[i].nodeName + ">"
-                );
+                onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
 
@@ -561,7 +593,14 @@ export class MySceneGraph {
             // Validate the primitive type
             if (
                 grandChildren.length != 1 ||
-                (!["rectangle", "triangle", "cylinder", "sphere", "torus", "patch"].includes(grandChildren[0].nodeName))
+                ![
+                    "rectangle",
+                    "triangle",
+                    "cylinder",
+                    "sphere",
+                    "torus",
+                    "patch",
+                ].includes(grandChildren[0].nodeName)
             ) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus or patch)";
             }
@@ -875,28 +914,44 @@ export class MySceneGraph {
 
                 this.primitives[primitiveId] = tor;
             } else if (primitiveType == "patch") {
-                const degree_u = this.reader.getInteger(grandChildren[0], "degree_u", false);
+                const degree_u = this.reader.getInteger(
+                    grandChildren[0],
+                    "degree_u",
+                    false
+                );
                 if (invalidNumber(degree_u))
                     return (
                         "unable to parse degree_u of the primitive coordinates for ID = " +
                         primitiveId
                     );
 
-                const degree_v = this.reader.getInteger(grandChildren[0], "degree_v", false);
+                const degree_v = this.reader.getInteger(
+                    grandChildren[0],
+                    "degree_v",
+                    false
+                );
                 if (invalidNumber(degree_v))
                     return (
                         "unable to parse degree_v of the primivite coordinates for ID = " +
                         primitiveId
                     );
 
-                const parts_u = this.reader.getInteger(grandChildren[0], "parts_u", false);
+                const parts_u = this.reader.getInteger(
+                    grandChildren[0],
+                    "parts_u",
+                    false
+                );
                 if (invalidNumber(parts_u))
                     return (
                         "unable to parse parts_u of the primitive coordinates for ID = " +
                         primitiveId
                     );
 
-                const parts_v = this.reader.getInteger(grandChildren[0], "parts_v", false);
+                const parts_v = this.reader.getInteger(
+                    grandChildren[0],
+                    "parts_v",
+                    false
+                );
                 if (invalidNumber(parts_v))
                     return (
                         "unable to parse parts_v of the primitive coordinates for ID = " +
@@ -905,43 +960,71 @@ export class MySceneGraph {
 
                 const controlPoints = [];
                 const controlPointNodes = grandChildren[0].children;
-                if (controlPointNodes.length != (degree_u + 1) * (degree_v + 1)) {
+                if (
+                    controlPointNodes.length !=
+                    (degree_u + 1) * (degree_v + 1)
+                ) {
                     return (
                         "unable to parse control points of the primitive coordinates for ID = " +
-                        primitiveId + ". Expected " + (degree_u + 1) * (degree_v + 1) + " control points, found " + controlPointNodes.length
+                        primitiveId +
+                        ". Expected " +
+                        (degree_u + 1) * (degree_v + 1) +
+                        " control points, found " +
+                        controlPointNodes.length
                     );
                 }
 
                 for (const controlNode of controlPointNodes) {
-                    const control_x = this.reader.getFloat(controlNode, "x", false);
+                    const control_x = this.reader.getFloat(
+                        controlNode,
+                        "x",
+                        false
+                    );
                     if (invalidNumber(control_x))
                         return (
                             "unable to parse x coordinate of the control point from primitive with ID = " +
                             primitiveId
                         );
 
-                    const control_y = this.reader.getFloat(controlNode, "y", false);
+                    const control_y = this.reader.getFloat(
+                        controlNode,
+                        "y",
+                        false
+                    );
                     if (invalidNumber(control_y))
                         return (
                             "unable to parse y coordinate of the control point from primitive with ID = " +
                             primitiveId
                         );
 
-                    const control_z = this.reader.getFloat(controlNode, "z", false);
+                    const control_z = this.reader.getFloat(
+                        controlNode,
+                        "z",
+                        false
+                    );
                     if (invalidNumber(control_z))
                         return (
                             "unable to parse z coordinate of the control point from primitive with ID = " +
                             primitiveId
                         );
-                    
-                    const control_w = this.reader.getFloat(controlNode, "w", false);
+
+                    const control_w = this.reader.getFloat(
+                        controlNode,
+                        "w",
+                        false
+                    );
                     if (control_w && isNaN(control_z))
                         return (
                             "unable to parse z coordinate of the control point from primitive with ID = " +
                             primitiveId
                         );
 
-                    controlPoints.push([control_x, control_y, control_z, control_w ?? 1]);
+                    controlPoints.push([
+                        control_x,
+                        control_y,
+                        control_z,
+                        control_w ?? 1,
+                    ]);
                 }
 
                 const currPatch = new MyPatch(
@@ -998,7 +1081,7 @@ export class MySceneGraph {
             return this.componentsParser.reports[0];
 
         if (!(this.idRoot in this.componentsParser.components)) {
-            return `Root component(${this.idRoot}) referenced in the  <scene /> does not exist.`
+            return `Root component(${this.idRoot}) referenced in the  <scene /> does not exist.`;
         }
 
         log("Parsed Components");
@@ -1051,9 +1134,9 @@ export class MySceneGraph {
         }
 
         let appearenceId =
-            component.materials.length > 0 ?
-            component.materials[component.currMaterial] :
-            prevAppearenceId;
+            component.materials.length > 0
+                ? component.materials[component.currMaterial]
+                : prevAppearenceId;
 
         if (appearenceId == "inherit") {
             appearenceId = prevAppearenceId;
@@ -1080,14 +1163,25 @@ export class MySceneGraph {
             appearance.apply();
         }
 
+        if (component.isHighlighted()) {
+            this.scene.highlightShader.setUniformsValues({ highlightScale: component.highlighted.scale, highlightColor: component.highlighted.getColor() });
+            this.scene.setActiveShader(this.scene.highlightShader);
+        }
+
         for (const primitive of component.primitives) {
             if (texture && texture.needsScaling()) {
-                this.primitives[primitive].scaleTexCoords(texture.length_s, texture.length_t);
+                this.primitives[primitive].scaleTexCoords(
+                    texture.length_s,
+                    texture.length_t
+                );
             }
             this.primitives[primitive].display();
             // Reset texture coords scale
             this.primitives[primitive].scaleTexCoords(1.0, 1.0);
         }
+
+        if (component.isHighlighted())
+            this.scene.setActiveShader(this.scene.defaultShader);
 
         // Clean the Appearance object that is being changed above
         if (appearance) appearance.setTexture(null);

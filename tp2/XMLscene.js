@@ -1,4 +1,4 @@
-import { CGFscene } from "../lib/CGF.js";
+import { CGFscene, CGFshader } from "../lib/CGF.js";
 import { CGFaxis, CGFcamera } from "../lib/CGF.js";
 import { updateLight } from "./scenes/parser/utils.js";
 
@@ -37,6 +37,9 @@ export class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
+
+        this.initShaders();
+
         this.setUpdatePeriod(100);
     }
 
@@ -62,6 +65,18 @@ export class XMLscene extends CGFscene {
             updateLight(this.lights[light[0]], light);
         }
         // console.log(this.lights)
+    }
+
+    /**
+     * Initialize custom shaders
+     */
+    initShaders() {
+        this.highlightShader = new CGFshader(this.gl, './shaders/highlight.vert', './shaders/highlight.frag');
+        this.timeFactor = 0;
+        this.totalSteps = 100;
+        this.highlightAngVelocity = 2.0 * Math.PI / this.totalSteps;
+
+        this.highlightShader.setUniformsValues({ highlightScale: 1, timeFactor: this.timeFactor, highlightColor: [1, 1, 1, 1] });
     }
 
     setDefaultAppearance() {
@@ -122,6 +137,13 @@ export class XMLscene extends CGFscene {
         this.selectedView = this.graph.viewsParser.defaultViewId;
 
         this.interface.onGraphLoaded();
+
+        /* TODO: Inteface needs to include options for each highlighted component including:
+        1. Checkbox for setting ative/inactive
+        Point 2. and 3. are optional
+        2. Select color
+        3. Change scale factor
+        */
     }
 
     /**
@@ -144,13 +166,21 @@ export class XMLscene extends CGFscene {
         }
     }
 
-     /**
+    /**
      * Iterate all the materials and change the active material to the next one
      */
     cycleMaterials() {
         for (const component of Object.values(this.graph.componentsParser.components)) {
             component.nextMaterial();
         }
+    }
+
+    update(t) {
+        let currTimeStep = Math.floor(t / 100) % this.totalSteps;
+        this.timeFactor = (1 + Math.sin(this.highlightAngVelocity * currTimeStep)) / 2.0;
+        // console.log(t, currTimeStep, this.timeFactor);
+
+        this.highlightShader.setUniformsValues({ timeFactor: this.timeFactor });
     }
 
 
