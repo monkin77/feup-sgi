@@ -25,7 +25,7 @@
     </ambient>
 
     <lights>
-        <omni id="back" enabled="0">
+        <omni id="back" enabled="1">
             <location x="10" y="5" z="5" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
@@ -70,6 +70,7 @@
         <texture id="bannerTexture" file="scenes/images/banner.jpg" />
         <texture id="barrelTexture" file="scenes/images/barrel.jpeg" />
         <texture id="barrelCoverTexture" file="scenes/images/barrelCover.jpeg" />
+        <texture id="fireTexture" file="scenes/images/fire.png" />
     </textures>
 
     <materials>
@@ -295,6 +296,18 @@
                 <controlpoint x="0.25" y="-0.25" z="0" />
                 <controlpoint x="0.25" y="0.0" z="1" />
                 <controlpoint x="0.25" y="0.25" z="0" />
+            </patch>
+        </primitive>
+
+        <primitive id="tentPatchInverted">
+            <patch degree_u="1" degree_v="2" parts_u="20" parts_v="20" >
+                <controlpoint x="-0.25" y="0.25" z="0" />
+                <controlpoint x="-0.25" y="0.0" z="1" />
+                <controlpoint x="-0.25" y="-0.25" z="0" />
+
+                <controlpoint x="0.25" y="0.25" z="0" />
+                <controlpoint x="0.25" y="0.0" z="1" />
+                <controlpoint x="0.25" y="-0.25" z="0" />
             </patch>
         </primitive>
 
@@ -733,6 +746,8 @@
             <children>
                 <primitiveref id="torus" />
             </children>
+
+            <highlighted r="0" g="1" b="1" scale_h="1.5" />
         </component>
 
         <!-- SIZES -->
@@ -1651,20 +1666,55 @@
                 <componentref id="pillars" />
                 <componentref id="banner" />
                 <componentref id="barrelSet" />
+                
+                <componentref id="campfire" />
             </children>
         </component>
 
-        <component id="tentComponent">
+        <component id="campfire">
             <transformation>
-                <translate x="0" y="5" z="0" />
-                <scale x="10" y="10" z="10" />
+                <translate x="-20" y="-10" z="-15" />
+     
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
+            <children>
+                <componentref id="tentComponent" />
+                <componentref id="fire" />
+            </children>
+        </component>
+
+        <component id="fire">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <scale x="2" y="2" z="4" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="fireTexture" />
+            <children>
+                <primitiveref id="cylinder" />
+            </children>
+
+            <highlighted r="0.4" g="0" b="0" scale_h="1.2" />
+        </component>
+
+        <component id="tentComponent">
+            <transformation>
+                <rotate axis="y" angle="-30" />
+                <rotate axis="x" angle="-90" />
+                <scale x="25" y="25" z="25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="wallTexture" />
             <children>
                 <primitiveref id="tentPatch" />
+                <primitiveref id="tentPatchInverted" />
             </children>
         </component>
 
