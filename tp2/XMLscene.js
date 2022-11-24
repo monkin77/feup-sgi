@@ -74,7 +74,9 @@ export class XMLscene extends CGFscene {
         this.highlightShader = new CGFshader(this.gl, './shaders/highlight.vert', './shaders/highlight.frag');
         this.timeFactor = 0;
         this.totalSteps = 100;
-        this.highlightShader.setUniformsValues({ highlightScale: 1.5, timeFactor: this.timeFactor, totalSteps: this.totalSteps });
+        this.highlightAngVelocity = 2.0 * Math.PI / this.totalSteps;
+
+        this.highlightShader.setUniformsValues({ highlightScale: 1, timeFactor: this.timeFactor, highlightColor: [1, 1, 1, 1] });
     }
 
     setDefaultAppearance() {
@@ -174,8 +176,10 @@ export class XMLscene extends CGFscene {
     }
 
     update(t) {
-        this.timeFactor = Math.floor(t / 100 % this.totalSteps);
-        // console.log(t, this.timeFactor);
+        let currTimeStep = Math.floor(t / 100 % this.totalSteps);
+        this.timeFactor = (1 + Math.sin(this.highlightAngVelocity * currTimeStep)) / 2.0;
+        console.log(t, this.timeFactor);
+
         this.highlightShader.setUniformsValues({ timeFactor: this.timeFactor });
     }
 
