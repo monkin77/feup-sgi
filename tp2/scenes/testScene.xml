@@ -391,36 +391,77 @@
     </primitives>
 
     <animations>
-        <keyframeanim id="testAnimation">        
-            <keyframe instant="1">
+        <keyframeanim id="laraAnimation">        
+            <keyframe instant="0">
                 <translation x="0.0" y="0.0" z="0.0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
                 <scale x="1.0" y="1.0" z="1.0" />
             </keyframe>
-            <keyframe instant="3">
-                <translation x="1.0" y="1.0" z="1.0" />
-                <rotation axis="z" angle="20" />
-                <rotation axis="y" angle="20" />
-                <rotation axis="x" angle="20" />
+            <keyframe instant="2">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="-90" />
+                <rotation axis="x" angle="0" />
                 <scale x="1.0" y="1.0" z="1.0" />
             </keyframe>
-            <keyframe instant="5">
-                <translation x="1.0" y="1.0" z="1.0" />
-                <rotation axis="z" angle="70" />
-                <rotation axis="y" angle="10" />
-                <rotation axis="x" angle="-50" />
+        </keyframeanim>
+
+        <keyframeanim id="rightLegAnimation">        
+            <keyframe instant="0">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
                 <scale x="1.0" y="1.0" z="1.0" />
             </keyframe>
-            <keyframe instant="7">
-                <translation x="1.0" y="1.0" z="1.0" />
-                <rotation axis="z" angle="20" />
-                <rotation axis="y" angle="20" />
-                <rotation axis="x" angle="20" />
+            <keyframe instant="0.5">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="-30" />
                 <scale x="1.0" y="1.0" z="1.0" />
             </keyframe>
-            <keyframe instant="10">
+            <keyframe instant="1.5">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="-30" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="2">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+        </keyframeanim>
+
+        <keyframeanim id="lowerLegRightAnimation">        
+            <keyframe instant="0">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="0.5">
+                <translation x="0.0" y="-0.5" z="0.06" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="30" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="1.5">
+                <translation x="0.0" y="-0.5" z="0.06" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="30" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="2">
                 <translation x="0.0" y="0.0" z="0.0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
@@ -1029,7 +1070,7 @@
             <transformation>
                 <translate x="0" y="-6.7" z="0" />
                 <rotate axis="x" angle="-90" />
-                <scale x="0.9" y="0.9" z="1.15" />
+                <scale x="0.9" y="0.9" z="1" />
             </transformation>
             <materials>
                 <material id="skinMaterial" />
@@ -1126,7 +1167,8 @@
             <transformation>
                 <rotate axis="z" angle="5" />
                 <rotate axis="y" angle="-90" />
-                <translate x="0.0" y="-10.5" z="0.9" />
+                <translate x="0.15" y="-10.3" z="0.9" />
+                <rotate axis="z" angle="10" />
             </transformation>
             <materials>
                 <material id="bootsMaterial" />
@@ -1144,7 +1186,8 @@
             <transformation>
                 <rotate axis="z" angle="-5" />
                 <rotate axis="y" angle="-90" />
-                <translate x="0.0" y="-10.5" z="-0.9" />
+                <translate x="0.15" y="-10.3" z="-0.9" />
+                <rotate axis="z" angle="10" />
             </transformation>
             <materials>
                 <material id="bootsMaterial" />
@@ -1158,11 +1201,12 @@
         </component>
 
         <!-- 0.9 x 0.72 x 4.25 -->
-        <component id="lowerLeg">
+        <component id="lowerLegRightBase">
             <transformation>
+                <translate x="0" y="4.4" z="-0.7" />
                 <rotate axis="x" angle="10" />
-                <translate x="0" y="0" z="1.72" />
             </transformation>
+            
             <materials>
                 <material id="skinMaterial" />
             </materials>
@@ -1172,6 +1216,56 @@
                 <componentref id="lowerShin" />
                 <componentref id="sock" />
                 <componentref id="upperBoot" />
+                <componentref id="footRight" />
+            </children>
+        </component>
+
+        <!-- 0.9 x 0.72 x 4.25 -->
+        <component id="lowerLegRight">
+            <transformation>
+                <translate x="0" y="-4.4" z="2.42" />
+            </transformation>
+            <animation id="lowerLegRightAnimation" />
+            <materials>
+                <material id="skinMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="lowerLegRightBase" />
+            </children>
+        </component>
+
+        <!-- 0.9 x 0.72 x 4.25 -->
+        <component id="lowerLegLeftBase">
+            <transformation>
+                <translate x="0" y="4.4" z="-0.7" />
+                <rotate axis="x" angle="10" />
+            </transformation>
+            
+            <materials>
+                <material id="skinMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="upperShin" />
+                <componentref id="lowerShin" />
+                <componentref id="sock" />
+                <componentref id="upperBoot" />
+                <componentref id="footLeft" />
+            </children>
+        </component>
+
+        <!-- 0.9 x 0.72 x 4.25 -->
+        <component id="lowerLegLeft">
+            <transformation>
+                <translate x="0" y="-4.4" z="2.42" />
+            </transformation>
+            <materials>
+                <material id="skinMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="lowerLegLeftBase" />
             </children>
         </component>
 
@@ -1185,8 +1279,7 @@
             <texture id="inherit"/>
             <children>
                 <componentref id="thigh" />
-                <componentref id="lowerLeg" />
-                <componentref id="footRight" />
+                <componentref id="lowerLegRight" />
             </children>
         </component>
 
@@ -1200,8 +1293,7 @@
             <texture id="inherit"/>
             <children>
                 <componentref id="thigh" />
-                <componentref id="lowerLeg" />
-                <componentref id="footLeft" />
+                <componentref id="lowerLegLeft" />
             </children>
         </component>
 
@@ -1212,6 +1304,7 @@
                 <translate x="1.0" y="-1.2" z="0" />
                 <scale x="0.5" y="0.5" z="0.5" />
             </transformation>
+            <animation id="rightLegAnimation" />
             <materials>
                 <material id="inherit" />
             </materials>
@@ -1258,7 +1351,7 @@
                 <translate x="0" y="-1" z="0" />
                 <rotate axis="y" angle="-45" />
             </transformation>
-            <animation id="testAnimation" />
+            <animation id="laraAnimation" />
             <materials>
                 <material id="skinMaterial" />
             </materials>
