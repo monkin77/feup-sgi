@@ -27,6 +27,10 @@ export class Highlighted {
         return this._active;
     }
 
+    set active(newValue) {
+        this._active = newValue;
+    }
+
     getColor() {
         return [this.red, this.green, this.blue, 1.0];
     }

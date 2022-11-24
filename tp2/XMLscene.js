@@ -176,9 +176,9 @@ export class XMLscene extends CGFscene {
     }
 
     update(t) {
-        let currTimeStep = Math.floor(t / 100 % this.totalSteps);
+        let currTimeStep = Math.floor(t / 100) % this.totalSteps;
         this.timeFactor = (1 + Math.sin(this.highlightAngVelocity * currTimeStep)) / 2.0;
-        // console.log(t, this.timeFactor);
+        // console.log(t, currTimeStep, this.timeFactor);
 
         this.highlightShader.setUniformsValues({ timeFactor: this.timeFactor });
     }

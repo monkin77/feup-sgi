@@ -36,6 +36,7 @@ export class ComponentsParser extends Parser {
         this._idRoot = idRoot;
 
         this._componentIds = new Set(); // save compononentIds for Reference verification
+        this._highlightedComponents = new Set();
 
 
         this.parse(xmlReader, componentsNode);
@@ -212,6 +213,10 @@ export class ComponentsParser extends Parser {
             childrenValue,
             highlighted
         );
+
+        if (highlighted != null) {
+            this._highlightedComponents.add(componentId);
+        }
 
         return null;
     };
@@ -448,6 +453,10 @@ export class ComponentsParser extends Parser {
 
     get components() {
         return this._components;
+    }
+
+    get highlightedComponents() {
+        return this._highlightedComponents;
     }
 }
 
