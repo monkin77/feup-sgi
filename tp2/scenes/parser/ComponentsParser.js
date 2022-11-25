@@ -384,9 +384,6 @@ export class ComponentsParser extends Parser {
                 error: `invalid 'scale_h' property defined for <highlighted> inside <components> of component with ID = ${componentId}`,
             };
 
-
-
-
         return { value: { red, green, blue, scaleH } };
     };
 
