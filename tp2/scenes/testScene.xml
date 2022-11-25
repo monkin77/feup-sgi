@@ -208,6 +208,13 @@
             <diffuse r="0.8" g="0.8" b="0.8" a="1.0" />
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
+
+        <material id="tentNetherMaterial" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.8" g="0.4" b="0.32" a="1.0" />
+            <diffuse r="0.8" g="0.4" b="0.32" a="1.0" />
+            <specular r="1.0" g="0.20" b="0.16" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
@@ -1820,6 +1827,7 @@
             </transformation>
             <materials>
                 <material id="inherit" />
+                <material id="tentNetherMaterial" />
             </materials>
             <texture id="camoTexture" />
             <children>
