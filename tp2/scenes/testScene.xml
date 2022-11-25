@@ -25,7 +25,7 @@
     </ambient>
 
     <lights>
-        <omni id="back" enabled="1">
+        <omni id="back" enabled="0">
             <location x="10" y="5" z="5" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
@@ -33,7 +33,7 @@
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
 
-        <omni id="frontal" enabled="1">
+        <omni id="frontal" enabled="0">
             <location x="-20" y="5" z="10" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
