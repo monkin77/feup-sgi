@@ -25,7 +25,7 @@
     </ambient>
 
     <lights>
-        <omni id="back" enabled="0">
+        <omni id="back" enabled="1">
             <location x="10" y="5" z="5" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
@@ -70,6 +70,9 @@
         <texture id="bannerTexture" file="scenes/images/banner.jpg" />
         <texture id="barrelTexture" file="scenes/images/barrel.jpeg" />
         <texture id="barrelCoverTexture" file="scenes/images/barrelCover.jpeg" />
+        <texture id="fireTexture" file="scenes/images/fire.png" />
+        <texture id="camoTexture" file="scenes/images/camo.jpg" />
+        <texture id="woodTexture" file="scenes/images/trunk-image.jpg" />
     </textures>
 
     <materials>
@@ -205,6 +208,13 @@
             <diffuse r="0.8" g="0.8" b="0.8" a="1.0" />
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
+
+        <material id="tentNetherMaterial" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.8" g="0.4" b="0.32" a="1.0" />
+            <diffuse r="0.8" g="0.4" b="0.32" a="1.0" />
+            <specular r="1.0" g="0.20" b="0.16" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
@@ -295,6 +305,18 @@
                 <controlpoint x="0.25" y="-0.25" z="0" />
                 <controlpoint x="0.25" y="0.0" z="1" />
                 <controlpoint x="0.25" y="0.25" z="0" />
+            </patch>
+        </primitive>
+
+        <primitive id="tentPatchInverted">
+            <patch degree_u="1" degree_v="2" parts_u="20" parts_v="20" >
+                <controlpoint x="-0.25" y="0.25" z="0" />
+                <controlpoint x="-0.25" y="0.0" z="1" />
+                <controlpoint x="-0.25" y="-0.25" z="0" />
+
+                <controlpoint x="0.25" y="0.25" z="0" />
+                <controlpoint x="0.25" y="0.0" z="1" />
+                <controlpoint x="0.25" y="-0.25" z="0" />
             </patch>
         </primitive>
 
@@ -569,6 +591,54 @@
             </children>
         </component>
 
+        <!-- Covered Cylinder -->
+
+        <!-- 2.0 x 1.0 x 1.0 Maybe?-->
+        <component id="coveredCylinder">
+            <transformation>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="cylinder" />
+                <componentref id="cylinderLeftCover" />
+                <componentref id="cylinderRightCover" />
+            </children>
+        </component>
+
+        <component id="cylinderLeftCover">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <rotate axis="y" angle="180" />
+                <scale x="2" y="2" z="2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="circlePatch" />
+            </children>
+        </component>
+
+        <component id="cylinderRightCover">
+            <transformation>
+                <translate x="0" y="0" z="2" />
+                <scale x="2" y="2" z="2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="circlePatch" />
+            </children>
+        </component>
+        
+
         <!-- 0.6 x 0.85 x 0.7-->
          <component id="head">
             <transformation>
@@ -585,7 +655,7 @@
                 <primitiveref id="sphere" />
             </children>
 
-            <highlighted r="0" g="1" b="1" scale_h="1.5" />
+            <highlighted r="1.0" g="0.75" b="0.60" scale_h="1.5" />
         </component>
 
         <!-- 0.25(r) x 0.3 (h)-->
@@ -733,6 +803,8 @@
             <children>
                 <primitiveref id="torus" />
             </children>
+
+            <highlighted r="0.15" g="0.15" b="0" scale_h="1.5" />
         </component>
 
         <!-- SIZES -->
@@ -1651,20 +1723,116 @@
                 <componentref id="pillars" />
                 <componentref id="banner" />
                 <componentref id="barrelSet" />
+                
+                <componentref id="campfire" />
+            </children>
+        </component>
+
+        <component id="campfire">
+            <transformation>
+                <translate x="-20" y="-10" z="-15" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="tentComponent" />
+                <componentref id="fireSphere" />
+                <componentref id="fireLogs" />
+            </children>
+        </component>
+
+        <component id="fireSphere">
+            <transformation>
+                <translate x="0.7" y="1.5" z="1" />
+                <rotate axis="x" angle="90" />
+                <scale x="1.5" y="1.5" z="2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="fireTexture" />
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+
+            <highlighted r="0.5" g="0" b="0" scale_h="1.3" />
+        </component>
+
+        <component id="fireLogs">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="woodTexture" />
+            <children>
+                <componentref id="fireLog1" />
+                <componentref id="fireLog2" />
+                <componentref id="fireLog3" />
+            </children>
+        </component>
+
+        <component id="fireLog1">
+            <transformation>
+                <translate x="0" y="0.5" z="-1" />
+                <scale x="0.5" y="0.5" z="2.3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="coveredCylinder" />
+            </children>
+        </component>
+
+        <component id="fireLog2">
+            <transformation>
+                <translate x="-1.25" y="1.7" z="1" />
+                <rotate axis="z" angle="-20" />
+                <rotate axis="y" angle="90" />
+                <scale x="0.5" y="0.5" z="2.3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="coveredCylinder" />
+            </children>
+        </component>
+
+        <component id="fireLog3">
+            <transformation>
+                <translate x="-1.5" y="0.5" z="-1" />
+                <rotate axis="y" angle="45" />
+                <scale x="0.5" y="0.5" z="2.7" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="coveredCylinder" />
             </children>
         </component>
 
         <component id="tentComponent">
             <transformation>
-                <translate x="0" y="5" z="0" />
-                <scale x="10" y="10" z="10" />
+                <rotate axis="y" angle="-30" />
+                <rotate axis="x" angle="-90" />
+                <scale x="30" y="30" z="30" />
             </transformation>
             <materials>
                 <material id="inherit" />
+                <material id="tentNetherMaterial" />
             </materials>
-            <texture id="none" />
+            <texture id="camoTexture" />
             <children>
                 <primitiveref id="tentPatch" />
+                <primitiveref id="tentPatchInverted" />
             </children>
         </component>
 

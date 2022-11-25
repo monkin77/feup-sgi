@@ -2,8 +2,8 @@ export class Component {
     /**
      * Constructor for the Component object.
      * @param {id}
-     * @param {transformation} reference to this compnimationNode.length == 0 ? null : onent's transformation. If declared inline,
-     * the parser is responsible for creating the transformation object and adding it to the exiting ones
+     * @param {transformation} reference. If declared inline, the parser is responsible for creating the 
+     * transformation object and adding it to the existing ones
      * @param {materials}
      * @param {texture: Texture}
      * @param { { components: string[], primitives: string[] } }
