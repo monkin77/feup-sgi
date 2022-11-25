@@ -48,6 +48,8 @@ export class MyInterface extends CGFinterface {
         // Selected View
         this.gui.add(this.scene, 'selectedView', this.scene.viewsSelector).name('Active View').onChange(this.scene.onViewChange);
 
+        this.gui.add(this.scene, 'resetAnimation').name('Reset Animation').onChange(this.scene.resetAnimation);
+
         // Highlighted Components
         const highlightedComponents = this.scene.graph.componentsParser.highlightedComponents;
         const highlightedComponentsFolder = this.gui.addFolder('Highlight');
