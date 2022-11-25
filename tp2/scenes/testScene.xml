@@ -453,6 +453,84 @@
             </keyframe>
         </keyframeanim>
 
+        <keyframeanim id="upperBodyAnimation">
+            <keyframe instant="0">
+                <translation x="0.0" y="0.0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="5">
+                <translation x="0.0" y="0.0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+
+            <!-- Crouch -->
+            <keyframe instant="6">
+                <translation x="0.0" y="-1.5" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+        </keyframeanim>
+
+        <keyframeanim id="thighAnimation">
+            <keyframe instant="0">
+                <translation x="0.0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="5">
+                <translation x="0.0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+
+            <!-- Crouch -->
+            <keyframe instant="6">
+                <translation x="0" y="-2.7" z="-0.5" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="-28" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+        </keyframeanim>
+
+        <keyframeanim id="lowerLegBaseNoFootAnimation">
+            <keyframe instant="0">
+                <translation x="0.0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="5">
+                <translation x="0.0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+
+            <!-- Crouch -->
+            <keyframe instant="6">
+                <translation x="0" y="-1.45" z="4.5" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="28" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+        </keyframeanim>
+
         <keyframeanim id="rightLegAnimation">
             <!-- Rotating -->
             <keyframe instant="0">
@@ -552,6 +630,13 @@
                 <scale x="1.0" y="1.0" z="1.0" />
             </keyframe>
             <keyframe instant="4.75">
+                <translation x="0.0" y="0.0" z="0.0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="5">
                 <translation x="0.0" y="0.0" z="0.0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
@@ -1584,6 +1669,7 @@
             <transformation>
                 <rotate axis="x" angle="-10" />
             </transformation>
+            <animation id="thighAnimation" />
             <materials>
                 <material id="skinMaterial" />
             </materials>
@@ -1730,6 +1816,22 @@
             </children>
         </component>
 
+        <component id="lowerLegBaseNoFoot">
+            <transformation>
+            </transformation>
+            <animation id="lowerLegBaseNoFootAnimation" />
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="upperShin" />
+                <componentref id="lowerShin" />
+                <componentref id="sock" />
+                <componentref id="upperBoot" />
+            </children>
+        </component>
+
         <!-- 0.9 x 0.72 x 4.25 -->
         <component id="lowerLegRightBase">
             <transformation>
@@ -1742,10 +1844,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="upperShin" />
-                <componentref id="lowerShin" />
-                <componentref id="sock" />
-                <componentref id="upperBoot" />
+                <componentref id="lowerLegBaseNoFoot" />
                 <componentref id="footRight" />
             </children>
         </component>
@@ -1777,10 +1876,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="upperShin" />
-                <componentref id="lowerShin" />
-                <componentref id="sock" />
-                <componentref id="upperBoot" />
+                <componentref id="lowerLegBaseNoFoot" />
                 <componentref id="footLeft" />
             </children>
         </component>
@@ -1876,6 +1972,23 @@
             </children>
         </component>
 
+        <component id="upperBody" >
+            <transformation>
+            </transformation>
+            <animation id="upperBodyAnimation" />
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="head" />
+                <componentref id="neck" />
+                <componentref id="torso" />
+                <componentref id="arms" />
+                <componentref id="hip" />
+            </children>
+        </component>
+
         <!-- SIZES -->
         <component id="laraCroft">
             <transformation>
@@ -1889,11 +2002,7 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="head" />
-                <componentref id="neck" />
-                <componentref id="torso" />
-                <componentref id="arms" />
-                <componentref id="hip" />
+                <componentref id="upperBody" />
                 <componentref id="legs" />
             </children>
         </component>
