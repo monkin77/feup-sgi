@@ -30,7 +30,10 @@ This project is the continuation of the previous one (`tp1`). The main objective
   - Secondary ambient inspired by the `Nether` world from Minecraft, activated by pressing the `m` key.
   - Added components using the created NURBS, such as the **Barrels**, the **Tent**, and the **Poster** in the wall.
 - Animations
-  - TODO
+  - It's possible to animate components by using keyframes and transformations. These work hierarchically and can be shared between components.
+  - We tried to make the animations as efficient as we could. When updating them, instead of updating all the components, we only update the ones that are actually animated (if an animation is shared then it only updates once). The current keyframe(s) are retrieved by using binary search with the current timestamp.
+  - The animations are interpolated between keyframes.
+  - The inteface has a button to reset the animations.
 ----
 ## Issues/Problems
 
@@ -46,7 +49,7 @@ This project is the continuation of the previous one (`tp1`). The main objective
 
 ## Gifs
 ### Lara Croft's Animation
-TODO:
+![Lara Croft Animation](./screenshots/laraCroftAnimation.gif)
 
 ### Campfire Highlighting
 ![Campfire Highlighting](./screenshots/fireHighlight.gif)
