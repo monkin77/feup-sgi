@@ -5,11 +5,13 @@ const discsPerSide = 12;
 
 // Class for a Checkers board
 export default class MyBoard {
-    constructor(x, y, z, sideLength) {
+    constructor(scene, x, y, z, sideLength) {
+        this._scene = scene;
         this._x = x;
         this._y = y;
         this._z = z;
         this._sideLength = sideLength;
+        this._tileSideLength = sideLength / tilesPerSide;
         this.buildTiles();
     }
 
@@ -22,11 +24,31 @@ export default class MyBoard {
         for (let i = 0; i < tilesPerSide; i++) {
             for (let j = 0; j < tilesPerSide; j++) {
                 const offset = j % 2 == 0 ? 0 : 1; // offset for the tiles in the odd rows
-                tiles.push(new MyTile(i * tilesPerSide + j, (i + offset) % 2 != 0));
+                tiles.push(new MyTile(this._scene, `tile-${i * tilesPerSide + j}`, this._tileSideLength, (i + offset) % 2 != 0));
             }
         }
 
         this._tiles = tiles;
+    }
+
+    display = () => {
+        this._scene.pushMatrix();
+
+        // Rotate board to draw it in the XZ plane
+        this._scene.rotate(-Math.PI / 2, 1, 0, 0);
+        this._scene.translate(this._x, this._y, this._z);
+
+
+        for (let i = 0; i < tilesPerSide; i++) {
+            for (let j = 0; j < tilesPerSide; j++) {
+                this._scene.pushMatrix();
+                this._scene.translate(j * this._tileSideLength, i * this._tileSideLength, 0);
+                this._tiles[i * tilesPerSide + j].display();
+                this._scene.popMatrix();
+            }
+        }
+
+        this._scene.popMatrix();
     }
 
     get x() {
@@ -49,9 +71,7 @@ export default class MyBoard {
         return this._tiles;
     }
 
-    /**
-     * 
-     * @returns {number} the length of a tile side
-     */
-    tileSideLength = () => this._sideLength / tilesPerSide;
+    get tileSideLength() {
+        return this._tileSideLength;
+    }
 }

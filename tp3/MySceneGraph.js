@@ -73,7 +73,7 @@ export class MySceneGraph {
     }
 
     prepareBoard() {
-        this.board = new MyBoard(0, 0, 0, 100);
+        this.board = new MyBoard(this.scene, 0, 0, 0, 20);
     }
 
     /*
@@ -1113,6 +1113,8 @@ export class MySceneGraph {
             null,
             null
         );
+
+        this.board.display();
     }
 
     /**
