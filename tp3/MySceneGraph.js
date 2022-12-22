@@ -20,6 +20,7 @@ import { MaterialsParser } from "./scenes/parser/MaterialsParser.js";
 import { Component } from "./scenes/model/Component.js";
 import { TexturesParser } from "./scenes/parser/TexturesParser.js";
 import { AnimationsParser } from "./scenes/parser/AnimationsParser.js";
+import MyBoard from "./scenes/model/MyBoard.js";
 
 // Order of the groups in the XML document.
 const SCENE_INDEX = 0;
@@ -67,6 +68,12 @@ export class MySceneGraph {
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
         this.reader.open("scenes/" + filename, this);
+
+        this.prepareBoard();
+    }
+
+    prepareBoard() {
+        this.board = new MyBoard(0, 0, 0, 100);
     }
 
     /*
@@ -370,8 +377,8 @@ export class MySceneGraph {
             if (aux == null) {
                 onXMLMinorError(
                     "unable to parse value component of the 'enable light' field for ID = " +
-                        lightId +
-                        "; assuming 'value = 1'"
+                    lightId +
+                    "; assuming 'value = 1'"
                 );
                 aux = true;
             }
@@ -1134,9 +1141,9 @@ export class MySceneGraph {
         }
 
         let appearenceId =
-            component.materials.length > 0
-                ? component.materials[component.currMaterial]
-                : prevAppearenceId;
+            component.materials.length > 0 ?
+            component.materials[component.currMaterial] :
+            prevAppearenceId;
 
         if (appearenceId == "inherit") {
             appearenceId = prevAppearenceId;
