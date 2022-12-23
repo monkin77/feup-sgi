@@ -1,3 +1,4 @@
+import { CGFtexture } from "../../../lib/CGF.js";
 import { MyRectangle } from "../../primitives/MyRectangle.js";
 
 export default class MyTile {
@@ -14,12 +15,21 @@ export default class MyTile {
         this._isWhite = isWhite;
         this._tileSideLength = sideLength;
         this._rectangle = new MyRectangle(scene, id, 0, sideLength, 0, sideLength);
+
+        const texturePath = isWhite ? "scenes/images/board/light_tile.png" : "scenes/images/board/dark_tile.png";
+        this._tileTexture = new CGFtexture(this._scene, texturePath);
     }
 
     /**
      * Displays the tile
+     * @param {*} woodAppearence appearence to apply the texture
      */
-    display = () => {
+    display = (woodAppearence) => {
+        // Apply texture to the tile
+        woodAppearence.setTexture(this._tileTexture);
+        woodAppearence.setTextureWrap("REPEAT", "REPEAT");
+        woodAppearence.apply();
+
         this._rectangle.display();
     }
 
