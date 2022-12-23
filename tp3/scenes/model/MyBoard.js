@@ -1,4 +1,4 @@
-import { CGFappearance } from "../../../lib/CGF.js";
+import { CGFappearance, CGFtexture } from "../../../lib/CGF.js";
 import { startRowsWithDiscs, tilesPerSide } from "../../utils/checkers.js";
 import MyPiece from "./MyPiece.js";
 import MyTile from "./MyTile.js";
@@ -18,6 +18,9 @@ export default class MyBoard {
         this._woodMaterial.setAmbient(1, 1, 1, 1);
         this._woodMaterial.setDiffuse(1, 1, 1, 1);
         this._woodMaterial.setSpecular(1, 1, 1, 1);
+
+        this._whiteTileTexture = new CGFtexture(this._scene, "scenes/images/board/light_tile.png");
+        this._blackTileTexture = new CGFtexture(this._scene, "scenes/images/board/dark_tile.png");
     }
 
     /**
@@ -29,7 +32,7 @@ export default class MyBoard {
         for (let i = 0; i < tilesPerSide; i++) {
             for (let j = 0; j < tilesPerSide; j++) {
                 const idNumber = i * tilesPerSide + j;
-                const offset = j % 2 == 0 ? 0 : 1; // offset for the tiles in the odd rows
+                const offset = i % 2 == 0 ? 0 : 1; // offset for the tiles in the odd rows
 
                 let piece = null;
                 if (i < startRowsWithDiscs || i > tilesPerSide - startRowsWithDiscs - 1) {
@@ -37,7 +40,7 @@ export default class MyBoard {
                     piece = new MyPiece(this._scene, `piece-${idNumber}`, i < startRowsWithDiscs, this._tileSideLength);
                 }
 
-                tiles.push(new MyTile(this._scene, `tile-${idNumber}`, this._tileSideLength, (i + offset) % 2 != 0, piece));
+                tiles.push(new MyTile(this._scene, `tile-${idNumber}`, this._tileSideLength, (j + offset) % 2 != 0, piece));
             }
         }
 
@@ -56,16 +59,37 @@ export default class MyBoard {
         this._woodMaterial.apply();
 
         // TODO: Draw white tiles first, then black tiles to avoid changing the texture for each tile
+        // Draw the tiles
+        this.drawTilesColor(true);
+        this.drawTilesColor(false);
+
+        // Draw the pieces
+
+        this._scene.popMatrix();
+    }
+
+    /**
+     * 
+     * @param {*} isWhite 
+     */
+    drawTilesColor = (isWhite) => {
+        const tileTexture = isWhite ? this._whiteTileTexture : this._blackTileTexture;
+        // Apply texture for white tiles
+        this._woodMaterial.setTexture(tileTexture);
+        this._woodMaterial.setTextureWrap("REPEAT", "REPEAT");
+        this._woodMaterial.apply();
+
         for (let i = 0; i < tilesPerSide; i++) {
-            for (let j = 0; j < tilesPerSide; j++) {
+            let offset = i % 2 == 0 ? 0 : 1; // offset for the tiles in the odd rows (black tiles)
+            if (isWhite) offset = 1 - offset;   // Offset for the white tiles is the opposite of the black tiles
+
+            for (let j = offset; j < tilesPerSide; j += 2) {
                 this._scene.pushMatrix();
                 this._scene.translate(j * this._tileSideLength, i * this._tileSideLength, 0);
-                this._tiles[i * tilesPerSide + j].display(this._woodMaterial);
+                this._tiles[i * tilesPerSide + j].display();
                 this._scene.popMatrix();
             }
         }
-
-        this._scene.popMatrix();
     }
 
     get x() {

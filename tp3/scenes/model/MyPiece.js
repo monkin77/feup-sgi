@@ -28,8 +28,8 @@ export default class MyPiece {
         this._radius = this._discLength / 2;
         this._disc = new MyCylinder(scene, id, this._radius, this._radius, height, 20, 20);
 
-        const texturePath = isWhite ? "scenes/images/board/light_wood_disc.jpg" : "scenes/images/board/dark_wood_disc.jpg";
-        this._tileTexture = new CGFtexture(this._scene, texturePath);
+        // const texturePath = isWhite ? "scenes/images/board/light_wood_disc.jpg" : "scenes/images/board/dark_wood_disc.jpg";
+        // this._tileTexture = new CGFtexture(this._scene, texturePath);
     }
     
     /**

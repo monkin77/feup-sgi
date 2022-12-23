@@ -1,4 +1,3 @@
-import { CGFtexture } from "../../../lib/CGF.js";
 import { MyRectangle } from "../../primitives/MyRectangle.js";
 import MyPiece from "./MyPiece.js";
 
@@ -18,29 +17,20 @@ export default class MyTile {
         this._tileSideLength = sideLength;
         this._rectangle = new MyRectangle(scene, id, 0, sideLength, 0, sideLength);
 
-        const texturePath = isWhite ? "scenes/images/board/light_tile.png" : "scenes/images/board/dark_tile.png";
-        this._tileTexture = new CGFtexture(this._scene, texturePath);
-
         // The piece on the tile (if any)
         this._piece = piece;
     }
 
     /**
      * Displays the tile
-     * @param {*} woodAppearence appearence to apply the texture
      */
-    display = (woodAppearence) => {
-        // Apply texture to the tile
-        woodAppearence.setTexture(this._tileTexture);
-        woodAppearence.setTextureWrap("REPEAT", "REPEAT");
-        woodAppearence.apply();
-
+    display = () => {
         this._rectangle.display();
 
         // TODO: Draw all the white pieces first, and then all the black pieces. To avoid changing the texture every time
-        if (this.hasPiece()) {
+        /* if (this.hasPiece()) {
             this._piece.display(woodAppearence);
-        }
+        } */
     }
 
     get id() {
