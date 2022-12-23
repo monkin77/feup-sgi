@@ -3,7 +3,7 @@
 
     <views default="frontal">
         <perspective id="frontal" near="0.1" far="500" angle="50">
-            <from x="-20" y="15" z="20" />
+            <from x="0" y="15" z="30" />
             <to x="0" y="-2" z="0" />
         </perspective>
 
@@ -3071,7 +3071,7 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="laraCroft" />
+                <!-- <componentref id="laraCroft" /> -->
                 <componentref id="temple" />
             </children>
         </component>

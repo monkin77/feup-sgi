@@ -1,8 +1,7 @@
 import { CGFappearance } from "../../../lib/CGF.js";
+import { startRowsWithDiscs, tilesPerSide } from "../../utils/checkers.js";
+import MyPiece from "./MyPiece.js";
 import MyTile from "./MyTile.js";
-
-const tilesPerSide = 8;
-const discsPerSide = 12;
 
 // Class for a Checkers board
 export default class MyBoard {
@@ -29,8 +28,16 @@ export default class MyBoard {
 
         for (let i = 0; i < tilesPerSide; i++) {
             for (let j = 0; j < tilesPerSide; j++) {
+                const idNumber = i * tilesPerSide + j;
                 const offset = j % 2 == 0 ? 0 : 1; // offset for the tiles in the odd rows
-                tiles.push(new MyTile(this._scene, `tile-${i * tilesPerSide + j}`, this._tileSideLength, (i + offset) % 2 != 0));
+
+                let piece = null;
+                if (i < startRowsWithDiscs || i > tilesPerSide - startRowsWithDiscs - 1) {
+                    // If the tile is in the first or last rows, it has a piece
+                    piece = new MyPiece(this._scene, `piece-${idNumber}`, i < startRowsWithDiscs, this._tileSideLength);
+                }
+
+                tiles.push(new MyTile(this._scene, `tile-${idNumber}`, this._tileSideLength, (i + offset) % 2 != 0, piece));
             }
         }
 
@@ -41,12 +48,14 @@ export default class MyBoard {
         this._scene.pushMatrix();
 
         // Rotate board to draw it in the XZ plane
-        this._scene.rotate(-Math.PI / 2, 1, 0, 0);
         this._scene.translate(this._x, this._y, this._z);
+        this._scene.rotate(-Math.PI / 2, 1, 0, 0);
+
 
         // Apply wood material
         this._woodMaterial.apply();
 
+        // TODO: Draw white tiles first, then black tiles to avoid changing the texture for each tile
         for (let i = 0; i < tilesPerSide; i++) {
             for (let j = 0; j < tilesPerSide; j++) {
                 this._scene.pushMatrix();
