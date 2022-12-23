@@ -21,6 +21,8 @@ export default class MyBoard {
 
         this._whiteTileTexture = new CGFtexture(this._scene, "scenes/images/board/light_tile.png");
         this._blackTileTexture = new CGFtexture(this._scene, "scenes/images/board/dark_tile.png");
+        this._whiteDiscTexture = new CGFtexture(this._scene, "scenes/images/board/light_wood_disc.jpg");
+        this._blackDiscTexture = new CGFtexture(this._scene, "scenes/images/board/dark_wood_disc.jpg");
     }
 
     /**
@@ -58,18 +60,20 @@ export default class MyBoard {
         // Apply wood material
         this._woodMaterial.apply();
 
-        // TODO: Draw white tiles first, then black tiles to avoid changing the texture for each tile
         // Draw the tiles
         this.drawTilesColor(true);
         this.drawTilesColor(false);
 
         // Draw the pieces
+        this.drawPiecesColor(true);
+        this.drawPiecesColor(false);
+    
 
         this._scene.popMatrix();
     }
 
     /**
-     * 
+     * Draws the tiles of the board with the given color
      * @param {*} isWhite 
      */
     drawTilesColor = (isWhite) => {
@@ -88,6 +92,30 @@ export default class MyBoard {
                 this._scene.translate(j * this._tileSideLength, i * this._tileSideLength, 0);
                 this._tiles[i * tilesPerSide + j].display();
                 this._scene.popMatrix();
+            }
+        }
+    }
+
+    /**
+     * Draws the pieces of the board with the given color
+     * @param {*} isWhite 
+     */
+    drawPiecesColor = (isWhite) => {
+        const tileTexture = isWhite ? this._whiteDiscTexture : this._blackDiscTexture;
+        // Apply texture for white tiles
+        this._woodMaterial.setTexture(tileTexture);
+        this._woodMaterial.setTextureWrap("REPEAT", "REPEAT");
+        this._woodMaterial.apply();
+
+        for (let i = 0; i < tilesPerSide; i++) {
+            for (let j = 0; j < tilesPerSide; j++) {
+                const tile = this._tiles[i * tilesPerSide + j];
+                if (tile.hasPiece() && tile.piece.isWhite == isWhite) {
+                    this._scene.pushMatrix();
+                    this._scene.translate(j * this._tileSideLength, i * this._tileSideLength, 0);
+                    this._tiles[i * tilesPerSide + j].displayPiece();
+                    this._scene.popMatrix();
+                }
             }
         }
     }

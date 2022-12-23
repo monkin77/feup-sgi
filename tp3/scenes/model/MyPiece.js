@@ -1,4 +1,3 @@
-import { CGFtexture } from "../../../lib/CGF.js";
 import { MyCylinder } from "../../primitives/MyCylinder.js";
 
 // Scale factor to make the piece smaller than the tile
@@ -27,29 +26,17 @@ export default class MyPiece {
 
         this._radius = this._discLength / 2;
         this._disc = new MyCylinder(scene, id, this._radius, this._radius, height, 20, 20);
-
-        // const texturePath = isWhite ? "scenes/images/board/light_wood_disc.jpg" : "scenes/images/board/dark_wood_disc.jpg";
-        // this._tileTexture = new CGFtexture(this._scene, texturePath);
     }
     
     /**
-     * Displays the piece on the board
-    * @param {*} woodAppearence appearence to apply the texture
+     * Displays the piece on the board.
+     * The piece is translated to the center of the tile.
      */
-    display = (woodAppearence) => {
-        this._scene.pushMatrix();
-
-        // Apply texture to the tile
-        woodAppearence.setTexture(this._tileTexture);
-        woodAppearence.setTextureWrap("REPEAT", "REPEAT");
-        woodAppearence.apply();
-
+    display = () => {
         // Translate the disc to the center of the tile. Since the scene was already rotated, we translate in the x and y axis
         this._scene.translate(this._radius, this._radius, 0);
 
         this._disc.display();
-
-        this._scene.popMatrix();
     }
 
     get id() {

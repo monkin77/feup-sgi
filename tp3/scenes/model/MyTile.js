@@ -33,6 +33,10 @@ export default class MyTile {
         } */
     }
 
+    displayPiece = () => {
+        this._piece.display();
+    }
+
     get id() {
         return this._id;
     }
