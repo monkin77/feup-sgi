@@ -46,14 +46,15 @@ export default class MyBoard {
             for (let j = 0; j < tilesPerSide; j++) {
                 const idNumber = i * tilesPerSide + j;
                 const offset = i % 2 == 0 ? 0 : 1; // offset for the tiles in the odd rows
+                const isWhite = (j + offset) % 2 != 0;
 
                 let piece = null;
-                if (i < startRowsWithDiscs || i > tilesPerSide - startRowsWithDiscs - 1) {
+                if (!isWhite && (i < startRowsWithDiscs || i > tilesPerSide - startRowsWithDiscs - 1)) {
                     // If the tile is in the first or last rows, it has a piece
                     piece = new MyPiece(this._sceneGraph, `piece-${idNumber}`, i < startRowsWithDiscs, this._tileSideLength);
                 }
 
-                tiles.push(new MyTile(this._scene, `tile-${idNumber}`, this._tileSideLength, (j + offset) % 2 != 0, piece));
+                tiles.push(new MyTile(this._scene, `tile-${idNumber}`, this._tileSideLength, isWhite, piece));
             }
         }
 

@@ -26,11 +26,6 @@ export default class MyTile {
      */
     display = () => {
         this._rectangle.display();
-
-        // TODO: Draw all the white pieces first, and then all the black pieces. To avoid changing the texture every time
-        /* if (this.hasPiece()) {
-            this._piece.display(woodAppearence);
-        } */
     }
 
     displayPiece = () => {
