@@ -255,6 +255,7 @@
             <sphere radius="1" slices="6" stacks="2" />
         </primitive>
 
+        <!-- base: Radius  -->
         <primitive id="cylinder">
             <cylinder base="1" top="1" height="2" slices="20" stacks="20" />
         </primitive>
@@ -1559,7 +1560,6 @@
         <!-- 2.0 x 1.0 x 1.0 Maybe?-->
         <component id="coveredCylinder">
             <transformation>
-                <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1574,7 +1574,6 @@
 
         <component id="cylinderLeftCover">
             <transformation>
-                <translate x="0" y="0" z="0" />
                 <rotate axis="y" angle="180" />
                 <scale x="2" y="2" z="2" />
             </transformation>

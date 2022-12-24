@@ -68,12 +68,6 @@ export class MySceneGraph {
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
         this.reader.open("scenes/" + filename, this);
-
-        this.prepareBoard();
-    }
-
-    prepareBoard() {
-        this.board = new MyBoard(this.scene, -5, 0, 10, 20);
     }
 
     /*
@@ -93,8 +87,15 @@ export class MySceneGraph {
 
         this.loadedOk = true;
 
+        // Create the board
+        this.prepareBoard();
+
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.scene.onGraphLoaded();
+    }
+
+    prepareBoard() {
+        this.board = new MyBoard(this, -5, 0, 10, 20);
     }
 
     /**

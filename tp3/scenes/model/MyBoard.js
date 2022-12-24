@@ -5,13 +5,24 @@ import MyTile from "./MyTile.js";
 
 // Class for a Checkers board
 export default class MyBoard {
-    constructor(scene, x, y, z, sideLength) {
-        this._scene = scene;
+    /**
+     * 
+     * @param {MySceneGraph} sceneGraph MySceneGraph object to use already created components and access the scene object
+     * @param {*} x 
+     * @param {*} y 
+     * @param {*} z 
+     * @param {*} sideLength 
+     */
+    constructor(sceneGraph, x, y, z, sideLength) {
+        this._sceneGraph = sceneGraph;
+
+        this._scene = sceneGraph.scene;
         this._x = x;
         this._y = y;
         this._z = z;
         this._sideLength = sideLength;
         this._tileSideLength = sideLength / tilesPerSide;
+
         this.buildTiles();
 
         this._woodMaterial = new CGFappearance(this._scene); // Appearence for wood with default values
@@ -39,7 +50,7 @@ export default class MyBoard {
                 let piece = null;
                 if (i < startRowsWithDiscs || i > tilesPerSide - startRowsWithDiscs - 1) {
                     // If the tile is in the first or last rows, it has a piece
-                    piece = new MyPiece(this._scene, `piece-${idNumber}`, i < startRowsWithDiscs, this._tileSideLength);
+                    piece = new MyPiece(this._sceneGraph, `piece-${idNumber}`, i < startRowsWithDiscs, this._tileSideLength);
                 }
 
                 tiles.push(new MyTile(this._scene, `tile-${idNumber}`, this._tileSideLength, (j + offset) % 2 != 0, piece));

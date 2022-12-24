@@ -1,7 +1,8 @@
+import { MySceneGraph } from "../../MySceneGraph.js";
 import { MyCylinder } from "../../primitives/MyCylinder.js";
 
 // Scale factor to make the piece smaller than the tile
-const pieceScaleFactor = 0.75;
+const pieceScaleFactor = 0.65;
 
 /**
  * This class represents a piece on the board
@@ -9,15 +10,16 @@ const pieceScaleFactor = 0.75;
  */
 export default class MyPiece {
     /**
-     * 
-     * @param {*} scene 
+     * @param {MySceneGraph} sceneGraph MySceneGraph object to use already created components and access the scene object
      * @param {string} id "piece-<tileId>", where tileId is the id of the initial tile the piece is on 
      * @param {*} isWhite Whether the piece is white or black
      * @param {number} sideLength sideLength length of the tile the piece is on
      * @param {*} height 
      */
-    constructor(scene, id, isWhite, sideLength, height = 1) {
-        this._scene = scene;
+    constructor(sceneGraph, id, isWhite, sideLength, height = 1) {
+        this._sceneGraph = sceneGraph;
+
+        this._scene = sceneGraph.scene;
         this._id = id;
         this._isWhite = isWhite;
         this._sideLength = sideLength;
@@ -25,7 +27,6 @@ export default class MyPiece {
         this._height = height;
 
         this._radius = this._discLength / 2;
-        this._disc = new MyCylinder(scene, id, this._radius, this._radius, height, 20, 20);
     }
     
     /**
@@ -34,9 +35,12 @@ export default class MyPiece {
      */
     display = () => {
         // Translate the disc to the center of the tile. Since the scene was already rotated, we translate in the x and y axis
-        this._scene.translate(this._radius, this._radius, 0);
+        this._scene.translate(this._sideLength/2, this._sideLength/2, 0);
+        this._scene.scale(this._radius, this._radius, 0.25);
 
-        this._disc.display();
+        // Covered cylinder contains a diameter of 2 and a height of 2
+        const coveredCylinder = this._sceneGraph.componentsParser.components["coveredCylinder"];
+        this._sceneGraph.drawComponent(coveredCylinder);
     }
 
     get id() {
