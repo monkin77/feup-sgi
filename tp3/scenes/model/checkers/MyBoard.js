@@ -1,17 +1,17 @@
-import { CGFappearance, CGFtexture } from "../../../lib/CGF.js";
-import { isPlayerTurn, player1, startRowsWithDiscs, tilesPerSide } from "../../utils/checkers.js";
+import { CGFappearance, CGFtexture } from "../../../../lib/CGF.js";
+import { player1, startRowsWithDiscs, tilesPerSide } from "../../../utils/checkers.js";
 import MyPiece from "./MyPiece.js";
 import MyTile from "./MyTile.js";
 
 // Class for a Checkers board
 export default class MyBoard {
     /**
-     * 
+     *
      * @param {MySceneGraph} sceneGraph MySceneGraph object to use already created components and access the scene object
-     * @param {*} x 
-     * @param {*} y 
-     * @param {*} z 
-     * @param {*} sideLength 
+     * @param {*} x
+     * @param {*} y
+     * @param {*} z
+     * @param {*} sideLength
      */
     constructor(sceneGraph, x, y, z, sideLength) {
         this._sceneGraph = sceneGraph; // TODO: Alternative to using the scene graph
@@ -167,8 +167,8 @@ export default class MyBoard {
     /**
      * Gets the tiles between two tiles in a diagonal
      * Throws an error if the tiles are not in a diagonal
-     * @param {MyTile} fromTile 
-     * @param {MyTile} toTile 
+     * @param {MyTile} fromTile
+     * @param {MyTile} toTile
      * @returns {MyTile[]} Array of tiles between the two tiles
      */
     getDiagonalBetweenTiles(fromTile, toTile) {
@@ -210,14 +210,14 @@ export default class MyBoard {
         // Draw the pieces
         this.drawPiecesColor(true);
         this.drawPiecesColor(false);
-    
+
 
         this._scene.popMatrix();
     }
 
     /**
      * Draws the tiles of the board with the given color
-     * @param {*} isWhite 
+     * @param {*} isWhite
      */
     drawTilesColor(isWhite) {
         const tileTexture = isWhite ? this._whiteTileTexture : this._blackTileTexture;
@@ -249,7 +249,7 @@ export default class MyBoard {
 
     /**
      * Draws the pieces of the board with the given color
-     * @param {*} isWhite 
+     * @param {*} isWhite
      */
     drawPiecesColor(isWhite) {
         const tileTexture = isWhite ? this._whiteDiscTexture : this._blackDiscTexture;
@@ -335,8 +335,8 @@ export default class MyBoard {
      */
     clone() {
         const clone = Object.create(
-            Object.getPrototypeOf(this), 
-            Object.getOwnPropertyDescriptors(this) 
+            Object.getPrototypeOf(this),
+            Object.getOwnPropertyDescriptors(this)
         );
         clone._tiles = clone._tiles.map(tile => tile.clone());
         clone._capturedPieces = this._capturedPieces.map(piece => piece.clone());

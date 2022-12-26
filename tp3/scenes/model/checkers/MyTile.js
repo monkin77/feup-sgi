@@ -1,12 +1,12 @@
-import { MyRectangle } from "../../primitives/MyRectangle.js";
-import { isPlayerTurn } from "../../utils/checkers.js";
+import { MyRectangle } from "../../../primitives/MyRectangle.js";
+import { isPlayerTurn } from "../../../utils/checkers.js";
 import MyPiece from "./MyPiece.js";
 
 export default class MyTile {
     /**
-     * 
-     * @param {*} scene 
-     * @param {*} id 
+     *
+     * @param {*} scene
+     * @param {*} id
      * @param {*} sideLength length of the tile's side to avoid having to scale the scene
      * @param {*} isWhite whether the tile is white or black
      * @param {MyPiece | null} piece MyPiece object if the tile has a piece on it, null otherwise
@@ -80,7 +80,7 @@ export default class MyTile {
 
     /**
      * Sets a piece on the tile
-     * @param {MyPiece} piece 
+     * @param {MyPiece} piece
      */
     setPiece(piece) {
         if (this._piece != null) throw Error("Tile already occupied");
@@ -110,8 +110,8 @@ export default class MyTile {
      */
     clone() {
         const clone = Object.create(
-            Object.getPrototypeOf(this), 
-            Object.getOwnPropertyDescriptors(this) 
+            Object.getPrototypeOf(this),
+            Object.getOwnPropertyDescriptors(this)
         );
         clone._piece = this._piece?.clone();
         return clone;

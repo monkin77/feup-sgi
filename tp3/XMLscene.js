@@ -1,6 +1,6 @@
 import { CGFscene, CGFshader } from "../lib/CGF.js";
 import { CGFaxis, CGFcamera } from "../lib/CGF.js";
-import MyGameOrchestrator from "./scenes/model/MyGameOrchestrator.js";
+import MyGameOrchestrator from "./scenes/model/checkers/MyGameOrchestrator.js";
 import { updateLight } from "./scenes/parser/utils.js";
 
 /**

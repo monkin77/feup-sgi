@@ -1,4 +1,4 @@
-import { MySceneGraph } from "../../MySceneGraph.js";
+import { MySceneGraph } from "../../../MySceneGraph.js";
 
 // Scale factor to make the piece smaller than the tile
 const pieceScaleFactor = 0.65;
@@ -10,10 +10,10 @@ const pieceScaleFactor = 0.65;
 export default class MyPiece {
     /**
      * @param {MySceneGraph} sceneGraph MySceneGraph object to use already created components and access the scene object
-     * @param {string} id "piece-<tileId>", where tileId is the id of the initial tile the piece is on 
+     * @param {string} id "piece-<tileId>", where tileId is the id of the initial tile the piece is on
      * @param {*} isWhite Whether the piece is white or black
      * @param {number} sideLength sideLength length of the tile the piece is on
-     * @param {*} height 
+     * @param {*} height
      */
     constructor(sceneGraph, id, isWhite, sideLength, height = 1) {
         this._sceneGraph = sceneGraph; // TODO: Alternative to using the scene graph
@@ -35,7 +35,7 @@ export default class MyPiece {
         
         this._isKing = false;
     }
-    
+
     /**
      * Displays the piece on the board.
      * The piece is translated to the center of the tile.
@@ -100,8 +100,8 @@ export default class MyPiece {
      */
     clone() {
         return Object.create(
-            Object.getPrototypeOf(this), 
-            Object.getOwnPropertyDescriptors(this) 
+            Object.getPrototypeOf(this),
+            Object.getOwnPropertyDescriptors(this)
         );
     }
 }

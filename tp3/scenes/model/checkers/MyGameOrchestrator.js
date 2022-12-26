@@ -1,4 +1,4 @@
-import { MySceneGraph } from "../../MySceneGraph.js";
+import { MySceneGraph } from "../../../MySceneGraph.js";
 import CheckersAnimation from "./CheckersAnimation.js";
 import MyBoard from "./MyBoard.js";
 import MyGameSequence from "./MyGameSequence.js";
