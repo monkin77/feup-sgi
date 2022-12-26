@@ -24,6 +24,7 @@ export default class MyBoard {
         this._tileSideLength = sideLength / tilesPerSide;
 
         this.buildTiles();
+        this._capturedPieces = []; // TODO: Display captured pieces
 
         this._woodMaterial = new CGFappearance(this._scene); // Appearence for wood with default values
         this._woodMaterial.setAmbient(1, 1, 1, 1);
@@ -81,7 +82,7 @@ export default class MyBoard {
     }
 
     /**
-     * Moves a piece from one tile to another
+     * Moves a piece from one tile to another. Checks if any piece is captured and updates the board
      * @param {MyPiece} piece
      * @param {MyTile} fromTile
      * @param {MyTile} toTile
@@ -94,8 +95,15 @@ export default class MyBoard {
         fromTile.removePiece();
         toTile.setPiece(piece);
         toTile.checkAndUpgradeToKing();
+
+        const middleTiles = this.getDiagonalBetweenTiles(fromTile, toTile);
+        for (tile of middleTiles) {
+            if (tile.hasPiece()) {
+                this._capturedPieces.push(tile.piece);
+                tile.removePiece();
+            }
+        }
     }
-    
 
     /**
      * Gets the possible moves of a given tile
@@ -154,6 +162,31 @@ export default class MyBoard {
         }
 
         return possibleMoves;
+    }
+
+    /**
+     * Gets the tiles between two tiles in a diagonal
+     * Throws an error if the tiles are not in a diagonal
+     * @param {MyTile} fromTile 
+     * @param {MyTile} toTile 
+     * @returns {MyTile[]} Array of tiles between the two tiles
+     */
+    getDiagonalBetweenTiles(fromTile, toTile) {
+        const { i: fromRow, j: fromCol } = this.getTileCoordinates(fromTile);
+        const { i: toRow, j: toCol } = this.getTileCoordinates(toTile);
+
+        if (Math.abs(toRow - fromRow) != Math.abs(toCol - fromCol)) {
+            throw Error("The tiles are not in a diagonal");
+        }
+
+        for (let i = fromRow, j = fromCol;
+            i != toRow && j != toCol;
+            i += Math.sign(toRow - fromRow), j += Math.sign(toCol - fromCol)
+        ) {
+            diagonalTiles.push(this.getTileByCoordinates(i, j));
+        }
+
+        return diagonalTiles;
     }
 
     /**
@@ -290,7 +323,7 @@ export default class MyBoard {
      * @param {MyTile} tile
      */
     getTileCoordinates(tile) {
-        // TODO: Check if this works
+        // TODO: Check if this works and consider adding coordinates to the tile class
         const index = this._tiles.indexOf(tile);
         const i = Math.floor(index / tilesPerSide);
         const j = index % tilesPerSide;

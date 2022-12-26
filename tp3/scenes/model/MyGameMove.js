@@ -25,4 +25,13 @@ export default class MyGameMove {
         if (!possibleMoves.includes(this._toTile)) return false;
         return true;
     }
+
+    /**
+     * Executes the move and updates the board
+     * Assumes a validated move
+     */
+    execute() {
+        // TODO: Maintain old board
+        this._board.movePiece(this._piece, this._fromTile, this._toTile);
+    }
 }
