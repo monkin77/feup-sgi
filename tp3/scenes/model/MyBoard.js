@@ -39,7 +39,7 @@ export default class MyBoard {
     /**
      * Auxiliary function to build the tiles of the board
      */
-    buildTiles = () => {
+    buildTiles() {
         const tiles = [];
 
         for (let i = 0; i < tilesPerSide; i++) {
@@ -61,7 +61,25 @@ export default class MyBoard {
         this._tiles = tiles;
     }
 
-    display = () => {
+    /**
+     * Moves a piece from one tile to another
+     * @param {MyPiece} piece
+     * @param {MyTile} fromTile
+     * @param {MyTile} toTile
+     */
+    movePiece(piece, fromTile, toTile) {
+        if (!piece) throw new Error("The piece is null");
+        if (!fromTile.hasPiece()) throw new Error("The tile doesn't have a piece to move");
+        if (toTile.hasPiece()) throw new Error("The tile already has a piece");
+
+        fromTile.removePiece();
+        toTile.setPiece(piece);
+    }
+
+    /**
+     * Displays the board
+     */
+    display() {
         this._scene.pushMatrix();
 
         // Rotate board to draw it in the XZ plane
@@ -88,7 +106,7 @@ export default class MyBoard {
      * Draws the tiles of the board with the given color
      * @param {*} isWhite 
      */
-    drawTilesColor = (isWhite) => {
+    drawTilesColor(isWhite) {
         const tileTexture = isWhite ? this._whiteTileTexture : this._blackTileTexture;
         // Apply texture for white tiles
         this._woodMaterial.setTexture(tileTexture);
@@ -112,7 +130,7 @@ export default class MyBoard {
      * Draws the pieces of the board with the given color
      * @param {*} isWhite 
      */
-    drawPiecesColor = (isWhite) => {
+    drawPiecesColor(isWhite) {
         const tileTexture = isWhite ? this._whiteDiscTexture : this._blackDiscTexture;
         // Apply texture for white tiles
         this._woodMaterial.setTexture(tileTexture);
@@ -154,5 +172,28 @@ export default class MyBoard {
 
     get tileSideLength() {
         return this._tileSideLength;
+    }
+
+    /**
+     * Returns the tile that is at the given distance from the board's origin
+     * @param {*} x distance in the x axis
+     * @param {*} y distance in the y axis
+     * @returns {MyTile} the tile at the given distance
+     */
+    getTileByDistance(x, y) {
+        const i = Math.floor(y / this._tileSideLength);
+        const j = Math.floor(x / this._tileSideLength);
+        return this.getTileByCoordinate(i, j);
+    }
+
+    /**
+     * Returns the tile at the given coordinates
+     * @param {*} i row index
+     * @param {*} j column index
+     * @returns {MyTile|null} the tile at the given coordinates or null if the coordinates are out of bounds
+     */
+    getTileByCoordinates(i, j) {
+        if (i < 0 || i >= tilesPerSide || j < 0 || j >= tilesPerSide) return null;
+        return this._tiles[i * tilesPerSide + j];
     }
 }
