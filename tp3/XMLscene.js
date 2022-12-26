@@ -209,7 +209,8 @@ export class XMLscene extends CGFscene {
 						let customId = this.pickResults[i][1];				
 						console.log("Picked object: " + obj.id + ", with pick id " + customId);
                         
-                        // TODO: Game logic according to user input
+                        const boardIdx = customId - 1;
+                        this.gameOrchestrator.onClick(boardIdx);
 					}
 				}
 				this.pickResults.splice(0, this.pickResults.length);

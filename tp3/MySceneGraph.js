@@ -1117,7 +1117,7 @@ export class MySceneGraph {
      * @param {Texture | null} prevTexture
      * @param {number | null} pickingId - Optional picking id to associated to all the primitives of the component and its children
      */
-    drawComponent(component, prevAppearenceId = null, prevTexture = null, pickingId = null) {
+    drawComponent(component, prevAppearenceId = null, prevTexture = null, pickingId = null, highlight) {
         this.scene.pushMatrix();
 
         if (!component) return;
@@ -1169,9 +1169,6 @@ export class MySceneGraph {
         if (component.isHighlighted()) {
             this.scene.highlightShader.setUniformsValues({ highlightScale: component.highlighted.scale, highlightColor: component.highlighted.getColor() });
             this.scene.setActiveShader(this.scene.highlightShader);
-        } else if (pickingId != null && pickingId != -1) {
-            // TODO: Change this to the selected piece
-            this.scene.setActiveShader(this.scene.pickingShader);
         }
 
         for (const primitive of component.primitives) {
@@ -1191,7 +1188,7 @@ export class MySceneGraph {
             currPrimitive.scaleTexCoords(1.0, 1.0);
         }
 
-        if (component.isHighlighted() || (pickingId != null && pickingId != -1))
+        if (component.isHighlighted())
             this.scene.setActiveShader(this.scene.defaultShader);
 
         // Clean the Appearance object that is being changed above

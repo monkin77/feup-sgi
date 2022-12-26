@@ -37,6 +37,8 @@ export default class MyBoard {
         this._blackDiscTexture = new CGFtexture(this._scene, "scenes/images/board/dark_wood_disc.jpg");
 
         this._turn = player1;
+
+        this._selectedTile = null;
     }
 
     /**
@@ -124,10 +126,9 @@ export default class MyBoard {
         for (const direction of directions) {
             if (piece.isKing) {
                 let jumpedOver = false;
-                for (let i = tileRow + direction.i, j = tileCol + direction.j;
+                for (let i = tileRow + direction.i, j = tileCol + direction.j; 
                     i < tilesPerSide && j < tilesPerSide && i >= 0 && j >= 0;
-                    i += direction.i, j += direction.j
-                ) {
+                    i += direction.i, j += direction.j) {
                     const nextTile = this.getTileByCoordinates(i, j);
 
                     if (nextTile.hasPiece()) {
@@ -179,10 +180,9 @@ export default class MyBoard {
             throw Error("The tiles are not in a diagonal");
         }
 
-        for (let i = fromRow, j = fromCol;
-            i != toRow && j != toCol;
-            i += Math.sign(toRow - fromRow), j += Math.sign(toCol - fromCol)
-        ) {
+        for (let i = fromRow, j = fromCol; 
+            i != toRow && j != toCol; 
+            i += Math.sign(toRow - fromRow), j += Math.sign(toCol - fromCol)) {
             diagonalTiles.push(this.getTileByCoordinates(i, j));
         }
 
@@ -228,7 +228,7 @@ export default class MyBoard {
 
         for (let i = 0; i < tilesPerSide; i++) {
             let offset = i % 2 == 0 ? 0 : 1; // offset for the tiles in the odd rows (black tiles)
-            if (isWhite) offset = 1 - offset;   // Offset for the white tiles is the opposite of the black tiles
+            if (isWhite) offset = 1 - offset; // Offset for the white tiles is the opposite of the black tiles
 
             for (let j = offset; j < tilesPerSide; j += 2) {
                 this._scene.pushMatrix();
@@ -260,14 +260,43 @@ export default class MyBoard {
 
         for (let i = 0; i < tilesPerSide; i++) {
             for (let j = 0; j < tilesPerSide; j++) {
-                const tile = this._tiles[i * tilesPerSide + j];
+                const tileIdx = i * tilesPerSide + j;
+                const tile = this._tiles[tileIdx];
                 if (tile.hasPiece() && tile.piece.isWhite == isWhite) {
                     this._scene.pushMatrix();
                     this._scene.translate(j * this._tileSideLength, i * this._tileSideLength, 0);
-                    this._tiles[i * tilesPerSide + j].displayPiece();
+
+                    if (this._selectedTile == tileIdx) {
+                        this._woodMaterial.setAmbient(0.8, 0.8, 0, 1);
+                        this._woodMaterial.setEmission(0.2, 0.2, 0.2, 1);
+                        this._woodMaterial.apply();
+                    }
+                    
+                    tile.displayPiece();
+                    
+                    if (this._selectedTile == tileIdx) {
+                        this._woodMaterial.setAmbient(1, 1, 1, 1);
+                        this._woodMaterial.setEmission(0, 0, 0, 1);
+                        this._woodMaterial.apply();
+                    }
+
                     this._scene.popMatrix();
                 }
             }
+        }
+    }
+
+    /**
+     * Selects a tile by its index
+     * @param {*} tileIdx 
+     */
+    selectTile(tileIdx) {
+        if (tileIdx < 0 || tileIdx >= this._tiles.length) throw Error("Invalid tile index");
+
+        if (this._selectedTile != tileIdx) {
+            this._selectedTile = tileIdx;
+        } else {
+            this._selectedTile = null;
         }
     }
 

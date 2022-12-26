@@ -80,4 +80,16 @@ export default class MyGameOrchestrator {
             }
         }
     }
+
+    /**
+     * Handles a click by the user
+     * @param {*} boardIdx 
+     */
+    onClick(boardIdx) {
+        if (boardIdx >= 0 && boardIdx < 64) {
+            this._board.selectTile(boardIdx);
+        } else {
+            console.log("Click index is unknown");
+        }
+    }
 }
