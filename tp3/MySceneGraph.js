@@ -1105,6 +1105,7 @@ export class MySceneGraph {
         this.drawComponent(
             this.componentsParser.components[this.idRoot],
             null,
+            null,
             null
         );
     }
@@ -1114,8 +1115,9 @@ export class MySceneGraph {
      * @param {Component} component
      * @param {string | null} prevAppearenceId
      * @param {Texture | null} prevTexture
+     * @param {number | null} pickingId - Optional picking id to associated to all the primitives of the component and its children
      */
-    drawComponent(component, prevAppearenceId = null, prevTexture = null) {
+    drawComponent(component, prevAppearenceId = null, prevTexture = null, pickingId = null) {
         this.scene.pushMatrix();
 
         if (!component) return;
@@ -1172,14 +1174,7 @@ export class MySceneGraph {
         for (const primitive of component.primitives) {
             let currPrimitive = this.primitives[primitive];
 
-            // Register for picking
-            if (component.isSelectable()) {
-                console.log("Creating copy of primitive" + primitive +  "with customIdx: " + this.scene.customPrimitiveIdx);
-                // Create a copy of the primitive with a different id since it will be registered for picking
-                currPrimitive = currPrimitive.copy(this.scene.customPrimitiveIdx++);    
-                this.scene.registerForPick(component.pickingId, currPrimitive);
-                console.log("Created copy of primitive " + primitive + ": ", currPrimitive);
-            }
+            if (pickingId != null) this.scene.registerForPick(pickingId, currPrimitive);
 
             if (texture && texture.needsScaling()) {
                 currPrimitive.scaleTexCoords(
@@ -1204,31 +1199,11 @@ export class MySceneGraph {
             this.drawComponent(
                 this.componentsParser.components[childComponent],
                 appearenceId,
-                texture
+                texture,
+                pickingId
             );
         }
 
         this.scene.popMatrix();
-    }
-
-    /**
-     * Registers all the children of a component for picking
-     * @param {*} component 
-     * @param {*} currPickId 
-     */
-    registerPickingComponent(component, currPickId) {
-        if (!component) return;
-
-        for (const primitive of component.primitives) {
-            // console.log("Registering primitive " + primitive + " with pick id " + currPickId);
-            this.scene.registerForPick(currPickId, this.primitives[primitive]);
-        }
-
-        for (const childComponent of component.components) {
-            this.registerPickingComponent(
-                this.componentsParser.components[childComponent],
-                currPickId
-            );
-        }
     }
 }

@@ -15,6 +15,7 @@ export class Component {
         this._materials = materials;
         this._texture = texture;
         this._animation = animation;
+        this._children = children;
         this._primitives = children.primitives;
         this._components = children.components;
         this._currMaterial = 0;
@@ -69,7 +70,18 @@ export class Component {
 
     resetPickId = () => this._pickingId = -1;
 
+    /**
+     * Set the picking id for the component
+     * @param {*} pickId 
+     */
     setPickId = (pickId) => {
         this._pickingId = pickId
     };
+
+    /**
+     * @returns New object with the same properties as the original one
+     */
+    copy() {
+        return new Component(this._id, this._transformation, this._materials, this._texture, this._animation, this._children, this._highlighted);
+    }
 }

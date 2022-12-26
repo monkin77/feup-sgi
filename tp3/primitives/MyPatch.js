@@ -8,6 +8,7 @@ export class MyPatch extends CGFobject {
         this.degreeV = degreeV;
         this.partsU = partsU;
         this.partsV = partsV;
+        this.argControlPoints = controlPoints;
         this.controlPoints = [];
 
         for (let u = 0; u < degreeU + 1; u++) {
@@ -42,6 +43,6 @@ export class MyPatch extends CGFobject {
      * @returns New object with the same properties as the original one, but with a different id
      */
     copy(idx) {
-        return new MyPatch(this.scene, `${this.id}-${idx}`, this.degreeU, this.degreeV, this.partsU, this.partsV, this.controlPoints);
+        return new MyPatch(this.scene, `${this.id}-${idx}`, this.degreeU, this.degreeV, this.partsU, this.partsV, this.argControlPoints);
     }
 }

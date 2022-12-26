@@ -27,8 +27,11 @@ export default class MyPiece {
 
         this._radius = this._discLength / 2;
 
-        const coveredCylinder = this._sceneGraph.componentsParser.components["coveredCylinder"];
-        this._coveredCylinder = coveredCylinder;
+        this._sceneComponents = this._sceneGraph.componentsParser.components;
+        const coveredCylinder = this._sceneComponents["coveredCylinder"];
+
+        // Copy the covered cylinder to avoid changing the original
+        this._coveredCylinder = coveredCylinder.copy();
     }
     
     /**
@@ -41,8 +44,9 @@ export default class MyPiece {
         this._scene.scale(this._radius, this._radius, 0.25);
 
         // Covered cylinder contains a diameter of 2 and a height of 2
-        
-        this._sceneGraph.drawComponent(this._coveredCylinder);
+
+        // Currently, all the pieces are registering the picking id. If it's not selectable, it is being registered with -1
+        this._sceneGraph.drawComponent(this._coveredCylinder, null, null, this._coveredCylinder.pickingId);
     }
 
     /**
@@ -51,7 +55,6 @@ export default class MyPiece {
      */
     registerPicking(currPickId) {
         this._coveredCylinder.setPickId(currPickId);
-        // this._sceneGraph.registerPickingComponent(this._coveredCylinder, currPickId);
     }
 
     get id() {
