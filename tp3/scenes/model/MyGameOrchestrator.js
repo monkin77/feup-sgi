@@ -18,6 +18,12 @@ export default class MyGameOrchestrator {
         this._sequence = new MyGameSequence();
         this._animator = new CheckersAnimation(this._sequence);
         this._theme = new MySceneGraph(filename, this._scene);
+    }
+
+    /**
+     * Initializes the board after the theme is loaded
+     */
+    initBoard() {
         this._board = new MyBoard(this._theme, -5, 0, 10, 20);
     }
 

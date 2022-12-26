@@ -1,4 +1,5 @@
 import { MyRectangle } from "../../primitives/MyRectangle.js";
+import { isPlayerTurn } from "../../utils/checkers.js";
 import MyPiece from "./MyPiece.js";
 
 export default class MyTile {
@@ -34,6 +35,29 @@ export default class MyTile {
      */
     displayPiece() {
         this._piece?.display();
+    }
+
+    /**
+     * Verifies if the tile has a piece on it from the current player's turn and registers it for picking if it does, incrementing the currPickId
+     * @param {number} turn number representing the current player's turn
+     * @param {number} currPickId 
+     * @returns true if the tile was registered for picking, false otherwise
+     */
+    registerPicking(turn, currPickId) {
+        if (this.hasPiece() && isPlayerTurn(turn, this._piece.isWhite)) {
+            // Register the tile's Rectangle and Piece for picking with the currPickId
+            this.setTileAndPiecePicking(currPickId);
+            return true;
+        }
+
+        // Indicate that the tile was not registered for picking
+        this.setTileAndPiecePicking(-1);
+        return false;
+    }
+
+    setTileAndPiecePicking(pickId) {
+        this._scene.registerForPick(pickId, this._rectangle);
+        if (this.hasPiece()) this._piece.registerPicking(pickId);
     }
 
     get id() {

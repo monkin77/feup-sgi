@@ -125,6 +125,9 @@ export class XMLscene extends CGFscene {
 
         this.setupInterface();
 
+        // Initialize Board
+        this.gameOrchestrator.initBoard();
+            
         this.sceneInited = true;
     }
 
@@ -188,6 +191,26 @@ export class XMLscene extends CGFscene {
         this.highlightShader.setUniformsValues({ timeFactor: this.timeFactor });
     }
 
+    /**
+     * Log Picking checks the buffer of picked objects and collects their ids
+     */
+    logPicking()
+	{
+		if (this.pickMode == false) {
+			// results can only be retrieved when picking mode is false
+			if (this.pickResults != null && this.pickResults.length > 0) {
+				for (let i=0; i< this.pickResults.length; i++) {
+					const obj = this.pickResults[i][0];
+					if (obj)
+					{
+						let customId = this.pickResults[i][1];				
+						console.log("Picked object: " + obj + ", with pick id " + customId);
+					}
+				}
+				this.pickResults.splice(0, this.pickResults.length);
+			}		
+		}
+	}
 
     /**
      * Displays the scene.

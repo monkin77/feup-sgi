@@ -1,5 +1,5 @@
 import { CGFappearance, CGFtexture } from "../../../lib/CGF.js";
-import { startRowsWithDiscs, tilesPerSide } from "../../utils/checkers.js";
+import { isPlayerTurn, player1, startRowsWithDiscs, tilesPerSide } from "../../utils/checkers.js";
 import MyPiece from "./MyPiece.js";
 import MyTile from "./MyTile.js";
 
@@ -34,6 +34,8 @@ export default class MyBoard {
         this._blackTileTexture = new CGFtexture(this._scene, "scenes/images/board/dark_tile.png");
         this._whiteDiscTexture = new CGFtexture(this._scene, "scenes/images/board/light_wood_disc.jpg");
         this._blackDiscTexture = new CGFtexture(this._scene, "scenes/images/board/dark_wood_disc.jpg");
+
+        this._turn = player1;
     }
 
     /**
@@ -99,8 +101,9 @@ export default class MyBoard {
         this._woodMaterial.apply();
 
         // Draw the tiles
-        this.drawTilesColor(true);
-        this.drawTilesColor(false);
+        let currPickId = 1;
+        currPickId = this.drawTilesColor(true, currPickId);
+        currPickId = this.drawTilesColor(false, currPickId);
 
         // Draw the pieces
         this.drawPiecesColor(true);
@@ -113,8 +116,10 @@ export default class MyBoard {
     /**
      * Draws the tiles of the board with the given color
      * @param {*} isWhite 
+     * @param {number} currPickId Numeric id to be used for picking
+     * @returns {number} The next pick id to be used
      */
-    drawTilesColor(isWhite) {
+    drawTilesColor(isWhite, currPickId) {
         const tileTexture = isWhite ? this._whiteTileTexture : this._blackTileTexture;
         // Apply texture for white tiles
         this._woodMaterial.setTexture(tileTexture);
@@ -128,10 +133,18 @@ export default class MyBoard {
             for (let j = offset; j < tilesPerSide; j += 2) {
                 this._scene.pushMatrix();
                 this._scene.translate(j * this._tileSideLength, i * this._tileSideLength, 0);
-                this._tiles[i * tilesPerSide + j].display();
+
+                const currTile = this._tiles[i * tilesPerSide + j];
+                // Increment the currPickId if the tile is selectable
+                if (currTile.registerPicking(this._turn, currPickId)) currPickId++;
+
+                currTile.display();
+
                 this._scene.popMatrix();
             }
         }
+
+        return currPickId;
     }
 
     /**

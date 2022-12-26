@@ -26,6 +26,9 @@ export default class MyPiece {
         this._height = height;
 
         this._radius = this._discLength / 2;
+
+        const coveredCylinder = this._sceneGraph.componentsParser.components["coveredCylinder"];
+        this._coveredCylinder = coveredCylinder;
     }
     
     /**
@@ -38,8 +41,16 @@ export default class MyPiece {
         this._scene.scale(this._radius, this._radius, 0.25);
 
         // Covered cylinder contains a diameter of 2 and a height of 2
-        const coveredCylinder = this._sceneGraph.componentsParser.components["coveredCylinder"];
-        this._sceneGraph.drawComponent(coveredCylinder);
+        
+        this._sceneGraph.drawComponent(this._coveredCylinder);
+    }
+
+    /**
+     * Registers Piece for picking
+     * @param {number} currPickId 
+     */
+    registerPicking(currPickId) {
+        this._sceneGraph.registerPickingComponent(this._coveredCylinder, currPickId);
     }
 
     get id() {

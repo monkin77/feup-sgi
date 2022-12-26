@@ -1198,4 +1198,25 @@ export class MySceneGraph {
 
         this.scene.popMatrix();
     }
+
+    /**
+     * Registers all the children of a component for picking
+     * @param {*} component 
+     * @param {*} currPickId 
+     */
+    registerPickingComponent(component, currPickId) {
+        if (!component) return;
+
+        for (const primitive of component.primitives) {
+            console.log("Registering primitive " + primitive + " with pick id " + currPickId);
+            this.scene.registerForPick(currPickId, this.primitives[primitive]);
+        }
+
+        for (const childComponent of component.components) {
+            this.registerPickingComponent(
+                this.componentsParser.components[childComponent],
+                currPickId
+            );
+        }
+    }
 }
