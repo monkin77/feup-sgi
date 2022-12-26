@@ -15,4 +15,14 @@ export default class MyGameMove {
     animate() {
         // TODO: implement animation
     }
+
+    /**
+     * Validates the move
+     */
+    validate() {
+        const possibleMoves = this._board.getPossibleMoves(this._fromTile);
+        // TODO: Check if this works
+        if (!possibleMoves.includes(this._toTile)) return false;
+        return true;
+    }
 }

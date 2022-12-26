@@ -59,8 +59,20 @@ export default class MyPiece {
         this._coveredCylinder.setPickId(currPickId);
     }
 
+    /**
+     * Makes the piece a king
+     */
     upgradeToKing() {
+        // TODO: Change the height and appearance of the piece to a king
         this._isKing = true;
+    }
+
+    /**
+     * Compares the color of another piece
+     * @param {MyPiece} otherPiece
+     */
+    isSameColorAs(otherPiece) {
+        return this._isWhite === otherPiece.isWhite;
     }
 
     get id() {
@@ -77,6 +89,10 @@ export default class MyPiece {
 
     get height() {
         return this._height;
+    }
+
+    get isKing() {
+        return this._isKing;
     }
 
 }

@@ -95,6 +95,66 @@ export default class MyBoard {
         toTile.setPiece(piece);
         toTile.checkAndUpgradeToKing();
     }
+    
+
+    /**
+     * Gets the possible moves of a given tile
+     * @param {MyTile} tile
+     * @returns {MyTile[]} Array of possible tiles to move to
+     */
+    getPossibleMoves(tile) {
+        if (!tile.hasPiece()) return [];
+
+        const piece = tile.piece;
+        const { i: tileRow, j: tileCol } = this.getTileCoordinates(tile);
+        const possibleMoves = [];
+
+        const directions = [];
+        if (piece.isWhite || piece.isKing) directions.push({ i: 1, j: 1 }, { i: 1, j: -1 });
+        if (!piece.isWhite || piece.isKing) directions.push({ i: -1, j: 1 }, { i: -1, j: -1 });
+
+        for (const direction of directions) {
+            if (piece.isKing) {
+                let jumpedOver = false;
+                for (let i = tileRow + direction.i, j = tileCol + direction.j;
+                    i < tilesPerSide && j < tilesPerSide && i >= 0 && j >= 0;
+                    i += direction.i, j += direction.j
+                ) {
+                    const nextTile = this.getTileByCoordinates(i, j);
+
+                    if (nextTile.hasPiece()) {
+                        if (piece.isSameColorAs(nextTile.piece)) break; // Can't jump over a piece of the same color
+                        if (jumpedOver) break; // Can't jump over more than one piece
+                        jumpedOver = true;
+                    } else {
+                        possibleMoves.push(nextTile);
+                    }
+                }
+            } else {
+                const i = tileRow + direction.i;
+                const j = tileCol + direction.j;
+                const nextTile = this.getTileByCoordinates(i, j);
+
+                if (!nextTile) continue; // Out of bounds
+
+                if (nextTile.hasPiece()) {
+                    if (piece.isSameColorAs(nextTile.piece)) continue; // Can't jump over a piece of the same color
+
+                    const jumpI = i + direction.i;
+                    const jumpJ = j + direction.j;
+                    const jumpTile = this.getTileByCoordinates(jumpI, jumpJ);
+
+                    if (jumpTile && !jumpTile.hasPiece()) {
+                        possibleMoves.push(jumpTile);
+                    }
+                } else {
+                    possibleMoves.push(nextTile);
+                }
+            }
+        }
+
+        return possibleMoves;
+    }
 
     /**
      * Displays the board
@@ -223,5 +283,17 @@ export default class MyBoard {
     getTileByCoordinates(i, j) {
         if (i < 0 || i >= tilesPerSide || j < 0 || j >= tilesPerSide) return null;
         return this._tiles[i * tilesPerSide + j];
+    }
+
+    /**
+     * Gets the coordinates of the given tile
+     * @param {MyTile} tile
+     */
+    getTileCoordinates(tile) {
+        // TODO: Check if this works
+        const index = this._tiles.indexOf(tile);
+        const i = Math.floor(index / tilesPerSide);
+        const j = index % tilesPerSide;
+        return { i, j };
     }
 }
