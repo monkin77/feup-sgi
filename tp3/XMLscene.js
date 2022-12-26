@@ -80,6 +80,8 @@ export class XMLscene extends CGFscene {
      */
     initShaders() {
         this.highlightShader = new CGFshader(this.gl, './shaders/highlight.vert', './shaders/highlight.frag');
+        this.pickingShader = new CGFshader(this.gl, './shaders/picking.vert', './shaders/picking.frag');
+
         this.timeFactor = 0;
         this.totalSteps = 100;
         this.slowdownSteps = 40;
@@ -206,6 +208,8 @@ export class XMLscene extends CGFscene {
 					{
 						let customId = this.pickResults[i][1];				
 						console.log("Picked object: " + obj.id + ", with pick id " + customId);
+                        
+                        // TODO: Game logic according to user input
 					}
 				}
 				this.pickResults.splice(0, this.pickResults.length);
