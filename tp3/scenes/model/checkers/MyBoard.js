@@ -1,5 +1,6 @@
 import { CGFappearance, CGFtexture } from "../../../../lib/CGF.js";
 import { player1, startRowsWithDiscs, tilesPerSide } from "../../../utils/checkers.js";
+import MyGameOrchestrator from "./MyGameOrchestrator.js";
 import MyPiece from "./MyPiece.js";
 import MyTile from "./MyTile.js";
 
@@ -237,8 +238,7 @@ export default class MyBoard {
                 const currTileIdx = i * tilesPerSide + j;
                 const currTile = this._tiles[currTileIdx];
 
-                const currPickId = currTileIdx + 1; // +1 because 0 is reserved
-                currTile.registerPicking(this._turn, currPickId);
+                currTile.registerPicking(this._turn, MyGameOrchestrator.pickingId++);
 
                 currTile.display();
 
@@ -246,6 +246,13 @@ export default class MyBoard {
             }
         }
     }
+
+    /**
+     * TODO: Add click handler for the other tiles to deselect
+     * TODO: Add picking for the possible moves after selection
+     * TODO: Show highlight for the possible moves
+     * TODO: Perform the move and change turn
+     */
 
     /**
      * Draws the pieces of the board with the given color
@@ -266,7 +273,7 @@ export default class MyBoard {
                     this._scene.pushMatrix();
                     this._scene.translate(j * this._tileSideLength, i * this._tileSideLength, 0);
 
-                    if (this._selectedTile == tileIdx) {
+                    if (this._selectedTile == tile) {
                         this._woodMaterial.setAmbient(0.8, 0.8, 0, 1);
                         this._woodMaterial.setEmission(0.2, 0.2, 0.2, 1);
                         this._woodMaterial.apply();
@@ -274,7 +281,7 @@ export default class MyBoard {
                     
                     tile.displayPiece();
                     
-                    if (this._selectedTile == tileIdx) {
+                    if (this._selectedTile == tile) {
                         this._woodMaterial.setAmbient(1, 1, 1, 1);
                         this._woodMaterial.setEmission(0, 0, 0, 1);
                         this._woodMaterial.apply();
@@ -288,13 +295,11 @@ export default class MyBoard {
 
     /**
      * Selects a tile by its index
-     * @param {*} tileIdx 
+     * @param {MyTile} tile selected tile 
      */
-    selectTile(tileIdx) {
-        if (tileIdx < 0 || tileIdx >= this._tiles.length) throw Error("Invalid tile index");
-
-        if (this._selectedTile != tileIdx) {
-            this._selectedTile = tileIdx;
+    selectTile(tile) {
+        if (this._selectedTile != tile) {
+            this._selectedTile = tile;
         } else {
             this._selectedTile = null;
         }

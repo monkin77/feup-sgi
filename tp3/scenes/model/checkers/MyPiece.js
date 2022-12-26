@@ -1,4 +1,6 @@
 import { MySceneGraph } from "../../../MySceneGraph.js";
+import PickingInfo from "../PickingInfo.js";
+import MyTile from "./MyTile.js";
 
 // Scale factor to make the piece smaller than the tile
 const pieceScaleFactor = 0.65;
@@ -39,8 +41,9 @@ export default class MyPiece {
     /**
      * Displays the piece on the board.
      * The piece is translated to the center of the tile.
+     * @param {MyTile} tile Tile the piece is on
      */
-    display() {
+    display(tile) {
         // Translate the disc to the center of the tile. Since the scene was already rotated, we translate in the x and y axis
         this._scene.translate(this._sideLength/2, this._sideLength/2, 0);
         this._scene.scale(this._radius, this._radius, 0.25);
@@ -48,7 +51,7 @@ export default class MyPiece {
         // Covered cylinder contains a diameter of 2 and a height of 2
 
         // Currently, all the pieces are registering the picking id. If it's not selectable, it is being registered with -1
-        this._sceneGraph.drawComponent(this._coveredCylinder, null, null, this._coveredCylinder.pickingId);
+        this._sceneGraph.drawComponent(this._coveredCylinder, null, null, new PickingInfo(this._coveredCylinder.pickingId, tile));
     }
 
     /**

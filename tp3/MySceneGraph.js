@@ -21,6 +21,7 @@ import { Component } from "./scenes/model/Component.js";
 import { TexturesParser } from "./scenes/parser/TexturesParser.js";
 import { AnimationsParser } from "./scenes/parser/AnimationsParser.js";
 import MyBoard from "./scenes/model/checkers/MyBoard.js";
+import PickingInfo from "./scenes/model/PickingInfo.js";
 
 // Order of the groups in the XML document.
 const SCENE_INDEX = 0;
@@ -1115,9 +1116,9 @@ export class MySceneGraph {
      * @param {Component} component
      * @param {string | null} prevAppearenceId
      * @param {Texture | null} prevTexture
-     * @param {number | null} pickingId - Optional picking id to associated to all the primitives of the component and its children
+     * @param {PickingInfo | null} pickingInfo - Optional pickingInfo to associate to all the primitives of the component and its children
      */
-    drawComponent(component, prevAppearenceId = null, prevTexture = null, pickingId = null, highlight) {
+    drawComponent(component, prevAppearenceId = null, prevTexture = null, pickingInfo = null) {
         this.scene.pushMatrix();
 
         if (!component) return;
@@ -1174,7 +1175,7 @@ export class MySceneGraph {
         for (const primitive of component.primitives) {
             let currPrimitive = this.primitives[primitive];
 
-            if (pickingId != null) this.scene.registerForPick(pickingId, currPrimitive);
+            if (pickingInfo != null) this.scene.registerForPick(pickingInfo.id, pickingInfo.object);
 
             if (texture && texture.needsScaling()) {
                 currPrimitive.scaleTexCoords(
@@ -1200,7 +1201,7 @@ export class MySceneGraph {
                 this.componentsParser.components[childComponent],
                 appearenceId,
                 texture,
-                pickingId
+                pickingInfo
             );
         }
 

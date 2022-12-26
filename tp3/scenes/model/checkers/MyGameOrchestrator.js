@@ -2,6 +2,7 @@ import { MySceneGraph } from "../../../MySceneGraph.js";
 import CheckersAnimation from "./CheckersAnimation.js";
 import MyBoard from "./MyBoard.js";
 import MyGameSequence from "./MyGameSequence.js";
+import MyTile from "./MyTile.js";
 
 /**
  * TODO: Class that orchestrates the execution of the checkers game
@@ -13,6 +14,8 @@ import MyGameSequence from "./MyGameSequence.js";
  *  • Manage object selection
  */
 export default class MyGameOrchestrator {
+    static pickingId = 1;
+
     constructor(filename, scene) {
         this._scene = scene;
         this._sequence = new MyGameSequence();
@@ -74,22 +77,25 @@ export default class MyGameOrchestrator {
      * Sets the pickId of the components to null
      */
     clearPickRegistration() {
-        if (this._scene.inited) {
+        if (this._scene.sceneInited) {
             for (const component of Object.values(this._theme.componentsParser.components)) {
                 component.resetPickId();
             }
+
+            
+            MyGameOrchestrator.pickingId = 1;    // Tracks the current picking id to avoid duplicates
         }
     }
 
     /**
      * Handles a click by the user
-     * @param {*} boardIdx 
+     * @param {*} obj Object that was clicked. Can be of various classes 
      */
-    onClick(boardIdx) {
-        if (boardIdx >= 0 && boardIdx < 64) {
-            this._board.selectTile(boardIdx);
+    onClick(obj) {
+        if (obj instanceof MyTile) {
+            this._board.selectTile(obj);
         } else {
-            console.log("Click index is unknown");
+            console.log("Clicked object is not being handled");
         }
     }
 }
