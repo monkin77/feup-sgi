@@ -10,7 +10,7 @@ export class XMLscene extends CGFscene {
     /**
      * @constructor
      * @param {MyInterface} myinterface
-     * @param {MyGameOrchestrator} gameOrchestrator
+     * @param {string} filename name of the scene's file
      */
     constructor(myinterface, filename) {
         super();
