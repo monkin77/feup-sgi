@@ -47,9 +47,10 @@ export default class MyBoard {
         const blackPieces = [];
 
         for (let i = 0; i < tilesPerSide; i++) {
+            const isEdgeRow = i == 0 || i == tilesPerSide - 1;
+            const offset = i % 2 == 0 ? 0 : 1; // offset for the tiles in the odd rows
             for (let j = 0; j < tilesPerSide; j++) {
                 const idNumber = i * tilesPerSide + j;
-                const offset = i % 2 == 0 ? 0 : 1; // offset for the tiles in the odd rows
                 const isWhite = (j + offset) % 2 != 0;
 
                 let piece = null;
@@ -62,7 +63,15 @@ export default class MyBoard {
                     else blackPieces.push(piece);
                 }
 
-                tiles.push(new MyTile(this._scene, `tile-${idNumber}`, this._tileSideLength, isWhite, piece));
+                tiles.push(
+                    new MyTile(
+                        this._scene,
+                        `tile-${idNumber}`,
+                        this._tileSideLength,
+                        isWhite, isEdgeRow,
+                        piece
+                    )
+                );
             }
         }
 
@@ -84,6 +93,7 @@ export default class MyBoard {
 
         fromTile.removePiece();
         toTile.setPiece(piece);
+        toTile.checkAndUpgradeToKing();
     }
 
     /**

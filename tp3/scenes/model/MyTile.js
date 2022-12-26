@@ -11,12 +11,13 @@ export default class MyTile {
      * @param {*} isWhite whether the tile is white or black
      * @param {MyPiece | null} piece MyPiece object if the tile has a piece on it, null otherwise
      */
-    constructor(scene, id, sideLength, isWhite = true, piece = null) {
+    constructor(scene, id, sideLength, isWhite, isEdgeRow, piece = null) {
         this._scene = scene; // TODO: Do we need the scene?
         this._id = id;
         this._isWhite = isWhite;
         this._tileSideLength = sideLength;
         this._rectangle = new MyRectangle(scene, id, 0, sideLength, 0, sideLength);
+        this._isEdgeRow = isEdgeRow;
 
         // The piece on the tile (if any)
         this._piece = piece;
@@ -91,5 +92,16 @@ export default class MyTile {
      */
     removePiece() {
         this._piece = null;
+    }
+
+    /**
+     * Checks if the piece can be upgraded to a king
+     */
+    checkAndUpgradeToKing() {
+        if (this._isEdgeRow && this._piece != null) {
+            this._piece.upgradeToKing();
+            return true;
+        }
+        return false;
     }
 }

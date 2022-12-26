@@ -32,13 +32,15 @@ export default class MyPiece {
 
         // Copy the covered cylinder to avoid changing the original
         this._coveredCylinder = coveredCylinder.copy();
+        
+        this._isKing = false;
     }
     
     /**
      * Displays the piece on the board.
      * The piece is translated to the center of the tile.
      */
-    display = () => {
+    display() {
         // Translate the disc to the center of the tile. Since the scene was already rotated, we translate in the x and y axis
         this._scene.translate(this._sideLength/2, this._sideLength/2, 0);
         this._scene.scale(this._radius, this._radius, 0.25);
@@ -55,6 +57,10 @@ export default class MyPiece {
      */
     registerPicking(currPickId) {
         this._coveredCylinder.setPickId(currPickId);
+    }
+
+    upgradeToKing() {
+        this._isKing = true;
     }
 
     get id() {
