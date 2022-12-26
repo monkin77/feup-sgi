@@ -1196,7 +1196,6 @@ export class MySceneGraph {
         // Clean the Appearance object that is being changed above
         if (appearance) appearance.setTexture(null);
 
-        // TODO: Confirm that the scene's appearance is being reset after one is selected
 
         for (const childComponent of component.components) {
             this.drawComponent(

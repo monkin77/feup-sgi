@@ -1,4 +1,4 @@
-export class MyAnimation {
+export default class MyAnimation {
     /**
      * Constructor for the MyAnimation abstract class. It is used to create an animation.
      * @constructor

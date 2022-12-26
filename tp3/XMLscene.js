@@ -138,13 +138,6 @@ export class XMLscene extends CGFscene {
         this.selectedView = this.graph.viewsParser.defaultViewId;
 
         this.interface.onGraphLoaded();
-
-        /* TODO: Inteface needs to include options for each highlighted component including:
-        1. Checkbox for setting ative/inactive
-        Point 2. and 3. are optional
-        2. Select color
-        3. Change scale factor
-        */
     }
 
     /**
