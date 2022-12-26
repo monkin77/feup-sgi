@@ -10,8 +10,8 @@ export default class MyTile {
      * @param {*} isWhite whether the tile is white or black
      * @param {MyPiece | null} piece MyPiece object if the tile has a piece on it, null otherwise
      */
-    constructor(scene, id, sideLength, isWhite = true, piece) {
-        this._scene = scene;
+    constructor(scene, id, sideLength, isWhite = true, piece = null) {
+        this._scene = scene; // TODO: Do we need the scene?
         this._id = id;
         this._isWhite = isWhite;
         this._tileSideLength = sideLength;
@@ -24,12 +24,16 @@ export default class MyTile {
     /**
      * Displays the tile
      */
-    display = () => {
+    display() {
         this._rectangle.display();
     }
 
-    displayPiece = () => {
-        this._piece.display();
+    /**
+     * Displays the piece on the tile
+     * If there is no piece on the tile, nothing is displayed
+     */
+    displayPiece() {
+        this._piece?.display();
     }
 
     get id() {
@@ -44,17 +48,24 @@ export default class MyTile {
         return this._piece;
     }
 
-    hasPiece = () => this._piece != null;
+    /**
+     * @returns {boolean} Whether the tile has a piece on it
+     */
+    hasPiece() { return this._piece != null }
 
     /**
      * Sets a piece on the tile
      * @param {MyPiece} piece 
-     * @returns false if the tile is already occupied, true otherwise
      */
-    setPiece = (piece) => {
-        if (this._piece != null) return false; // Tile already occupied
-
+    setPiece(piece) {
+        if (this._piece != null) throw Error("Tile already occupied");
         this._piece = piece;
-        return true;
+    }
+
+    /**
+     * Removes the piece from the tile
+     */
+    removePiece() {
+        this._piece = null;
     }
 }

@@ -1,7 +1,7 @@
-import { axisToVec, DEGREE_TO_RAD } from "../parser/utils.js";
-import { MyAnimation } from "./MyAnimation.js";
+import { DEGREE_TO_RAD } from "../parser/utils.js";
+import MyAnimation from "./MyAnimation.js";
 
-export class KeyFrameAnimation extends MyAnimation {
+export default class KeyFrameAnimation extends MyAnimation {
     /**
      * Constructor for the KeyFrameAnimation class. It is used to create an animation based on keyframes.
      * @constructor

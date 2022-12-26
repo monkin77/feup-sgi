@@ -1,7 +1,7 @@
 import { KeyFrame } from "../model/KeyFrame.js";
-import { KeyFrameAnimation } from "../model/KeyFrameAnimation.js";
+import KeyFrameAnimation from "../model/KeyFrameAnimation.js";
 import { Parser } from "./Parser.js";
-import { calculateTransformationMatrix, onXMLMinorError, parseCoordinates3D, parseRotation } from "./utils.js";
+import { onXMLMinorError, parseCoordinates3D, parseRotation } from "./utils.js";
 
 const parserId = "Animations Parser";
 
