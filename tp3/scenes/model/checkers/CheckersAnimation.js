@@ -1,4 +1,4 @@
-import MyAnimation from "./MyAnimation.js";
+import MyAnimation from "../MyAnimation.js";
 
 export default class CheckersAnimation extends MyAnimation {
     constructor(sequence) {

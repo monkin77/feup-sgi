@@ -20,7 +20,7 @@ import { MaterialsParser } from "./scenes/parser/MaterialsParser.js";
 import { Component } from "./scenes/model/Component.js";
 import { TexturesParser } from "./scenes/parser/TexturesParser.js";
 import { AnimationsParser } from "./scenes/parser/AnimationsParser.js";
-import MyBoard from "./scenes/model/MyBoard.js";
+import MyBoard from "./scenes/model/checkers/MyBoard.js";
 
 // Order of the groups in the XML document.
 const SCENE_INDEX = 0;

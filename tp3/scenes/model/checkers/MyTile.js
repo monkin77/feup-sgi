@@ -1,22 +1,23 @@
-import { MyRectangle } from "../../primitives/MyRectangle.js";
-import { isPlayerTurn } from "../../utils/checkers.js";
+import { MyRectangle } from "../../../primitives/MyRectangle.js";
+import { isPlayerTurn } from "../../../utils/checkers.js";
 import MyPiece from "./MyPiece.js";
 
 export default class MyTile {
     /**
-     * 
-     * @param {*} scene 
-     * @param {*} id 
+     *
+     * @param {*} scene
+     * @param {*} id
      * @param {*} sideLength length of the tile's side to avoid having to scale the scene
      * @param {*} isWhite whether the tile is white or black
      * @param {MyPiece | null} piece MyPiece object if the tile has a piece on it, null otherwise
      */
-    constructor(scene, id, sideLength, isWhite = true, piece = null) {
+    constructor(scene, id, sideLength, isWhite, isEdgeRow, piece = null) {
         this._scene = scene; // TODO: Do we need the scene?
         this._id = id;
         this._isWhite = isWhite;
         this._tileSideLength = sideLength;
         this._rectangle = new MyRectangle(scene, id, 0, sideLength, 0, sideLength);
+        this._isEdgeRow = isEdgeRow;
 
         // The piece on the tile (if any)
         this._piece = piece;
@@ -79,7 +80,7 @@ export default class MyTile {
 
     /**
      * Sets a piece on the tile
-     * @param {MyPiece} piece 
+     * @param {MyPiece} piece
      */
     setPiece(piece) {
         if (this._piece != null) throw Error("Tile already occupied");
@@ -91,5 +92,28 @@ export default class MyTile {
      */
     removePiece() {
         this._piece = null;
+    }
+
+    /**
+     * Checks if the piece can be upgraded to a king
+     */
+    checkAndUpgradeToKing() {
+        if (this._isEdgeRow && this._piece != null) {
+            this._piece.upgradeToKing();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Clones the tile
+     */
+    clone() {
+        const clone = Object.create(
+            Object.getPrototypeOf(this),
+            Object.getOwnPropertyDescriptors(this)
+        );
+        clone._piece = this._piece?.clone();
+        return clone;
     }
 }

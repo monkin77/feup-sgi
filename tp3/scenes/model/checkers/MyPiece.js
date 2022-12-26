@@ -1,4 +1,4 @@
-import { MySceneGraph } from "../../MySceneGraph.js";
+import { MySceneGraph } from "../../../MySceneGraph.js";
 
 // Scale factor to make the piece smaller than the tile
 const pieceScaleFactor = 0.65;
@@ -10,10 +10,10 @@ const pieceScaleFactor = 0.65;
 export default class MyPiece {
     /**
      * @param {MySceneGraph} sceneGraph MySceneGraph object to use already created components and access the scene object
-     * @param {string} id "piece-<tileId>", where tileId is the id of the initial tile the piece is on 
+     * @param {string} id "piece-<tileId>", where tileId is the id of the initial tile the piece is on
      * @param {*} isWhite Whether the piece is white or black
      * @param {number} sideLength sideLength length of the tile the piece is on
-     * @param {*} height 
+     * @param {*} height
      */
     constructor(sceneGraph, id, isWhite, sideLength, height = 1) {
         this._sceneGraph = sceneGraph; // TODO: Alternative to using the scene graph
@@ -32,13 +32,15 @@ export default class MyPiece {
 
         // Copy the covered cylinder to avoid changing the original
         this._coveredCylinder = coveredCylinder.copy();
+        
+        this._isKing = false;
     }
-    
+
     /**
      * Displays the piece on the board.
      * The piece is translated to the center of the tile.
      */
-    display = () => {
+    display() {
         // Translate the disc to the center of the tile. Since the scene was already rotated, we translate in the x and y axis
         this._scene.translate(this._sideLength/2, this._sideLength/2, 0);
         this._scene.scale(this._radius, this._radius, 0.25);
@@ -57,6 +59,22 @@ export default class MyPiece {
         this._coveredCylinder.setPickId(currPickId);
     }
 
+    /**
+     * Makes the piece a king
+     */
+    upgradeToKing() {
+        // TODO: Change the height and appearance of the piece to a king
+        this._isKing = true;
+    }
+
+    /**
+     * Compares the color of another piece
+     * @param {MyPiece} otherPiece
+     */
+    isSameColorAs(otherPiece) {
+        return this._isWhite === otherPiece.isWhite;
+    }
+
     get id() {
         return this._id;
     }
@@ -73,4 +91,17 @@ export default class MyPiece {
         return this._height;
     }
 
+    get isKing() {
+        return this._isKing;
+    }
+
+    /**
+     * Clone the piece
+     */
+    clone() {
+        return Object.create(
+            Object.getPrototypeOf(this),
+            Object.getOwnPropertyDescriptors(this)
+        );
+    }
 }
