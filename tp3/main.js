@@ -1,7 +1,6 @@
 import { CGFapplication } from '../lib/CGF.js';
 import { XMLscene } from './XMLscene.js';
 import { MyInterface } from './MyInterface.js';
-import { MySceneGraph } from './MySceneGraph.js';
 
 function getUrlVars() {
     var vars = {};
@@ -15,9 +14,13 @@ function getUrlVars() {
 function main() {
 
     // Standard application, scene and interface setup
-    var app = new CGFapplication(document.body);
-    var myInterface = new MyInterface();
-    var myScene = new XMLscene(myInterface);
+    const app = new CGFapplication(document.body);
+    const myInterface = new MyInterface();
+
+    // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
+    // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
+    const filename = getUrlVars()['file'] || "demo.xml";
+    const myScene = new XMLscene(myInterface, filename);
 
     app.init();
 
@@ -25,15 +28,6 @@ function main() {
     app.setInterface(myInterface);
 
     myInterface.setActiveCamera(myScene.camera);
-
-    // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
-    // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
-
-    var filename = getUrlVars()['file'] || "demo.xml";
-
-    // create and load graph, and associate it to scene. 
-    // Check console for loading errors
-    var myGraph = new MySceneGraph(filename, myScene);
 
     // start
     app.run();

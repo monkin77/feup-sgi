@@ -68,12 +68,6 @@ export class MySceneGraph {
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
         this.reader.open("scenes/" + filename, this);
-
-        this.prepareBoard();
-    }
-
-    prepareBoard() {
-        this.board = new MyBoard(this.scene, 0, 0, 0, 20);
     }
 
     /*
@@ -1113,8 +1107,6 @@ export class MySceneGraph {
             null,
             null
         );
-
-        this.board.display();
     }
 
     /**
@@ -1195,7 +1187,6 @@ export class MySceneGraph {
         // Clean the Appearance object that is being changed above
         if (appearance) appearance.setTexture(null);
 
-        // TODO: Confirm that the scene's appearance is being reset after one is selected
 
         for (const childComponent of component.components) {
             this.drawComponent(
