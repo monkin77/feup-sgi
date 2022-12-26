@@ -1170,15 +1170,27 @@ export class MySceneGraph {
         }
 
         for (const primitive of component.primitives) {
+            let currPrimitive = this.primitives[primitive];
+
+            // Register for picking
+            if (component.isSelectable()) {
+                console.log("Creating copy of primitive" + primitive +  "with customIdx: " + this.scene.customPrimitiveIdx);
+                // Create a copy of the primitive with a different id since it will be registered for picking
+                currPrimitive = currPrimitive.copy(this.scene.customPrimitiveIdx++);    
+                this.scene.registerForPick(component.pickingId, currPrimitive);
+                console.log("Created copy of primitive " + primitive + ": ", currPrimitive);
+            }
+
             if (texture && texture.needsScaling()) {
-                this.primitives[primitive].scaleTexCoords(
+                currPrimitive.scaleTexCoords(
                     texture.length_s,
                     texture.length_t
                 );
             }
-            this.primitives[primitive].display();
+
+            currPrimitive.display();
             // Reset texture coords scale
-            this.primitives[primitive].scaleTexCoords(1.0, 1.0);
+            currPrimitive.scaleTexCoords(1.0, 1.0);
         }
 
         if (component.isHighlighted())
@@ -1208,7 +1220,7 @@ export class MySceneGraph {
         if (!component) return;
 
         for (const primitive of component.primitives) {
-            console.log("Registering primitive " + primitive + " with pick id " + currPickId);
+            // console.log("Registering primitive " + primitive + " with pick id " + currPickId);
             this.scene.registerForPick(currPickId, this.primitives[primitive]);
         }
 

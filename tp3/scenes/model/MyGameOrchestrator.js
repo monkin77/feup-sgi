@@ -69,4 +69,15 @@ export default class MyGameOrchestrator {
         // TODO: Implement replay
         this._sequence.replay();
     }
+
+    /**
+     * Sets the pickId of the components to null
+     */
+    clearPickRegistration() {
+        if (this._scene.inited) {
+            for (const component of Object.values(this._theme.componentsParser.components)) {
+                component.resetPickId();
+            }
+        }
+    }
 }

@@ -88,4 +88,13 @@ export class MySphere extends CGFobject {
 
         this.updateTexCoordsGLBuffers();
     }
+
+    /**
+     * 
+     * @param {*} idx Index to add to the original id 
+     * @returns New object with the same properties as the original one, but with a different id
+     */
+    copy(idx) {
+        return new MySphere(this.scene, `${this.id}-${idx}`, this.radius, this.slices, this.stacks);
+    }
 }

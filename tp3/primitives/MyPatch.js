@@ -35,4 +35,13 @@ export class MyPatch extends CGFobject {
     display() {
         this.obj.display();
     }
+
+    /**
+     * 
+     * @param {*} idx Index to add to the original id 
+     * @returns New object with the same properties as the original one, but with a different id
+     */
+    copy(idx) {
+        return new MyPatch(this.scene, `${this.id}-${idx}`, this.degreeU, this.degreeV, this.partsU, this.partsV, this.controlPoints);
+    }
 }

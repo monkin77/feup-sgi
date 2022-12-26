@@ -50,7 +50,8 @@ export default class MyPiece {
      * @param {number} currPickId 
      */
     registerPicking(currPickId) {
-        this._sceneGraph.registerPickingComponent(this._coveredCylinder, currPickId);
+        this._coveredCylinder.setPickId(currPickId);
+        // this._sceneGraph.registerPickingComponent(this._coveredCylinder, currPickId);
     }
 
     get id() {

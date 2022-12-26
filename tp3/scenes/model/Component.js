@@ -19,6 +19,8 @@ export class Component {
         this._components = children.components;
         this._currMaterial = 0;
         this._highlighted = highlighted;
+
+        this._pickingId = -1;
     }
 
     get id() {
@@ -50,6 +52,10 @@ export class Component {
         return this._highlighted;
     }
 
+    get pickingId() {
+        return this._pickingId;
+    }
+
     nextMaterial() {
         this._currMaterial = (this._currMaterial + 1) % this.materials.length;
     }
@@ -58,4 +64,12 @@ export class Component {
     hasAnimation = () => !!this._animation;
 
     isHighlighted = () => this._highlighted != null && this._highlighted.active;
+
+    isSelectable = () => this._pickingId != -1;
+
+    resetPickId = () => this._pickingId = -1;
+
+    setPickId = (pickId) => {
+        this._pickingId = pickId
+    };
 }

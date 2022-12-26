@@ -227,6 +227,7 @@ export class XMLscene extends CGFscene {
 
 		// this resets the picking buffer (association between objects and ids)
 		this.clearPickRegistration();
+        this.gameOrchestrator.clearPickRegistration();
 
 
         // ---- BEGIN Background, camera and axis setup
@@ -253,6 +254,7 @@ export class XMLscene extends CGFscene {
             this.updateAllLights();
 
             // Displays the game
+            this.customPrimitiveIdx = 0;    // Reset the custom primitive index
             this.gameOrchestrator.display();
         }
 
