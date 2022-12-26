@@ -104,4 +104,16 @@ export default class MyTile {
         }
         return false;
     }
+
+    /**
+     * Clones the tile
+     */
+    clone() {
+        const clone = Object.create(
+            Object.getPrototypeOf(this), 
+            Object.getOwnPropertyDescriptors(this) 
+        );
+        clone._piece = this._piece?.clone();
+        return clone;
+    }
 }

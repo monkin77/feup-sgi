@@ -21,17 +21,18 @@ export default class MyGameMove {
      */
     validate() {
         const possibleMoves = this._board.getPossibleMoves(this._fromTile);
-        // TODO: Check if this works
         if (!possibleMoves.includes(this._toTile)) return false;
         return true;
     }
 
     /**
-     * Executes the move and updates the board
-     * Assumes a validated move
+     * Executes the move and returns an updated board.
+     * Assumes a valid move
      */
     execute() {
-        // TODO: Maintain old board
-        this._board.movePiece(this._piece, this._fromTile, this._toTile);
+        const newBoard = this._board;
+        this._board = this._board.clone();
+        newBoard.movePiece(this._piece, this._fromTile, this._toTile);
+        return newBoard;
     }
 }

@@ -95,4 +95,13 @@ export default class MyPiece {
         return this._isKing;
     }
 
+    /**
+     * Clone the piece
+     */
+    clone() {
+        return Object.create(
+            Object.getPrototypeOf(this), 
+            Object.getOwnPropertyDescriptors(this) 
+        );
+    }
 }

@@ -323,10 +323,23 @@ export default class MyBoard {
      * @param {MyTile} tile
      */
     getTileCoordinates(tile) {
-        // TODO: Check if this works and consider adding coordinates to the tile class
+        // TODO: Consider adding coordinates to the tile class
         const index = this._tiles.indexOf(tile);
         const i = Math.floor(index / tilesPerSide);
         const j = index % tilesPerSide;
         return { i, j };
+    }
+
+    /**
+     * Clones the board
+     */
+    clone() {
+        const clone = Object.create(
+            Object.getPrototypeOf(this), 
+            Object.getOwnPropertyDescriptors(this) 
+        );
+        clone._tiles = clone._tiles.map(tile => tile.clone());
+        clone._capturedPieces = this._capturedPieces.map(piece => piece.clone());
+        return clone;
     }
 }
