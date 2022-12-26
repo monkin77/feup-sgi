@@ -193,6 +193,7 @@ export class XMLscene extends CGFscene {
 
     /**
      * Log Picking checks the buffer of picked objects and collects their ids
+     * The Checkers pieces are identified by their position on the board. The pick ids from 1-64 are reserved for the board
      */
     logPicking()
 	{
@@ -204,7 +205,7 @@ export class XMLscene extends CGFscene {
 					if (obj)
 					{
 						let customId = this.pickResults[i][1];				
-						console.log("Picked object: " + obj + ", with pick id " + customId);
+						console.log("Picked object: " + obj.id + ", with pick id " + customId);
 					}
 				}
 				this.pickResults.splice(0, this.pickResults.length);

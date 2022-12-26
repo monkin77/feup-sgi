@@ -101,9 +101,8 @@ export default class MyBoard {
         this._woodMaterial.apply();
 
         // Draw the tiles
-        let currPickId = 1;
-        currPickId = this.drawTilesColor(true, currPickId);
-        currPickId = this.drawTilesColor(false, currPickId);
+        this.drawTilesColor(true);
+        this.drawTilesColor(false);
 
         // Draw the pieces
         this.drawPiecesColor(true);
@@ -116,10 +115,8 @@ export default class MyBoard {
     /**
      * Draws the tiles of the board with the given color
      * @param {*} isWhite 
-     * @param {number} currPickId Numeric id to be used for picking
-     * @returns {number} The next pick id to be used
      */
-    drawTilesColor(isWhite, currPickId) {
+    drawTilesColor(isWhite) {
         const tileTexture = isWhite ? this._whiteTileTexture : this._blackTileTexture;
         // Apply texture for white tiles
         this._woodMaterial.setTexture(tileTexture);
@@ -134,17 +131,17 @@ export default class MyBoard {
                 this._scene.pushMatrix();
                 this._scene.translate(j * this._tileSideLength, i * this._tileSideLength, 0);
 
-                const currTile = this._tiles[i * tilesPerSide + j];
-                // Increment the currPickId if the tile is selectable
-                if (currTile.registerPicking(this._turn, currPickId)) currPickId++;
+                const currTileIdx = i * tilesPerSide + j;
+                const currTile = this._tiles[currTileIdx];
+
+                const currPickId = currTileIdx + 1; // +1 because 0 is reserved
+                currTile.registerPicking(this._turn, currPickId);
 
                 currTile.display();
 
                 this._scene.popMatrix();
             }
         }
-
-        return currPickId;
     }
 
     /**
