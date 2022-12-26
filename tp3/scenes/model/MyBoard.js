@@ -14,7 +14,7 @@ export default class MyBoard {
      * @param {*} sideLength 
      */
     constructor(sceneGraph, x, y, z, sideLength) {
-        this._sceneGraph = sceneGraph;
+        this._sceneGraph = sceneGraph; // TODO: Alternative to using the scene graph
 
         this._scene = sceneGraph.scene;
         this._x = x;

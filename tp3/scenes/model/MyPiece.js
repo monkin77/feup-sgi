@@ -1,5 +1,4 @@
 import { MySceneGraph } from "../../MySceneGraph.js";
-import { MyCylinder } from "../../primitives/MyCylinder.js";
 
 // Scale factor to make the piece smaller than the tile
 const pieceScaleFactor = 0.65;
@@ -17,7 +16,7 @@ export default class MyPiece {
      * @param {*} height 
      */
     constructor(sceneGraph, id, isWhite, sideLength, height = 1) {
-        this._sceneGraph = sceneGraph;
+        this._sceneGraph = sceneGraph; // TODO: Alternative to using the scene graph
 
         this._scene = sceneGraph.scene;
         this._id = id;

@@ -87,15 +87,8 @@ export class MySceneGraph {
 
         this.loadedOk = true;
 
-        // Create the board
-        this.prepareBoard();
-
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.scene.onGraphLoaded();
-    }
-
-    prepareBoard() {
-        this.board = new MyBoard(this, -5, 0, 10, 20);
     }
 
     /**
@@ -1114,8 +1107,6 @@ export class MySceneGraph {
             null,
             null
         );
-
-        this.board.display();
     }
 
     /**

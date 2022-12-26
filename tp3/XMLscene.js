@@ -1,5 +1,6 @@
 import { CGFscene, CGFshader } from "../lib/CGF.js";
 import { CGFaxis, CGFcamera } from "../lib/CGF.js";
+import MyGameOrchestrator from "./scenes/model/MyGameOrchestrator.js";
 import { updateLight } from "./scenes/parser/utils.js";
 
 /**
@@ -9,13 +10,14 @@ export class XMLscene extends CGFscene {
     /**
      * @constructor
      * @param {MyInterface} myinterface
+     * @param {MyGameOrchestrator} gameOrchestrator
      */
-    constructor(myinterface) {
+    constructor(myinterface, filename) {
         super();
 
         this.interface = myinterface;
         this.setUpdatePeriod(100);
-        this.startTime = null;
+        this._filename = filename;
     }
 
     /**
@@ -41,6 +43,9 @@ export class XMLscene extends CGFscene {
         this.initShaders();
 
         this.setUpdatePeriod(100);
+
+        this.gameOrchestrator = new MyGameOrchestrator(this._filename, this);
+        this.startTime = null;
     }
 
     /**
@@ -172,12 +177,10 @@ export class XMLscene extends CGFscene {
     update(t) {
         if (!this.sceneInited) return;
         if (this.startTime === null) this.startTime = t;
-        for (const animation of Object.values(this.graph.animations))
-            animation.update(t - this.startTime);
+        this.gameOrchestrator.update(t - this.startTime);
 
         let currTimeStep = Math.floor(t / this.slowdownSteps) % this.totalSteps;
         this.timeFactor = (1 + Math.sin(this.highlightAngVelocity * currTimeStep)) / 2.0;
-        // console.log(t, currTimeStep, this.timeFactor);
 
         this.highlightShader.setUniformsValues({ timeFactor: this.timeFactor });
     }
@@ -210,8 +213,8 @@ export class XMLscene extends CGFscene {
 
             this.updateAllLights();
 
-            // Displays the scene (MySceneGraph function).
-            this.graph.displayScene();
+            // Displays the game
+            this.gameOrchestrator.display();
         }
 
         this.popMatrix();
