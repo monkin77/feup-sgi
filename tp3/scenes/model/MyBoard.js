@@ -41,6 +41,8 @@ export default class MyBoard {
      */
     buildTiles() {
         const tiles = [];
+        const whitePieces = [];
+        const blackPieces = [];
 
         for (let i = 0; i < tilesPerSide; i++) {
             for (let j = 0; j < tilesPerSide; j++) {
@@ -52,6 +54,10 @@ export default class MyBoard {
                 if (!isWhite && (i < startRowsWithDiscs || i > tilesPerSide - startRowsWithDiscs - 1)) {
                     // If the tile is in the first or last rows, it has a piece
                     piece = new MyPiece(this._sceneGraph, `piece-${idNumber}`, i < startRowsWithDiscs, this._tileSideLength);
+
+                    // Add new Piece to the corresponding array
+                    if (isWhite) whitePieces.push(piece);
+                    else blackPieces.push(piece);
                 }
 
                 tiles.push(new MyTile(this._scene, `tile-${idNumber}`, this._tileSideLength, isWhite, piece));
@@ -59,6 +65,8 @@ export default class MyBoard {
         }
 
         this._tiles = tiles;
+        this._whitePieces = whitePieces;
+        this._blackPieces = blackPieces;
     }
 
     /**

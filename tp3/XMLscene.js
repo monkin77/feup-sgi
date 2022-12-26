@@ -46,6 +46,9 @@ export class XMLscene extends CGFscene {
 
         this.gameOrchestrator = new MyGameOrchestrator(this._filename, this);
         this.startTime = null;
+
+        // the activation of picking capabilities in WebCGF
+        this.setPickEnabled(true);
     }
 
     /**
@@ -190,6 +193,19 @@ export class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
+        // ---- BEGIN Picking setup
+        // When picking is enabled, the scene's display method is called once for picking, 
+		// and then again for rendering.
+		// logPicking does nothing in the beginning of the first pass (when pickMode is true)
+		// during the first pass, a picking buffer is filled.
+		// in the beginning of the second pass (pickMode false), logPicking checks the buffer and
+		// collects the id's of the picked object(s) 
+		this.logPicking();
+
+		// this resets the picking buffer (association between objects and ids)
+		this.clearPickRegistration();
+
+
         // ---- BEGIN Background, camera and axis setup
 
         // Clear image and depth buffer everytime we update the scene
