@@ -240,9 +240,14 @@ export default class MyBoard {
                 const currTileIdx = i * tilesPerSide + j;
                 const currTile = this._tiles[currTileIdx];
 
-                currTile.registerPicking(turn, possibleTiles, MyGameOrchestrator.pickingId++);
+                const isTargetTile = possibleTiles.includes(currTile);
+                currTile.registerPicking(turn, isTargetTile, MyGameOrchestrator.pickingId++);
+
+                if (isTargetTile) this.highlightMaterial();
 
                 currTile.display();
+
+                if (isTargetTile) this.resetMaterial();
 
                 this._scene.popMatrix();
             }
@@ -250,10 +255,8 @@ export default class MyBoard {
     }
 
     /**
-     * TODO: Add click handler for the other tiles to deselect
-     * TODO: Add picking for the possible moves after selection
-     * TODO: Show highlight for the possible moves
      * TODO: Perform the move and change turn
+     * TODO: Add Light on top of selected piece
      */
 
     /**
@@ -276,24 +279,35 @@ export default class MyBoard {
                     this._scene.pushMatrix();
                     this._scene.translate(j * this._tileSideLength, i * this._tileSideLength, 0);
 
-                    if (selectedTile == tile) {
-                        this._woodMaterial.setAmbient(0.8, 0.8, 0, 1);
-                        this._woodMaterial.setEmission(0.2, 0.2, 0.2, 1);
-                        this._woodMaterial.apply();
-                    }
+                    if (selectedTile == tile) this.highlightMaterial();
                     
                     tile.displayPiece();
                     
-                    if (selectedTile == tile) {
-                        this._woodMaterial.setAmbient(1, 1, 1, 1);
-                        this._woodMaterial.setEmission(0, 0, 0, 1);
-                        this._woodMaterial.apply();
-                    }
+                    if (selectedTile == tile) this.resetMaterial();
 
                     this._scene.popMatrix();
                 }
             }
         }
+    }
+
+    /**
+     * Highlights the board's material
+     */
+    highlightMaterial() {
+        this._woodMaterial.setAmbient(0.8, 0.8, 0, 1);
+        this._woodMaterial.setDiffuse(0.8, 0.8, 0, 1);
+        this._woodMaterial.setSpecular(0.8, 0.8, 0, 1);
+        this._woodMaterial.setEmission(0.4, 0.4, 0.4, 1);
+        this._woodMaterial.apply();
+    }
+
+    resetMaterial() {
+        this._woodMaterial.setAmbient(1, 1, 1, 1);
+        this._woodMaterial.setDiffuse(1, 1, 1, 1);
+        this._woodMaterial.setSpecular(1, 1, 1, 1);
+        this._woodMaterial.setEmission(0, 0, 0, 1);
+        this._woodMaterial.apply();
     }
 
     get x() {
