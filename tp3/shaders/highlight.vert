@@ -52,6 +52,8 @@ out vec2 vTextureCoord;
 uniform float timeFactor;   // Time factor is a value between [0, 1.0]
 uniform float highlightScale;
 
+uniform vec4 uPickColor;    // picking
+
 vec4 lighting(vec4 vertex, vec3 E, vec3 N) {
 
     vec4 result = vec4(0.0, 0.0, 0.0, 0.0);
@@ -120,7 +122,8 @@ void main() {
     vec3 eyeVec = -vec3(vertex.xyz);
     vec3 E = normalize(eyeVec);
 
-    vFinalColor = lighting(vertex, E, N);
+    // vFinalColor = lighting(vertex, E, N);
+    vFinalColor = uPickColor;
 
 	gl_Position = uPMatrix * vertex;
 

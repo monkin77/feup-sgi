@@ -18,6 +18,7 @@ export class MyCylinder extends CGFobject {
         this.h = h;
         this.slices = slices;
         this.stacks = stacks;
+        this.id = id;
 
         this.initBuffers();
     }
@@ -87,5 +88,14 @@ export class MyCylinder extends CGFobject {
         }
 
         this.updateTexCoordsGLBuffers();
+    }
+
+    /**
+     * 
+     * @param {*} idx Index to add to the original id 
+     * @returns New object with the same properties as the original one, but with a different id
+     */
+    copy(idx) {
+        return new MyCylinder(this.scene, `${this.id}-${idx}`, this.radiusBot, this.radiusTop, this.h, this.slices, this.stacks);
     }
 }

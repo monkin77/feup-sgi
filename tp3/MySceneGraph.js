@@ -20,7 +20,8 @@ import { MaterialsParser } from "./scenes/parser/MaterialsParser.js";
 import { Component } from "./scenes/model/Component.js";
 import { TexturesParser } from "./scenes/parser/TexturesParser.js";
 import { AnimationsParser } from "./scenes/parser/AnimationsParser.js";
-import MyBoard from "./scenes/model/MyBoard.js";
+import MyBoard from "./scenes/model/checkers/MyBoard.js";
+import PickingInfo from "./scenes/model/PickingInfo.js";
 
 // Order of the groups in the XML document.
 const SCENE_INDEX = 0;
@@ -1105,6 +1106,7 @@ export class MySceneGraph {
         this.drawComponent(
             this.componentsParser.components[this.idRoot],
             null,
+            null,
             null
         );
     }
@@ -1114,8 +1116,9 @@ export class MySceneGraph {
      * @param {Component} component
      * @param {string | null} prevAppearenceId
      * @param {Texture | null} prevTexture
+     * @param {PickingInfo | null} pickingInfo - Optional pickingInfo to associate to all the primitives of the component and its children
      */
-    drawComponent(component, prevAppearenceId = null, prevTexture = null) {
+    drawComponent(component, prevAppearenceId = null, prevTexture = null, pickingInfo = null) {
         this.scene.pushMatrix();
 
         if (!component) return;
@@ -1170,15 +1173,20 @@ export class MySceneGraph {
         }
 
         for (const primitive of component.primitives) {
+            let currPrimitive = this.primitives[primitive];
+
+            if (pickingInfo != null) this.scene.registerForPick(pickingInfo.id, pickingInfo.object);
+
             if (texture && texture.needsScaling()) {
-                this.primitives[primitive].scaleTexCoords(
+                currPrimitive.scaleTexCoords(
                     texture.length_s,
                     texture.length_t
                 );
             }
-            this.primitives[primitive].display();
+
+            currPrimitive.display();
             // Reset texture coords scale
-            this.primitives[primitive].scaleTexCoords(1.0, 1.0);
+            currPrimitive.scaleTexCoords(1.0, 1.0);
         }
 
         if (component.isHighlighted())
@@ -1192,7 +1200,8 @@ export class MySceneGraph {
             this.drawComponent(
                 this.componentsParser.components[childComponent],
                 appearenceId,
-                texture
+                texture,
+                pickingInfo
             );
         }
 

@@ -93,4 +93,13 @@ export class MyTorus extends CGFobject {
 
         this.updateTexCoordsGLBuffers();
     }
+
+    /**
+     * 
+     * @param {*} idx Index to add to the original id 
+     * @returns New object with the same properties as the original one, but with a different id
+     */
+    copy(idx) {
+        return new MyTorus(this.scene, `${this.id}-${idx}`, this.inner, this.outer, this.slices, this.loops);
+    }
 }

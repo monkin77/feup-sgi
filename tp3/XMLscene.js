@@ -1,6 +1,6 @@
 import { CGFscene, CGFshader } from "../lib/CGF.js";
 import { CGFaxis, CGFcamera } from "../lib/CGF.js";
-import MyGameOrchestrator from "./scenes/model/MyGameOrchestrator.js";
+import MyGameOrchestrator from "./scenes/model/checkers/MyGameOrchestrator.js";
 import { updateLight } from "./scenes/parser/utils.js";
 
 /**
@@ -46,6 +46,9 @@ export class XMLscene extends CGFscene {
 
         this.gameOrchestrator = new MyGameOrchestrator(this._filename, this);
         this.startTime = null;
+
+        // the activation of picking capabilities in WebCGF
+        this.setPickEnabled(true);
     }
 
     /**
@@ -77,6 +80,8 @@ export class XMLscene extends CGFscene {
      */
     initShaders() {
         this.highlightShader = new CGFshader(this.gl, './shaders/highlight.vert', './shaders/highlight.frag');
+        this.pickingShader = new CGFshader(this.gl, './shaders/picking.vert', './shaders/picking.frag');
+
         this.timeFactor = 0;
         this.totalSteps = 100;
         this.slowdownSteps = 40;
@@ -122,6 +127,9 @@ export class XMLscene extends CGFscene {
 
         this.setupInterface();
 
+        // Initialize Board
+        this.gameOrchestrator.initBoard();
+            
         this.sceneInited = true;
     }
 
@@ -185,11 +193,48 @@ export class XMLscene extends CGFscene {
         this.highlightShader.setUniformsValues({ timeFactor: this.timeFactor });
     }
 
+    /**
+     * Log Picking checks the buffer of picked objects and collects their ids
+     * The Checkers pieces are identified by their position on the board. The pick ids from 1-64 are reserved for the board
+     */
+    logPicking()
+	{
+		if (this.pickMode == false) {
+			// results can only be retrieved when picking mode is false
+			if (this.pickResults != null && this.pickResults.length > 0) {
+				for (let i=0; i< this.pickResults.length; i++) {
+					const obj = this.pickResults[i][0];
+					if (obj)
+					{
+						let customId = this.pickResults[i][1];				
+						console.log("Picked object: " + obj.id + ", with pick id " + customId);
+                        
+                        this.gameOrchestrator.onClick(obj);
+					}
+				}
+				this.pickResults.splice(0, this.pickResults.length);
+			}		
+		}
+	}
 
     /**
      * Displays the scene.
      */
     display() {
+        // ---- BEGIN Picking setup
+        // When picking is enabled, the scene's display method is called once for picking, 
+		// and then again for rendering.
+		// logPicking does nothing in the beginning of the first pass (when pickMode is true)
+		// during the first pass, a picking buffer is filled.
+		// in the beginning of the second pass (pickMode false), logPicking checks the buffer and
+		// collects the id's of the picked object(s) 
+		this.logPicking();
+
+		// this resets the picking buffer (association between objects and ids)
+		this.clearPickRegistration();
+        this.gameOrchestrator.clearPickRegistration();
+
+
         // ---- BEGIN Background, camera and axis setup
 
         // Clear image and depth buffer everytime we update the scene
@@ -214,6 +259,7 @@ export class XMLscene extends CGFscene {
             this.updateAllLights();
 
             // Displays the game
+            this.customPrimitiveIdx = 0;    // Reset the custom primitive index
             this.gameOrchestrator.display();
         }
 

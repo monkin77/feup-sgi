@@ -79,4 +79,13 @@ export class MyTriangle extends CGFobject {
         }
         this.updateTexCoordsGLBuffers();
     }
+
+    /**
+     * 
+     * @param {*} idx Index to add to the original id 
+     * @returns New object with the same properties as the original one, but with a different id
+     */
+    copy(idx) {
+        return new MyTriangle(this.scene, `${this.id}-${idx}`, this.x1, this.x2, this.x3, this.y1, this.y2, this.y3, this.z1, this.z2, this.z3);
+    }
 }

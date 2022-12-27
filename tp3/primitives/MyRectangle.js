@@ -14,6 +14,7 @@ export class MyRectangle extends CGFobject {
         this.x2 = x2;
         this.y1 = y1;
         this.y2 = y2;
+        this.id = id;
 
         this.initialTexCoords = [
             0, 0,
@@ -84,5 +85,14 @@ export class MyRectangle extends CGFobject {
         }
 
         this.updateTexCoordsGLBuffers();
+    }
+
+    /**
+     * 
+     * @param {*} idx Index to add to the original id 
+     * @returns New object with the same properties as the original one, but with a different id
+     */
+    copy(idx) {
+        return new MyRectangle(this.scene, `${this.id}-${idx}`, this.x1, this.x2, this.y1, this.y2);
     }
 }
