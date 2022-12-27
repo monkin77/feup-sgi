@@ -435,6 +435,20 @@ export default class MyBoard {
     }
 
     /**
+     * Gets the difference between the coordinates of the two given tiles
+     * @param {MyTile} tile1
+     * @param {MyTile} tile2
+     * @returns {{x: number, y: number}} the difference between the coordinates of the two given tiles
+     */
+    getDifferenceBetweenTiles(tile1, tile2) {
+        const { i: i1, j: j1 } = this.getTileCoordinates(tile1);
+        const { i: i2, j: j2 } = this.getTileCoordinates(tile2);
+        const rowDiff = -(i1 - i2) * this._tileSideLength; // The y axis is inverted
+        const colDiff = -(j1 - j2) * this._tileSideLength; // The x axis is inverted
+        return { rowDiff, colDiff };
+    }
+
+    /**
      * Clones the board
      */
     clone() {

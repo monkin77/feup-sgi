@@ -7,7 +7,16 @@ export default class MoveAnimState extends State {
         super(orchestrator);
         this._move = move;
         this._nextPlayer = nextPlayer;
-        this._animation = new MoveAnimation(this.orchestrator._scene);
+
+        const { rowDiff, colDiff } = move.board.getDifferenceBetweenTiles(move.fromTile, move.toTile);
+        // TODO: Fix this offset, there's a small difference between the piece's center and the tile's center
+        const baseOffset = - move.piece.radius + move.piece.sideLength / 2;
+        const rowOffset = Math.sign(rowDiff) * baseOffset;
+        const colOffset = Math.sign(colDiff) * baseOffset;
+        this._animation = new MoveAnimation(
+            this.orchestrator._scene,
+            colDiff + colOffset, rowDiff + rowOffset
+        );
     }
 
     onClick(obj) {
@@ -18,6 +27,7 @@ export default class MoveAnimState extends State {
     update(t) {
         if (!this._animation.hasStarted()) {
             this._animation.start();
+            this._move.piece.animation = this._animation;
         }
 
         this._animation.update(t);
@@ -25,13 +35,12 @@ export default class MoveAnimState extends State {
         // TODO: Check collisions and trigger collection animations
 
         if (this._animation.ended) {
+            this._move.piece.animation = null;
             this._orchestrator.state = new TurnState(this._orchestrator, this._nextPlayer);
         }
     }
 
     display() {
-        this._move.piece.animation = this._animation;
-        this._move._board.display();
-        this._move.piece.animation = null;
+        this._move.board.display();
     }
 }

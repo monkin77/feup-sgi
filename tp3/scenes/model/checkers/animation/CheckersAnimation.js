@@ -17,11 +17,7 @@ export default class CheckersAnimation extends MyAnimation {
         }
 
         this._ended = false;
-        this.keyFrameAnimation = new KeyFrameAnimation(
-            scene,
-            this.getKeyFrameID(),
-            this.buildKeyFrames()
-        );
+        this._scene = scene;
     }
 
     /**
@@ -83,6 +79,11 @@ export default class CheckersAnimation extends MyAnimation {
      */
     start() {
         this.started = true;
+        this.keyFrameAnimation = new KeyFrameAnimation(
+            this._scene,
+            this.getKeyFrameID(),
+            this.buildKeyFrames()
+        );
     }
 
     /**

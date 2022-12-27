@@ -122,6 +122,10 @@ export default class MyPiece {
         this._animation = animation;
     }
 
+    get radius() {
+        return this._radius;
+    }
+
     /**
      * Clone the piece
      */

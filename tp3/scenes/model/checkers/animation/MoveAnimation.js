@@ -5,8 +5,10 @@ const MOVE_ANIMATION_DURATION = 1000;
 const MOVE_ANIMATION_ID = "move-animation-a-totally-random-string";
 
 export default class MoveAnimation extends CheckersAnimation {
-    constructor(scene) {
+    constructor(scene, dx, dy) {
         super(scene);
+        this._dx = dx;
+        this._dy = dy;
     }
 
     /**
@@ -16,7 +18,7 @@ export default class MoveAnimation extends CheckersAnimation {
     buildKeyFrames() {
         return [
             this.buildKeyFrame(0, [0, 0, 0], [0, 0, 0], [1, 1, 1]),
-            this.buildKeyFrame(1, [1, 0, 0], [0, 0, 0], [1, 1, 1]),
+            this.buildKeyFrame(1, [this._dx, this._dy, 0], [0, 0, 0], [1, 1, 1]),
         ];
     }
 
