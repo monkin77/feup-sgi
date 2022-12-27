@@ -1,8 +1,9 @@
 import { CGFappearance, CGFtexture } from "../../../../lib/CGF.js";
-import { player1, startRowsWithDiscs, tilesPerSide } from "../../../utils/checkers.js";
-import { calcVector, updateLight } from "../../parser/utils.js";
+import { startRowsWithDiscs, tilesPerSide } from "../../../utils/checkers.js";
+import { updateLight } from "../../parser/utils.js";
 import MyGameOrchestrator from "./MyGameOrchestrator.js";
 import MyPiece from "./MyPiece.js";
+import MyStorage from "./MyStorage.js";
 import MyTile from "./MyTile.js";
 
 const spotlightDistance = 2;
@@ -27,18 +28,18 @@ export default class MyBoard {
         this._sideLength = sideLength;
         this._tileSideLength = sideLength / tilesPerSide;
 
-        this.buildTiles();
-        this._capturedPieces = []; // TODO: Display captured pieces
-
-        this._woodMaterial = new CGFappearance(this._scene); // Appearence for wood with default values
-        this._woodMaterial.setAmbient(1, 1, 1, 1);
-        this._woodMaterial.setDiffuse(1, 1, 1, 1);
-        this._woodMaterial.setSpecular(1, 1, 1, 1);
+        this._boardMaterial = new CGFappearance(this._scene); // Appearence for wood with default values
+        this._boardMaterial.setAmbient(1, 1, 1, 1);
+        this._boardMaterial.setDiffuse(1, 1, 1, 1);
+        this._boardMaterial.setSpecular(1, 1, 1, 1);
 
         this._whiteTileTexture = new CGFtexture(this._scene, "scenes/images/board/light_tile.png");
         this._blackTileTexture = new CGFtexture(this._scene, "scenes/images/board/dark_tile.png");
         this._whiteDiscTexture = new CGFtexture(this._scene, "scenes/images/board/light_wood_disc2.jpg");
         this._blackDiscTexture = new CGFtexture(this._scene, "scenes/images/board/dark_wood_disc2.jpg");
+
+        this.buildTiles();
+        this.buildStorages();
 
         /* 
         Initialize the Spotlight
@@ -65,9 +66,11 @@ export default class MyBoard {
                 const isWhite = (j + offset) % 2 != 0;
 
                 let piece = null;
-                if (!isWhite && (i < startRowsWithDiscs || i > tilesPerSide - startRowsWithDiscs - 1)) {
+                const pieceIsWhite = i < startRowsWithDiscs;
+                if (!isWhite && (pieceIsWhite || i > tilesPerSide - startRowsWithDiscs - 1)) {
                     // If the tile is in the first or last rows, it has a piece
-                    piece = new MyPiece(this._sceneGraph, `piece-${idNumber}`, i < startRowsWithDiscs, this._tileSideLength);
+                    const texture = pieceIsWhite ? this._whiteDiscTexture : this._blackDiscTexture;
+                    piece = new MyPiece(this._sceneGraph, `piece-${idNumber}`, pieceIsWhite, this._tileSideLength, texture, this._boardMaterial);
 
                     // Add new Piece to the corresponding array
                     if (isWhite) whitePieces.push(piece);
@@ -92,6 +95,14 @@ export default class MyBoard {
     }
 
     /**
+     * Auxiliary function to build the storages for the captured pieces
+     */
+    buildStorages() {
+        this._whiteStorage = new MyStorage(this._scene, "white-storage", this._sideLength, true, this._boardMaterial);
+        this._blackStorage = new MyStorage(this._scene, "black-storage", this._sideLength, false, this._boardMaterial);
+    }
+
+    /**
      * Moves a piece from one tile to another. Checks if any piece is captured and updates the board
      * @param {MyPiece} piece
      * @param {MyTile} fromTile
@@ -109,7 +120,10 @@ export default class MyBoard {
         const middleTiles = this.getDiagonalBetweenTiles(fromTile, toTile);
         for (const tile of middleTiles) {
             if (tile.hasPiece()) {
-                this._capturedPieces.push(tile.piece);
+                // Add captured piece to the corresponding storage
+                if (piece.isWhite) this._whiteStorage.addPiece(tile.piece);
+                else this._blackStorage.addPiece(tile.piece);
+
                 tile.removePiece();
             }
         }
@@ -211,7 +225,7 @@ export default class MyBoard {
 
 
         // Apply wood material
-        this._woodMaterial.apply();
+        this._boardMaterial.apply();
 
         // Calculate the possible moves from the selected tile
         const possibleTiles = selectedTile ? this.getPossibleMoves(selectedTile) : [];
@@ -223,6 +237,10 @@ export default class MyBoard {
         // Draw the pieces
         this.drawPiecesColor(true, selectedTile);
         this.drawPiecesColor(false, selectedTile);
+
+        // Draw the Storages
+        this._whiteStorage.display();
+        this._blackStorage.display();
 
         this._scene.popMatrix();
     }
@@ -236,9 +254,9 @@ export default class MyBoard {
     drawTilesColor(isWhite, turn, possibleTiles) {
         const tileTexture = isWhite ? this._whiteTileTexture : this._blackTileTexture;
         // Apply texture for white tiles
-        this._woodMaterial.setTexture(tileTexture);
-        this._woodMaterial.setTextureWrap("REPEAT", "REPEAT");
-        this._woodMaterial.apply();
+        this._boardMaterial.setTexture(tileTexture);
+        this._boardMaterial.setTextureWrap("REPEAT", "REPEAT");
+        this._boardMaterial.apply();
 
         for (let i = 0; i < tilesPerSide; i++) {
             let offset = i % 2 == 0 ? 0 : 1; // offset for the tiles in the odd rows (black tiles)
@@ -271,12 +289,6 @@ export default class MyBoard {
      * @param {MyTile} selectedTile
      */
     drawPiecesColor(isWhite, selectedTile) {
-        const tileTexture = isWhite ? this._whiteDiscTexture : this._blackDiscTexture;
-        // Apply texture for white tiles
-        this._woodMaterial.setTexture(tileTexture);
-        this._woodMaterial.setTextureWrap("REPEAT", "REPEAT");
-        this._woodMaterial.apply();
-
         for (let i = 0; i < tilesPerSide; i++) {
             for (let j = 0; j < tilesPerSide; j++) {
                 const tileIdx = i * tilesPerSide + j;
@@ -301,19 +313,19 @@ export default class MyBoard {
      * Highlights the board's material
      */
     highlightMaterial(withEmission = false) {
-        this._woodMaterial.setAmbient(0.5, 0.5, 0, 1);
-        this._woodMaterial.setDiffuse(0.5, 0.5, 0, 1);
-        this._woodMaterial.setSpecular(0.5, 0.5, 0, 1);
-        if (withEmission) this._woodMaterial.setEmission(0.8, 0.8, 0.8, 1);
-        this._woodMaterial.apply();
+        this._boardMaterial.setAmbient(0.5, 0.5, 0, 1);
+        this._boardMaterial.setDiffuse(0.5, 0.5, 0, 1);
+        this._boardMaterial.setSpecular(0.5, 0.5, 0, 1);
+        if (withEmission) this._boardMaterial.setEmission(0.8, 0.8, 0.8, 1);
+        this._boardMaterial.apply();
     }
 
     resetMaterial() {
-        this._woodMaterial.setAmbient(1, 1, 1, 1);
-        this._woodMaterial.setDiffuse(1, 1, 1, 1);
-        this._woodMaterial.setSpecular(1, 1, 1, 1);
-        this._woodMaterial.setEmission(0, 0, 0, 1);
-        this._woodMaterial.apply();
+        this._boardMaterial.setAmbient(1, 1, 1, 1);
+        this._boardMaterial.setDiffuse(1, 1, 1, 1);
+        this._boardMaterial.setSpecular(1, 1, 1, 1);
+        this._boardMaterial.setEmission(0, 0, 0, 1);
+        this._boardMaterial.apply();
     }
 
     /**
@@ -431,7 +443,9 @@ export default class MyBoard {
             Object.getOwnPropertyDescriptors(this)
         );
         clone._tiles = clone._tiles.map(tile => tile.clone());
-        clone._capturedPieces = this._capturedPieces.map(piece => piece.clone());
+        clone._whiteStorage = clone._whiteStorage.clone();
+        clone._blackStorage = clone._blackStorage.clone();
+        
         return clone;
     }
 }

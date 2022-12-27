@@ -1,9 +1,10 @@
+import { CGFtexture } from "../../../../lib/CGF.js";
 import { MySceneGraph } from "../../../MySceneGraph.js";
 import PickingInfo from "../PickingInfo.js";
 import MyTile from "./MyTile.js";
 
 // Scale factor to make the piece smaller than the tile
-const pieceScaleFactor = 0.65;
+export const pieceScaleFactor = 0.65;
 
 /**
  * This class represents a piece on the board
@@ -15,9 +16,11 @@ export default class MyPiece {
      * @param {string} id "piece-<tileId>", where tileId is the id of the initial tile the piece is on
      * @param {*} isWhite Whether the piece is white or black
      * @param {number} sideLength sideLength length of the tile the piece is on
+     * @param {CGFtexture} texture
+     * @param {CGFappearance} boardMaterial
      * @param {*} height
      */
-    constructor(sceneGraph, id, isWhite, sideLength, height = 1) {
+    constructor(sceneGraph, id, isWhite, sideLength, texture, boardMaterial, height = 1,) {
         this._sceneGraph = sceneGraph; // TODO: Alternative to using the scene graph
 
         this._scene = sceneGraph.scene;
@@ -26,6 +29,8 @@ export default class MyPiece {
         this._sideLength = sideLength;
         this._discLength = sideLength * pieceScaleFactor;
         this._height = height;
+        this._texture = texture;
+        this._boardMaterial = boardMaterial;
 
         this._radius = this._discLength / 2;
 
@@ -39,19 +44,25 @@ export default class MyPiece {
     }
 
     /**
-     * Displays the piece on the board.
-     * The piece is translated to the center of the tile.
-     * @param {MyTile} tile Tile the piece is on. Used to register the piece for picking with a pointer to the tile
+     * Display the piece. If the piece is on the board, it is translated to the center of the tile.
+     * @param {boolean} onBoard Whether the piece is on the board or not
+     * @param {MyTile | null} tile Tile the piece is on. Used to register the piece for picking with a pointer to the tile
      */
-    display(tile) {
-        // Translate the disc to the center of the tile. Since the scene was already rotated, we translate in the x and y axis
-        this._scene.translate(this._sideLength/2, this._sideLength/2, 0);
+    display(onBoard = false, tile = null) {
+        this._boardMaterial.setTexture(this._texture);
+        this._boardMaterial.setTextureWrap("REPEAT", "REPEAT");
+        this._boardMaterial.apply();
+
+        this._scene.pushMatrix();
+
+        if (onBoard) this._scene.translate(this._sideLength/2, this._sideLength/2, 0);
         this._scene.scale(this._radius, this._radius, 0.25);
 
         // Covered cylinder contains a diameter of 2 and a height of 2
-
         // Currently, all the pieces are registering the picking id. If it's not selectable, it is being registered with -1
         this._sceneGraph.drawComponent(this._coveredCylinder, null, null, new PickingInfo(this._coveredCylinder.pickingId, tile));
+
+        this._scene.popMatrix();
     }
 
     /**

@@ -35,7 +35,7 @@ export default class MyTile {
      * If there is no piece on the tile, nothing is displayed
      */
     displayPiece() {
-        this._piece?.display(this);
+        this._piece?.display(true, this);
     }
 
     /**
