@@ -3,9 +3,6 @@ import { player1, switchPlayer } from "../../../utils/checkers.js";
 import CheckersAnimation from "./CheckersAnimation.js";
 import MyBoard from "./MyBoard.js";
 import MyGameSequence from "./MyGameSequence.js";
-import MyGameMove from "./MyGameMove.js";
-import MyTile from "./MyTile.js";
-import EndGameState from "./state/EndGameState.js";
 import MenuState from "./state/MenuState.js";
 import MoveAnimState from "./state/MoveAnimState.js";
 import TurnState from "./state/TurnState.js";
@@ -29,7 +26,7 @@ export default class MyGameOrchestrator {
         this._sequence = new MyGameSequence();
         this._animator = new CheckersAnimation(this._sequence);
         this._theme = new MySceneGraph(filename, this._scene);
-        this.state = new MenuState();
+        this.state = new MenuState(this);
     }
 
     /**
@@ -38,7 +35,7 @@ export default class MyGameOrchestrator {
     initBoard() {
         this._board = new MyBoard(this._theme, -5, 0, 10, 20);
         if (this.state instanceof MenuState) {
-            this.state = new TurnState(player1);
+            this.state = new TurnState(this, player1, this._board);
         }
     }
 
@@ -120,39 +117,7 @@ export default class MyGameOrchestrator {
      * @param {*} obj Object that was clicked. Can be of various classes 
      */
     onClick(obj) {
-        // TODO: Consider moving this to state class
-        if (this.state instanceof TurnState) {
-            if (obj instanceof MyTile) {
-                this.state = new PickedState(this.state.player, obj);
-            } else {
-                console.log("Clicked object is not being handled");
-            }
-        } else if (this.state instanceof PickedState) {
-            if (obj instanceof MyTile) { // TODO possible tiles not detected
-                const possibleTiles = this._board.getPossibleMoves(this.state.tile);
-                if (possibleTiles.includes(obj)) {
-                    const move = new MyGameMove(
-                        this.state.tile.piece,
-                        this.state.tile,
-                        obj, this._board
-                    );
-                    if (!move.validate()) {
-                        this.state = new TurnState(this.state.player);
-                        return;
-                    }
-
-                    move.execute();
-                    this._sequence.addMove(move);
-                    //this.state = new MoveAnimState(this.state.player);
-                    this.state = new TurnState(switchPlayer(this.state.player));
-                } else if (obj.id === this.state.tile.id) {
-                    this.state = new TurnState(this.state.player);
-                } else {
-                    this.state = new PickedState(this.state.player, obj);
-                }
-            } else {
-                this.state = new TurnState(this.state.player);
-            }
-        }
+        // TODO: Handle general scene clicks
+        this.state = this.state.onClick(obj);
     }
 }
