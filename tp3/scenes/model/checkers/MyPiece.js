@@ -41,7 +41,7 @@ export default class MyPiece {
     /**
      * Displays the piece on the board.
      * The piece is translated to the center of the tile.
-     * @param {MyTile} tile Tile the piece is on
+     * @param {MyTile} tile Tile the piece is on. Used to register the piece for picking with a pointer to the tile
      */
     display(tile) {
         // Translate the disc to the center of the tile. Since the scene was already rotated, we translate in the x and y axis

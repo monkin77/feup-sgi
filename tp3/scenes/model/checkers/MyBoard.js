@@ -96,7 +96,7 @@ export default class MyBoard {
         toTile.checkAndUpgradeToKing();
 
         const middleTiles = this.getDiagonalBetweenTiles(fromTile, toTile);
-        for (tile of middleTiles) {
+        for (const tile of middleTiles) {
             if (tile.hasPiece()) {
                 this._capturedPieces.push(tile.piece);
                 tile.removePiece();
@@ -177,8 +177,8 @@ export default class MyBoard {
             throw Error("The tiles are not in a diagonal");
         }
 
-        for (let i = fromRow, j = fromCol; 
-            i != toRow && j != toCol; 
+        const diagonalTiles = [];
+        for (let i = fromRow, j = fromCol; i != toRow && j != toCol; 
             i += Math.sign(toRow - fromRow), j += Math.sign(toCol - fromCol)) {
             diagonalTiles.push(this.getTileByCoordinates(i, j));
         }

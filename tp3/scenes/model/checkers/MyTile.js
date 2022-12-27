@@ -63,7 +63,7 @@ export default class MyTile {
     }
 
     setTileAndPiecePicking(pickId) {
-        this._scene.registerForPick(pickId, this._rectangle);
+        this._scene.registerForPick(pickId, this);
         if (this.hasPiece()) this._piece.registerPicking(pickId);
     }
 
