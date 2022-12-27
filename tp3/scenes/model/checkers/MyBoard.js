@@ -47,7 +47,6 @@ export default class MyBoard {
         */
         this.initSpotlightProperties = [7, true, "spot", [this._x + this._tileSideLength/2, this._y + spotlightDistance, this._z - this._tileSideLength/2, 1.0], [0, 0, 0, 1], [1, 1, 1, 1], 
             [1, 1, 1, 1], [0, 1, 0], 180, 1, [this._x, this._y, this._z]];
-        updateLight(this._scene.lights[7], this.initSpotlightProperties);
     }
 
     /**
@@ -267,10 +266,6 @@ export default class MyBoard {
     }
 
     /**
-     * TODO: Add Light on top of selected piece
-     */
-
-    /**
      * Draws the pieces of the board with the given color
      * @param {*} isWhite
      * @param {MyTile} selectedTile
@@ -306,10 +301,10 @@ export default class MyBoard {
      * Highlights the board's material
      */
     highlightMaterial(withEmission = false) {
-        this._woodMaterial.setAmbient(0.8, 0.8, 0, 1);
-        this._woodMaterial.setDiffuse(0.8, 0.8, 0, 1);
-        this._woodMaterial.setSpecular(0.8, 0.8, 0, 1);
-        if (withEmission) this._woodMaterial.setEmission(0.4, 0.4, 0.4, 1);
+        this._woodMaterial.setAmbient(0.5, 0.5, 0, 1);
+        this._woodMaterial.setDiffuse(0.5, 0.5, 0, 1);
+        this._woodMaterial.setSpecular(0.5, 0.5, 0, 1);
+        if (withEmission) this._woodMaterial.setEmission(0.8, 0.8, 0.8, 1);
         this._woodMaterial.apply();
     }
 
