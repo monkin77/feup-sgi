@@ -188,6 +188,8 @@ export default class MyBoard {
 
     /**
      * Displays the board
+     * @param {number} turn
+     * @param {MyTile} selectedTile
      */
     display(turn = null, selectedTile = null) {
         this._scene.pushMatrix();
@@ -200,9 +202,12 @@ export default class MyBoard {
         // Apply wood material
         this._woodMaterial.apply();
 
+        // Calculate the possible moves from the selected tile
+        const possibleTiles = selectedTile ? this.getPossibleMoves(selectedTile) : [];
+
         // Draw the tiles
-        this.drawTilesColor(true, turn);
-        this.drawTilesColor(false, turn);
+        this.drawTilesColor(true, turn, possibleTiles);
+        this.drawTilesColor(false, turn, possibleTiles);
 
         // Draw the pieces
         this.drawPiecesColor(true, selectedTile);
@@ -213,9 +218,11 @@ export default class MyBoard {
 
     /**
      * Draws the tiles of the board with the given color
-     * @param {*} isWhite
+     * @param {boolean} isWhite
+     * @param {number} turn
+     * @param {MyTile[]} possibleTiles Possible target tiles from the selected tile
      */
-    drawTilesColor(isWhite, turn) {
+    drawTilesColor(isWhite, turn, possibleTiles) {
         const tileTexture = isWhite ? this._whiteTileTexture : this._blackTileTexture;
         // Apply texture for white tiles
         this._woodMaterial.setTexture(tileTexture);
@@ -233,7 +240,7 @@ export default class MyBoard {
                 const currTileIdx = i * tilesPerSide + j;
                 const currTile = this._tiles[currTileIdx];
 
-                currTile.registerPicking(turn, MyGameOrchestrator.pickingId++);
+                currTile.registerPicking(turn, possibleTiles, MyGameOrchestrator.pickingId++);
 
                 currTile.display();
 
@@ -252,6 +259,7 @@ export default class MyBoard {
     /**
      * Draws the pieces of the board with the given color
      * @param {*} isWhite
+     * @param {MyTile} selectedTile
      */
     drawPiecesColor(isWhite, selectedTile) {
         const tileTexture = isWhite ? this._whiteDiscTexture : this._blackDiscTexture;

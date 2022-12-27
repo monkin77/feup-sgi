@@ -41,12 +41,18 @@ export default class MyTile {
     /**
      * Verifies if the tile has a piece on it from the current player's turn and registers it for picking if it does, incrementing the currPickId
      * @param {number} turn number representing the current player's turn
+     * @param {MyTile[]} possibleTiles Possible target tiles from the selected tile
      * @param {number} currPickId 
      * @returns true if the tile was registered for picking, false otherwise
      */
-    registerPicking(turn, currPickId) {
-        if (true) {
+    registerPicking(turn, possibleTiles, currPickId) {
+        // If the tile has a piece on it and it's the player's turn, register it for picking
+        if (this.hasPiece() && isPlayerTurn(turn, this._piece.isWhite)) {
             // Register the tile's Rectangle and Piece for picking with the currPickId
+            this.setTileAndPiecePicking(currPickId);
+            return true;
+        } else if (possibleTiles.includes(this)) {
+            // If the tile is a possible target tile, register it for picking with the currPickId
             this.setTileAndPiecePicking(currPickId);
             return true;
         }
