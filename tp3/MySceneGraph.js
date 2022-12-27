@@ -318,11 +318,11 @@ export class MySceneGraph {
 
         // Any number of lights.
         for (let i = 0; i < children.length; i++) {
-            if (numLights >= 8) {
+            if (numLights >= 7) {
                 onXMLMinorError(
-                    "too many lights defined; WebGL imposes a limit of 8 lights. Only the first 8 lights will be used"
+                    "too many lights defined; WebGL imposes a limit of 8 lights and 1 is already reserved. Only the first 7 lights will be used"
                 );
-                break; // Ignore additional lights if more than 8
+                break; // Ignore additional lights if more than 7
             }
 
             // Storing light information [sceneIdx, enabled, type, location, ambient, diffuse, specular, attenuation, angle, exponent, target]
