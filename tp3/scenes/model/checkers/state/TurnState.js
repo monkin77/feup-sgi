@@ -16,4 +16,8 @@ export default class TurnState extends State {
             return this;
         }
     }
+
+    display() {
+        this.orchestrator._board.display(this.player);
+    }
 }

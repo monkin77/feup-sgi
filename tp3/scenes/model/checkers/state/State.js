@@ -1,7 +1,10 @@
+import MyGameOrchestrator from "../MyGameOrchestrator.js";
+
 export default class State {
     /**
      * Constructor for the State abstract class.
      * @constructor
+     * @param {MyGameOrchestrator} orchestrator
      * @abstract
     */
     constructor(orchestrator) {
@@ -20,6 +23,13 @@ export default class State {
      */
     onClick(obj) {
         throw new Error("Method 'onClick()' must be implemented.");
+    }
+
+    /**
+     * Displays the Board according to the current state
+     */
+    display() {
+        throw new Error("Method 'display()' must be implemented.");
     }
 
     get orchestrator() {

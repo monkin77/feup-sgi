@@ -51,4 +51,8 @@ export default class PickedState extends State {
             return new TurnState(this.orchestrator, this.player);
         }
     }
+
+    display() {
+        this.orchestrator._board.display(this.player, this.tile);
+    }
 }

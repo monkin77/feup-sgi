@@ -10,4 +10,10 @@ export default class MoveAnimState extends State {
         console.log("Game is being animated");
         return this;
     }
+
+    display() {
+        // TODO: Check what should be displayed
+        this._orchestrator._board.display();
+        this._orchestrator._animator.apply();
+    }
 }

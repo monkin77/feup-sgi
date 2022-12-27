@@ -9,4 +9,9 @@ export default class ReplayState extends State {
         console.log("Game is being replayed");
         return this;
     }
+
+    display() {
+        // TODO: Check what should be displayed
+        this.orchestrator._board.display();
+    }
 }

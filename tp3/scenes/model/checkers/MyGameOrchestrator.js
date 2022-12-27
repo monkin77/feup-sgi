@@ -10,7 +10,7 @@ import PickedState from "./state/PickedState.js";
 import ReplayState from "./state/ReplayState.js";
 
 /**
- * TODO: Class that orchestrates the execution of the checkers game
+ * Class that orchestrates the execution of the checkers game
  * • Manages the entire game:
  *  • Load of new scenes (new files)
  *  • Manage gameplay (game states and interrupting game states)
@@ -57,17 +57,8 @@ export default class MyGameOrchestrator {
     display() {
         this._theme.displayScene();
 
-        if (this.state instanceof TurnState) {
-            this._board.display(this.state.player);
-        } else if (this.state instanceof PickedState) {
-            this._board.display(this.state.player, this.state.tile);
-        } else if (!(this.state instanceof MenuState)) {
-            this._board.display();
-        }
-
-        if (this.state instanceof MoveAnimState) {
-            this._animator.apply();
-        }
+        // Display the board according to the current state
+        this.state.display();
     }
 
     /**
@@ -123,5 +114,9 @@ export default class MyGameOrchestrator {
 
     get sequence() {
         return this._sequence;
+    }
+
+    get board() {
+        return this._board;
     }
 }

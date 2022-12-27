@@ -10,4 +10,8 @@ export default class EndGameState extends State {
         console.log("Game is over");
         return this;
     }
+
+    display() {
+        // TODO: Display
+    }
 }

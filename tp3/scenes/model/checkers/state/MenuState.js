@@ -9,4 +9,9 @@ export default class MenuState extends State {
         console.log("Game menu");
         return this;
     }
+
+    display() {
+        // TODO: Display Menu?
+        this._orchestrator._board.display();
+    }
 }
