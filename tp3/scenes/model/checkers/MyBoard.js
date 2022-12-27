@@ -34,8 +34,8 @@ export default class MyBoard {
 
         this._whiteTileTexture = new CGFtexture(this._scene, "scenes/images/board/light_tile.png");
         this._blackTileTexture = new CGFtexture(this._scene, "scenes/images/board/dark_tile.png");
-        this._whiteDiscTexture = new CGFtexture(this._scene, "scenes/images/board/light_wood_disc.jpg");
-        this._blackDiscTexture = new CGFtexture(this._scene, "scenes/images/board/dark_wood_disc.jpg");
+        this._whiteDiscTexture = new CGFtexture(this._scene, "scenes/images/board/light_wood_disc2.jpg");
+        this._blackDiscTexture = new CGFtexture(this._scene, "scenes/images/board/dark_wood_disc2.jpg");
     }
 
     /**
