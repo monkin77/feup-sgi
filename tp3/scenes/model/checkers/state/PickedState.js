@@ -1,10 +1,17 @@
 import { switchPlayer } from "../../../../utils/checkers.js";
 import MyGameMove from "../MyGameMove.js";
+import MyGameOrchestrator from "../MyGameOrchestrator.js";
 import MyTile from "../MyTile.js";
 import State from "./State.js";
 import TurnState from "./TurnState.js";
 
 export default class PickedState extends State {
+    /**
+     * 
+     * @param {MyGameOrchestrator} orchestrator 
+     * @param {number} player 
+     * @param {MyTile} tile 
+     */
     constructor(orchestrator, player, tile) {
         super(orchestrator);
         this.player = player;
@@ -28,8 +35,7 @@ export default class PickedState extends State {
 
                 move.execute();
 
-                // TODO: ADD TO SEQUENCE
-                //this._sequence.addMove(move);
+                this._orchestrator.sequence.addMove(move);
 
                 //this.state = new MoveAnimState(this.player);
 

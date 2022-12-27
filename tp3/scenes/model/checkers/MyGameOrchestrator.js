@@ -120,4 +120,8 @@ export default class MyGameOrchestrator {
         // TODO: Handle general scene clicks
         this.state = this.state.onClick(obj);
     }
+
+    get sequence() {
+        return this._sequence;
+    }
 }
