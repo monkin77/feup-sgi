@@ -1,11 +1,16 @@
 import { MySceneGraph } from "../../../MySceneGraph.js";
+import { player1, switchPlayer } from "../../../utils/checkers.js";
 import CheckersAnimation from "./CheckersAnimation.js";
 import MyBoard from "./MyBoard.js";
 import MyGameSequence from "./MyGameSequence.js";
-import MyTile from "./MyTile.js";
+import MenuState from "./state/MenuState.js";
+import MoveAnimState from "./state/MoveAnimState.js";
+import TurnState from "./state/TurnState.js";
+import PickedState from "./state/PickedState.js";
+import ReplayState from "./state/ReplayState.js";
 
 /**
- * TODO: Class that orchestrates the execution of the checkers game
+ * Class that orchestrates the execution of the checkers game
  * • Manages the entire game:
  *  • Load of new scenes (new files)
  *  • Manage gameplay (game states and interrupting game states)
@@ -21,6 +26,7 @@ export default class MyGameOrchestrator {
         this._sequence = new MyGameSequence();
         this._animator = new CheckersAnimation(this._sequence);
         this._theme = new MySceneGraph(filename, this._scene);
+        this.state = new MenuState(this);
     }
 
     /**
@@ -28,6 +34,9 @@ export default class MyGameOrchestrator {
      */
     initBoard() {
         this._board = new MyBoard(this._theme, -5, 0, 10, 20);
+        if (this.state instanceof MenuState) {
+            this.state = new TurnState(this, player1, this._board);
+        }
     }
 
     /**
@@ -36,7 +45,10 @@ export default class MyGameOrchestrator {
     update(t) {
         for (const animation of Object.values(this._theme.animations))
             animation.update(t);
-        this._animator.update(t);
+
+        if (this.state instanceof MoveAnimState) {
+            this._animator.update(t);
+        }
     }
 
     /**
@@ -44,8 +56,9 @@ export default class MyGameOrchestrator {
      */
     display() {
         this._theme.displayScene();
-        this._board.display();
-        this._animator.apply();
+
+        // Display the board according to the current state
+        this.state.display();
     }
 
     /**
@@ -70,7 +83,11 @@ export default class MyGameOrchestrator {
      */
     replay() {
         // TODO: Implement replay
-        this._sequence.replay();
+        if (this.state instanceof TurnState ||
+            this.state instanceof PickedState) {
+                this.state = new ReplayState();
+                this._sequence.replay();
+            }
     }
 
     /**
@@ -81,7 +98,6 @@ export default class MyGameOrchestrator {
             for (const component of Object.values(this._theme.componentsParser.components)) {
                 component.resetPickId();
             }
-
             
             MyGameOrchestrator.pickingId = 1;    // Tracks the current picking id to avoid duplicates
         }
@@ -92,10 +108,15 @@ export default class MyGameOrchestrator {
      * @param {*} obj Object that was clicked. Can be of various classes 
      */
     onClick(obj) {
-        if (obj instanceof MyTile) {
-            this._board.selectTile(obj);
-        } else {
-            console.log("Clicked object is not being handled");
-        }
+        // TODO: Handle general scene clicks
+        this.state = this.state.onClick(obj);
+    }
+
+    get sequence() {
+        return this._sequence;
+    }
+
+    get board() {
+        return this._board;
     }
 }
