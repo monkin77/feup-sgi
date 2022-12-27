@@ -336,6 +336,14 @@ export default class MyBoard {
         updateLight(this._scene.lights[7], newProps);
     }
 
+    /**
+     * Disables the board's spotlight
+     */
+    disableSpotlight = () => {
+        this._scene.lights[7].disable();
+        this._scene.lights[7].update();
+    }
+
     get x() {
         return this._x;
     }
