@@ -41,8 +41,6 @@ export default class MyBoard {
         this.buildTiles();
         this.buildStorages();
 
-        this._capturedPieces = []; // TODO: Display captured pieces
-
         /* 
         Initialize the Spotlight
         Properties structure: [sceneIdx, enabled, type, location, ambient, diffuse, 
@@ -120,7 +118,10 @@ export default class MyBoard {
         const middleTiles = this.getDiagonalBetweenTiles(fromTile, toTile);
         for (const tile of middleTiles) {
             if (tile.hasPiece()) {
-                this._capturedPieces.push(tile.piece);
+                // Add captured piece to the corresponding storage
+                if (piece.isWhite) this._whiteStorage.addPiece(tile.piece);
+                else this._blackStorage.addPiece(tile.piece);
+
                 tile.removePiece();
             }
         }
@@ -446,7 +447,9 @@ export default class MyBoard {
             Object.getOwnPropertyDescriptors(this)
         );
         clone._tiles = clone._tiles.map(tile => tile.clone());
-        clone._capturedPieces = this._capturedPieces.map(piece => piece.clone());
+        clone._whiteStorage = clone._whiteStorage.clone();
+        clone._blackStorage = clone._blackStorage.clone();
+        
         return clone;
     }
 }
