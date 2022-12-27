@@ -9,13 +9,9 @@ export default class MoveAnimState extends State {
         this._nextPlayer = nextPlayer;
 
         const { rowDiff, colDiff } = move.board.getDifferenceBetweenTiles(move.fromTile, move.toTile);
-        // TODO: Fix this offset, there's a small difference between the piece's center and the tile's center
-        const baseOffset = - move.piece.radius + move.piece.sideLength / 2;
-        const rowOffset = Math.sign(rowDiff) * baseOffset;
-        const colOffset = Math.sign(colDiff) * baseOffset;
         this._animation = new MoveAnimation(
             this.orchestrator._scene,
-            colDiff + colOffset, rowDiff + rowOffset
+            colDiff, rowDiff
         );
     }
 

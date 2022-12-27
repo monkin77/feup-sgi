@@ -56,12 +56,12 @@ export default class MyPiece {
 
         this._scene.pushMatrix();
 
-        if (onBoard) this._scene.translate(this._sideLength/2, this._sideLength/2, 0);
-        this._scene.scale(this._radius, this._radius, 0.25);
-
         if (this._animation) {
             this._animation.apply();
         }
+
+        if (onBoard) this._scene.translate(this._sideLength/2, this._sideLength/2, 0);
+        this._scene.scale(this._radius, this._radius, 0.25);
 
         // Covered cylinder contains a diameter of 2 and a height of 2
         // Currently, all the pieces are registering the picking id. If it's not selectable, it is being registered with -1
