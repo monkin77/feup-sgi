@@ -39,12 +39,22 @@ export default class PickedState extends State {
 
                 //this.state = new MoveAnimState(this.player);
 
+                // TODO: Move the spotlight while the animation is playing
+
                 return new TurnState(this.orchestrator, switchPlayer(this.player));
             } else if (obj.id === this.tile.id) {
+                // Turn off the spotlight
+                this._orchestrator.board.disableSpotlight();
+
                 // Deselect the piece
                 return new TurnState(this.orchestrator, this.player);
             } else {
-                // Ignore the click and keep the piece selected
+                // Move the spotlight to the clicked tile
+                let tilePos = this._orchestrator.board.getTileAbsPosition(obj);
+                tilePos = this._orchestrator.board.getCenteredAbsPosition(tilePos);
+                this._orchestrator.board.moveSpotlight(tilePos);
+
+                // Another piece was selected
                 return new PickedState(this.orchestrator, this.player, obj);
             }
         } else {

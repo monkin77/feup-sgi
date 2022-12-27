@@ -1,8 +1,11 @@
 import { CGFappearance, CGFtexture } from "../../../../lib/CGF.js";
 import { player1, startRowsWithDiscs, tilesPerSide } from "../../../utils/checkers.js";
+import { calcVector, updateLight } from "../../parser/utils.js";
 import MyGameOrchestrator from "./MyGameOrchestrator.js";
 import MyPiece from "./MyPiece.js";
 import MyTile from "./MyTile.js";
+
+const spotlightDistance = 2;
 
 // Class for a Checkers board
 export default class MyBoard {
@@ -36,6 +39,14 @@ export default class MyBoard {
         this._blackTileTexture = new CGFtexture(this._scene, "scenes/images/board/dark_tile.png");
         this._whiteDiscTexture = new CGFtexture(this._scene, "scenes/images/board/light_wood_disc2.jpg");
         this._blackDiscTexture = new CGFtexture(this._scene, "scenes/images/board/dark_wood_disc2.jpg");
+
+        /* 
+        Initialize the Spotlight
+        Properties structure: [sceneIdx, enabled, type, location, ambient, diffuse, 
+            specular, attenuation, angle, exponent, target] 
+        */
+        this.initSpotlightProperties = [7, true, "spot", [this._x + this._tileSideLength/2, this._y + spotlightDistance, this._z - this._tileSideLength/2, 1.0], [0, 0, 0, 1], [1, 1, 1, 1], 
+            [1, 1, 1, 1], [0, 1, 0], 180, 1, [this._x, this._y, this._z]];
     }
 
     /**
@@ -240,21 +251,19 @@ export default class MyBoard {
                 const currTileIdx = i * tilesPerSide + j;
                 const currTile = this._tiles[currTileIdx];
 
-                currTile.registerPicking(turn, possibleTiles, MyGameOrchestrator.pickingId++);
+                const isTargetTile = possibleTiles.includes(currTile);
+                currTile.registerPicking(turn, isTargetTile, MyGameOrchestrator.pickingId++);
+
+                if (isTargetTile) this.highlightMaterial(true);
 
                 currTile.display();
+
+                if (isTargetTile) this.resetMaterial();
 
                 this._scene.popMatrix();
             }
         }
     }
-
-    /**
-     * TODO: Add click handler for the other tiles to deselect
-     * TODO: Add picking for the possible moves after selection
-     * TODO: Show highlight for the possible moves
-     * TODO: Perform the move and change turn
-     */
 
     /**
      * Draws the pieces of the board with the given color
@@ -276,24 +285,58 @@ export default class MyBoard {
                     this._scene.pushMatrix();
                     this._scene.translate(j * this._tileSideLength, i * this._tileSideLength, 0);
 
-                    if (selectedTile == tile) {
-                        this._woodMaterial.setAmbient(0.8, 0.8, 0, 1);
-                        this._woodMaterial.setEmission(0.2, 0.2, 0.2, 1);
-                        this._woodMaterial.apply();
-                    }
+                    if (selectedTile == tile) this.highlightMaterial();
                     
                     tile.displayPiece();
                     
-                    if (selectedTile == tile) {
-                        this._woodMaterial.setAmbient(1, 1, 1, 1);
-                        this._woodMaterial.setEmission(0, 0, 0, 1);
-                        this._woodMaterial.apply();
-                    }
+                    if (selectedTile == tile) this.resetMaterial();
 
                     this._scene.popMatrix();
                 }
             }
         }
+    }
+
+    /**
+     * Highlights the board's material
+     */
+    highlightMaterial(withEmission = false) {
+        this._woodMaterial.setAmbient(0.5, 0.5, 0, 1);
+        this._woodMaterial.setDiffuse(0.5, 0.5, 0, 1);
+        this._woodMaterial.setSpecular(0.5, 0.5, 0, 1);
+        if (withEmission) this._woodMaterial.setEmission(0.8, 0.8, 0.8, 1);
+        this._woodMaterial.apply();
+    }
+
+    resetMaterial() {
+        this._woodMaterial.setAmbient(1, 1, 1, 1);
+        this._woodMaterial.setDiffuse(1, 1, 1, 1);
+        this._woodMaterial.setSpecular(1, 1, 1, 1);
+        this._woodMaterial.setEmission(0, 0, 0, 1);
+        this._woodMaterial.apply();
+    }
+
+    /**
+     * Moves the board's spotlight to a new position and updates the light
+     * @param {number[]} position 3D array representing new position on the board
+     */
+    moveSpotlight = (position) => {
+        const fromPos = [position[0], position[1] + spotlightDistance, position[2], 1.0];
+        const toPos = [...position, 1.0];
+
+        const newProps = this.initSpotlightProperties;
+        newProps[3] = fromPos;
+        newProps[10] = toPos;
+
+        updateLight(this._scene.lights[7], newProps);
+    }
+
+    /**
+     * Disables the board's spotlight
+     */
+    disableSpotlight = () => {
+        this._scene.lights[7].disable();
+        this._scene.lights[7].update();
     }
 
     get x() {
@@ -353,6 +396,30 @@ export default class MyBoard {
         const i = Math.floor(index / tilesPerSide);
         const j = index % tilesPerSide;
         return { i, j };
+    }
+
+    /**
+     * Gets the absolute position of the bottom left corner of the tile at the given coordinates
+     * @param {MyTile} tile
+     * @returns {number[]} 3D array representing the absolute position of the tile
+     */
+    getTileAbsPosition(tile) {
+        const { i, j } = this.getTileCoordinates(tile);
+
+        return [
+            this._x + j * this._tileSideLength,
+            this._y,
+            this._z - i * this._tileSideLength
+        ];
+    }
+
+    /**
+     * Gets the absolute position of the center of the tile at the given coordinates
+     * @param {number []} position 3D Array representing the position of the tile in the bottom left corner
+     * @returns {number[]} 3D array representing the absolute position of the tile in the center 
+     */
+    getCenteredAbsPosition(position) {
+        return [position[0] + this._tileSideLength / 2, position[1], position[2] - this._tileSideLength / 2];
     }
 
     /**

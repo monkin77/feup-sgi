@@ -296,3 +296,4 @@ export const updateLight = (cgfLight, properties) => {
 
     cgfLight.update();
 }
+
