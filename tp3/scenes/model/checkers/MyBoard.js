@@ -435,6 +435,22 @@ export default class MyBoard {
     }
 
     /**
+     * Gets the difference between the coordinates of the two given tiles
+     * @param {MyTile} tile1
+     * @param {MyTile} tile2
+     * @returns {{x: number, y: number}} the difference between the coordinates of the two given tiles
+     */
+    getDifferenceBetweenTiles(tile1, tile2) {
+        const center1 = this.getCenteredAbsPosition(this.getTileAbsPosition(tile1));
+        const center2 = this.getCenteredAbsPosition(this.getTileAbsPosition(tile2));
+
+        return {
+            rowDiff: center1[2] - center2[2],
+            colDiff: center2[0] - center1[0]
+        };
+    }
+
+    /**
      * Clones the board
      */
     clone() {

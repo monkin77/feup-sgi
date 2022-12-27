@@ -16,9 +16,10 @@ export default class MyGameSequence {
 
     /**
      * Goes back to the previous move in the sequence
+     * Returns the move that was undone
      */
     undo() {
-        this._moves.pop();
+        return this._moves.pop();
     }
 
     /**

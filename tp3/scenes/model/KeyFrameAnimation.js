@@ -19,7 +19,7 @@ export default class KeyFrameAnimation extends MyAnimation {
 
     /**
      * Updates the animation's state.
-     * @param {time} time in seconds
+     * @param {time} time in milliseconds
      */
     update(t) {
         if (!this.started) {

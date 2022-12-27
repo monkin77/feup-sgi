@@ -22,6 +22,7 @@ export default class MyPiece {
      */
     constructor(sceneGraph, id, isWhite, sideLength, texture, boardMaterial, height = 1,) {
         this._sceneGraph = sceneGraph; // TODO: Alternative to using the scene graph
+        this.animation = null;
 
         this._scene = sceneGraph.scene;
         this._id = id;
@@ -54,6 +55,10 @@ export default class MyPiece {
         this._boardMaterial.apply();
 
         this._scene.pushMatrix();
+
+        if (this._animation) {
+            this._animation.apply();
+        }
 
         if (onBoard) this._scene.translate(this._sideLength/2, this._sideLength/2, 0);
         this._scene.scale(this._radius, this._radius, 0.25);
@@ -107,6 +112,18 @@ export default class MyPiece {
 
     get isKing() {
         return this._isKing;
+    }
+
+    get animation() {
+        return this._animation;
+    }
+
+    set animation(animation) {
+        this._animation = animation;
+    }
+
+    get radius() {
+        return this._radius;
     }
 
     /**
