@@ -66,9 +66,11 @@ export default class MyBoard {
                 const isWhite = (j + offset) % 2 != 0;
 
                 let piece = null;
-                if (!isWhite && (i < startRowsWithDiscs || i > tilesPerSide - startRowsWithDiscs - 1)) {
+                const pieceIsWhite = i < startRowsWithDiscs;
+                if (!isWhite && (pieceIsWhite || i > tilesPerSide - startRowsWithDiscs - 1)) {
                     // If the tile is in the first or last rows, it has a piece
-                    piece = new MyPiece(this._sceneGraph, `piece-${idNumber}`, i < startRowsWithDiscs, this._tileSideLength);
+                    const texture = pieceIsWhite ? this._whiteDiscTexture : this._blackDiscTexture;
+                    piece = new MyPiece(this._sceneGraph, `piece-${idNumber}`, pieceIsWhite, this._tileSideLength, texture, this._boardMaterial);
 
                     // Add new Piece to the corresponding array
                     if (isWhite) whitePieces.push(piece);
@@ -287,12 +289,6 @@ export default class MyBoard {
      * @param {MyTile} selectedTile
      */
     drawPiecesColor(isWhite, selectedTile) {
-        const tileTexture = isWhite ? this._whiteDiscTexture : this._blackDiscTexture;
-        // Apply texture 
-        this._boardMaterial.setTexture(tileTexture);
-        this._boardMaterial.setTextureWrap("REPEAT", "REPEAT");
-        this._boardMaterial.apply();
-
         for (let i = 0; i < tilesPerSide; i++) {
             for (let j = 0; j < tilesPerSide; j++) {
                 const tileIdx = i * tilesPerSide + j;
