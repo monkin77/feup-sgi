@@ -36,10 +36,6 @@ export default class MyBoard {
         this._blackTileTexture = new CGFtexture(this._scene, "scenes/images/board/dark_tile.png");
         this._whiteDiscTexture = new CGFtexture(this._scene, "scenes/images/board/light_wood_disc.jpg");
         this._blackDiscTexture = new CGFtexture(this._scene, "scenes/images/board/dark_wood_disc.jpg");
-
-        this._turn = player1;
-
-        this._selectedTile = null;
     }
 
     /**
@@ -193,7 +189,7 @@ export default class MyBoard {
     /**
      * Displays the board
      */
-    display() {
+    display(turn = null, selectedTile = null) {
         this._scene.pushMatrix();
 
         // Rotate board to draw it in the XZ plane
@@ -205,13 +201,12 @@ export default class MyBoard {
         this._woodMaterial.apply();
 
         // Draw the tiles
-        this.drawTilesColor(true);
-        this.drawTilesColor(false);
+        this.drawTilesColor(true, turn);
+        this.drawTilesColor(false, turn);
 
         // Draw the pieces
-        this.drawPiecesColor(true);
-        this.drawPiecesColor(false);
-
+        this.drawPiecesColor(true, selectedTile);
+        this.drawPiecesColor(false, selectedTile);
 
         this._scene.popMatrix();
     }
@@ -220,7 +215,7 @@ export default class MyBoard {
      * Draws the tiles of the board with the given color
      * @param {*} isWhite
      */
-    drawTilesColor(isWhite) {
+    drawTilesColor(isWhite, turn) {
         const tileTexture = isWhite ? this._whiteTileTexture : this._blackTileTexture;
         // Apply texture for white tiles
         this._woodMaterial.setTexture(tileTexture);
@@ -238,7 +233,7 @@ export default class MyBoard {
                 const currTileIdx = i * tilesPerSide + j;
                 const currTile = this._tiles[currTileIdx];
 
-                currTile.registerPicking(this._turn, MyGameOrchestrator.pickingId++);
+                currTile.registerPicking(turn, MyGameOrchestrator.pickingId++);
 
                 currTile.display();
 
@@ -258,7 +253,7 @@ export default class MyBoard {
      * Draws the pieces of the board with the given color
      * @param {*} isWhite
      */
-    drawPiecesColor(isWhite) {
+    drawPiecesColor(isWhite, selectedTile) {
         const tileTexture = isWhite ? this._whiteDiscTexture : this._blackDiscTexture;
         // Apply texture for white tiles
         this._woodMaterial.setTexture(tileTexture);
@@ -273,7 +268,7 @@ export default class MyBoard {
                     this._scene.pushMatrix();
                     this._scene.translate(j * this._tileSideLength, i * this._tileSideLength, 0);
 
-                    if (this._selectedTile == tile) {
+                    if (selectedTile == tile) {
                         this._woodMaterial.setAmbient(0.8, 0.8, 0, 1);
                         this._woodMaterial.setEmission(0.2, 0.2, 0.2, 1);
                         this._woodMaterial.apply();
@@ -281,7 +276,7 @@ export default class MyBoard {
                     
                     tile.displayPiece();
                     
-                    if (this._selectedTile == tile) {
+                    if (selectedTile == tile) {
                         this._woodMaterial.setAmbient(1, 1, 1, 1);
                         this._woodMaterial.setEmission(0, 0, 0, 1);
                         this._woodMaterial.apply();
@@ -290,18 +285,6 @@ export default class MyBoard {
                     this._scene.popMatrix();
                 }
             }
-        }
-    }
-
-    /**
-     * Selects a tile by its index
-     * @param {MyTile} tile selected tile 
-     */
-    selectTile(tile) {
-        if (this._selectedTile != tile) {
-            this._selectedTile = tile;
-        } else {
-            this._selectedTile = null;
         }
     }
 

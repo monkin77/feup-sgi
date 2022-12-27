@@ -17,4 +17,6 @@ export const isPlayerTurn = (turn, isWhite) => {
     return (turn == player1 && isWhite) || (turn == player2 && !isWhite);
 };
 
-
+export const switchPlayer = (turn) => {
+    return turn == player1 ? player2 : player1;
+}

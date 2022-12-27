@@ -45,7 +45,7 @@ export default class MyTile {
      * @returns true if the tile was registered for picking, false otherwise
      */
     registerPicking(turn, currPickId) {
-        if (this.hasPiece() && isPlayerTurn(turn, this._piece.isWhite)) {
+        if (true) {
             // Register the tile's Rectangle and Piece for picking with the currPickId
             this.setTileAndPiecePicking(currPickId);
             return true;
