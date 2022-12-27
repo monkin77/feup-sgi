@@ -270,4 +270,8 @@ export class XMLscene extends CGFscene {
     resetAnimation() {
         this.startTime = null;
     }
+
+    undo() {
+        this.gameOrchestrator.undo();
+    }
 }

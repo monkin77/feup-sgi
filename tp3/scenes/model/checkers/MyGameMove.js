@@ -5,10 +5,11 @@ export default class MyGameMove {
      * @param {MyTile} toTile Tile the piece is moving to
      * @param {MyBoard} board Board the move is being made on
      */
-    constructor(piece, fromTile, toTile, board) {
+    constructor(piece, fromTile, toTile, player, board) {
         this._piece = piece;
         this._fromTile = fromTile;
         this._toTile = toTile;
+        this._player = player;
         this._board = board;
     }
 
@@ -34,5 +35,13 @@ export default class MyGameMove {
         this._board = this._board.clone();
         newBoard.movePiece(this._piece, this._fromTile, this._toTile);
         return newBoard;
+    }
+
+    get board() {
+        return this._board;
+    }
+
+    get player() {
+        return this._player;
     }
 }

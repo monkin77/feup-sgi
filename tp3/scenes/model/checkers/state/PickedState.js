@@ -19,14 +19,14 @@ export default class PickedState extends State {
     }
 
     onClick(obj) {
-        if (obj instanceof MyTile) { // TODO possible tiles not detected
+        if (obj instanceof MyTile) { // TODO Finish game logic
             const possibleTiles = this.orchestrator._board.getPossibleMoves(this.tile);
             if (possibleTiles.includes(obj)) {
                 // Perform a Move to a new position
                 const move = new MyGameMove(
                     this.tile.piece,
                     this.tile,
-                    obj,
+                    obj, this.player,
                     this.orchestrator._board
                 );
                 if (!move.validate()) {
@@ -37,7 +37,7 @@ export default class PickedState extends State {
 
                 this._orchestrator.sequence.addMove(move);
 
-                //this.state = new MoveAnimState(this.player);
+                // return new MoveAnimState(this.player);
 
                 // TODO: Move the spotlight while the animation is playing
 

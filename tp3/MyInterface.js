@@ -50,6 +50,8 @@ export class MyInterface extends CGFinterface {
 
         this.gui.add(this.scene, 'resetAnimation').name('Reset Animation').onChange(this.scene.resetAnimation);
 
+        this.gui.add(this.scene, 'undo').name('Undo');
+
         // Highlighted Components
         const highlightedComponents = this.scene.graph.componentsParser.highlightedComponents;
         const highlightedComponentsFolder = this.gui.addFolder('Highlight');

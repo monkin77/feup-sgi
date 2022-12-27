@@ -74,8 +74,12 @@ export default class MyGameOrchestrator {
      * Undoes the last move
      */
     undo() {
-        // TODO: Implement undo
-        this._sequence.undo();
+        if (this.state instanceof TurnState ||
+            this.state instanceof PickedState) {
+                const lastMove = this._sequence.undo();
+                this._board = lastMove.board;
+                this.state = new TurnState(this, lastMove.player);
+            }
     }
 
     /**
