@@ -22,6 +22,7 @@ export default class MyPiece {
      */
     constructor(sceneGraph, id, isWhite, sideLength, texture, boardMaterial, height = 1,) {
         this._sceneGraph = sceneGraph; // TODO: Alternative to using the scene graph
+        this.animation = null;
 
         this._scene = sceneGraph.scene;
         this._id = id;
@@ -57,6 +58,10 @@ export default class MyPiece {
 
         if (onBoard) this._scene.translate(this._sideLength/2, this._sideLength/2, 0);
         this._scene.scale(this._radius, this._radius, 0.25);
+
+        if (this._animation) {
+            this._animation.apply();
+        }
 
         // Covered cylinder contains a diameter of 2 and a height of 2
         // Currently, all the pieces are registering the picking id. If it's not selectable, it is being registered with -1
@@ -107,6 +112,14 @@ export default class MyPiece {
 
     get isKing() {
         return this._isKing;
+    }
+
+    get animation() {
+        return this._animation;
+    }
+
+    set animation(animation) {
+        this._animation = animation;
     }
 
     /**

@@ -31,9 +31,12 @@ export default class MyGameMove {
      * Assumes a valid move
      */
     execute() {
-        const newBoard = this._board;
-        this._board = this._board.clone();
-        newBoard.movePiece(this._piece, this._fromTile, this._toTile);
+        const newBoard = this._board.clone();
+        const newFromTile = newBoard.tiles.find(t => t.id === this._fromTile.id);
+        const newToTile = newBoard.tiles.find(t => t.id === this._toTile.id);
+        const newPiece = newFromTile.piece;
+
+        newBoard.movePiece(newPiece, newFromTile, newToTile);
         return newBoard;
     }
 
@@ -43,5 +46,17 @@ export default class MyGameMove {
 
     get player() {
         return this._player;
+    }
+
+    get piece() {
+        return this._piece;
+    }
+
+    get fromTile() {
+        return this._fromTile;
+    }
+
+    get toTile() {
+        return this._toTile;
     }
 }

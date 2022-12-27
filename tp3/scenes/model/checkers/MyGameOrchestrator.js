@@ -1,10 +1,8 @@
 import { MySceneGraph } from "../../../MySceneGraph.js";
-import { player1, switchPlayer } from "../../../utils/checkers.js";
-import CheckersAnimation from "./CheckersAnimation.js";
+import { player1 } from "../../../utils/checkers.js";
 import MyBoard from "./MyBoard.js";
 import MyGameSequence from "./MyGameSequence.js";
 import MenuState from "./state/MenuState.js";
-import MoveAnimState from "./state/MoveAnimState.js";
 import TurnState from "./state/TurnState.js";
 import PickedState from "./state/PickedState.js";
 import ReplayState from "./state/ReplayState.js";
@@ -24,7 +22,6 @@ export default class MyGameOrchestrator {
     constructor(filename, scene) {
         this._scene = scene;
         this._sequence = new MyGameSequence();
-        this._animator = new CheckersAnimation(this._sequence);
         this._theme = new MySceneGraph(filename, this._scene);
         this.state = new MenuState(this);
     }
@@ -45,10 +42,7 @@ export default class MyGameOrchestrator {
     update(t) {
         for (const animation of Object.values(this._theme.animations))
             animation.update(t);
-
-        if (this.state instanceof MoveAnimState) {
-            this._animator.update(t);
-        }
+        this.state.update(t);
     }
 
     /**
@@ -122,5 +116,17 @@ export default class MyGameOrchestrator {
 
     get board() {
         return this._board;
+    }
+
+    set board(board) {
+        this._board = board;
+    }
+
+    get scene() {
+        return this._scene;
+    }
+
+    get theme() {
+        return this._theme;
     }
 }

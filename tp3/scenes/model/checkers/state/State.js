@@ -27,9 +27,18 @@ export default class State {
 
     /**
      * Displays the Board according to the current state
+     * @abstract
      */
     display() {
         throw new Error("Method 'display()' must be implemented.");
+    }
+
+    /**
+     * Updates the state according to the current time
+     * @abstract
+     */
+    update(t) {
+        // Override in subclasses if necessary
     }
 
     get orchestrator() {
