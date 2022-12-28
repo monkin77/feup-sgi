@@ -36,8 +36,7 @@ export default class MyStorage {
         this._scene.pushMatrix();
 
         // Translate the storage to the correct position
-        const translateX = this._isWhite ? -this._storageWidth : this._sideLength;
-        this._scene.translate(translateX, 0, 0);
+        this._scene.translate(...this.getBoardTranslation());
 
         this._rectangle.display();
 
@@ -51,27 +50,56 @@ export default class MyStorage {
      * Displays the captured pieces
      */
     displayCapturedPieces() {
+        this._scene.translate(...this.getPieceStartTranslation());
+        for (const idx in this._captured) {
+            const piece = this._captured[idx];
+            this._scene.translate(...this.getSinglePieceTranslation(idx));
+            piece.display();
+        }
+    }
+
+    /**
+     * Returns the translation for a single captured piece
+     */
+    getSinglePieceTranslation(idx) {
+        if (idx == 0) return [0, 0, 0];
+
         // Array of translation sequences for the captured pieces
         const translateX = (this._storageWidth - 2 * this._storagePadding + (this._pieceLength/2)) / 2;
-        const translateY = (this._sideLength - 2 * this._storagePadding + (this._pieceLength/2)) / 6
+        const translateY = (this._sideLength - 2 * this._storagePadding + (this._pieceLength/2)) / 6;
         const translations = [
             [translateX, 0, 0],
             [0, translateY, 0],
             [-translateX, 0, 0],
             [0, translateY, 0],
         ]
+        return translations[(idx-1) % 4];
+    }
 
-        this._scene.translate(this._storagePadding + (this._pieceLength/2), this._storagePadding + (this._pieceLength/2), 0);
-        for (const idx in this._captured) {
-            const piece = this._captured[idx];
+    /**
+     * Returns the translation for the start of the captured pieces
+     */
+    getPieceStartTranslation() {
+        return [this._storagePadding + (this._pieceLength/2), this._storagePadding + (this._pieceLength/2), 0];
+    }
 
-            if (idx > 0) {
-                // Translate the piece to the correct position
-                this._scene.translate(...translations[(idx-1) % 4]);
-            }
+    /**
+     * Returns the translation for the storage
+     */
+    getBoardTranslation() {
+        return [this._isWhite ? -this._storageWidth : this._sideLength, 0, 0];
+    }
 
-            piece.display();
-        }
+    /**
+     * Gets the overall translation of a single captured piece
+     */
+    getPieceOverallTranslation(idx) {
+        const pieceTranslation = this.getSinglePieceTranslation(idx);
+        const startTranslation = this.getPieceStartTranslation();
+        const translation1 = vec3.add(vec3.create(), pieceTranslation, startTranslation);
+
+        const boardTranslation = this.getBoardTranslation();
+        return vec3.add(vec3.create(), translation1, boardTranslation);
     }
 
     /**
@@ -80,6 +108,14 @@ export default class MyStorage {
      */
     addPiece(piece) {
         this._captured.push(piece);
+    }
+
+    get numPieces() {
+        return this._captured.length;
+    }
+
+    get captured() {
+        return this._captured;
     }
 
     /**

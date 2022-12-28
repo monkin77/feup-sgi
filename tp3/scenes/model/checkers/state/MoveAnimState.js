@@ -1,4 +1,5 @@
 import { getTranslation } from "../../../../utils/algebra.js";
+import BounceAnimation from "../animation/BounceAnimation.js";
 import MoveAnimation from "../animation/MoveAnimation.js";
 import State from "./State.js";
 import TurnState from "./TurnState.js";
@@ -59,10 +60,18 @@ export default class MoveAnimState extends State {
             );
             if (vec3.dist(tilePos, curPos) < tile.piece.radius + this._move.piece.radius) {
                 if (tile.piece.animation) return;
-                const collisionAnimation = new MoveAnimation(
+
+                const storage = tile.piece.isWhite ? this._move.board.blackStorage : this._move.board.whiteStorage;
+                const pieceTranslation = storage.getPieceOverallTranslation(storage.captured.length);
+                const realPieceTranslation = [pieceTranslation[0], pieceTranslation[2], -pieceTranslation[1]];
+                const relativeOrigin = this._move.board.getTileAbsPosition(this._move.board.getTileByCoordinates(0, 0));
+                const finalPos = vec3.add(vec3.create(), relativeOrigin, realPieceTranslation);
+
+                const collisionAnimation = new BounceAnimation(
                     this._orchestrator._scene,
-                    0, 1
+                    tilePos, finalPos
                 );
+
                 collisionAnimation.start();
                 tile.piece.animation = collisionAnimation;
                 this._collisionAnimations.push(collisionAnimation);

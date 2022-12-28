@@ -375,6 +375,14 @@ export default class MyBoard {
         return this._tileSideLength;
     }
 
+    get whiteStorage() {
+        return this._whiteStorage;
+    }
+
+    get blackStorage() {
+        return this._blackStorage;
+    }
+
     /**
      * Returns the tile that is at the given distance from the board's origin
      * @param {*} x distance in the x axis
