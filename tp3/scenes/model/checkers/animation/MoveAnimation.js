@@ -29,4 +29,12 @@ export default class MoveAnimation extends CheckersAnimation {
     getDuration() {
         return MOVE_ANIMATION_DURATION;
     }
+
+    get dx() {
+        return this._dx;
+    }
+
+    get dy() {
+        return this._dy;
+    }
 }

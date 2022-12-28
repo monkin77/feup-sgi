@@ -313,9 +313,9 @@ export default class MyBoard {
      * Highlights the board's material
      */
     highlightMaterial(withEmission = false) {
-        this._boardMaterial.setAmbient(0.5, 0.5, 0, 1);
-        this._boardMaterial.setDiffuse(0.5, 0.5, 0, 1);
-        this._boardMaterial.setSpecular(0.5, 0.5, 0, 1);
+        this._boardMaterial.setAmbient(1.0, 0, 0, 1);
+        this._boardMaterial.setDiffuse(1.0, 0, 0, 1);
+        this._boardMaterial.setSpecular(1.0, 0, 0, 1);
         if (withEmission) this._boardMaterial.setEmission(0.8, 0.8, 0.8, 1);
         this._boardMaterial.apply();
     }
@@ -421,25 +421,19 @@ export default class MyBoard {
     /**
      * Gets the absolute position of the bottom left corner of the tile at the given coordinates
      * @param {MyTile} tile
+     * @param {boolean} centered if true, the position will be the center of the tile
      * @returns {number[]} 3D array representing the absolute position of the tile
      */
-    getTileAbsPosition(tile) {
+    getTileAbsPosition(tile, centered = false) {
         const { i, j } = this.getTileCoordinates(tile);
 
-        return [
-            this._x + j * this._tileSideLength,
-            this._y,
-            this._z - i * this._tileSideLength
-        ];
-    }
+        const offset = centered ? this._tileSideLength / 2 : 0;
 
-    /**
-     * Gets the absolute position of the center of the tile at the given coordinates
-     * @param {number []} position 3D Array representing the position of the tile in the bottom left corner
-     * @returns {number[]} 3D array representing the absolute position of the tile in the center 
-     */
-    getCenteredAbsPosition(position) {
-        return [position[0] + this._tileSideLength / 2, position[1], position[2] - this._tileSideLength / 2];
+        return [
+            this._x + j * this._tileSideLength + offset,
+            this._y,
+            this._z - i * this._tileSideLength - offset
+        ];
     }
 
     /**
@@ -449,8 +443,8 @@ export default class MyBoard {
      * @returns {{x: number, y: number}} the difference between the coordinates of the two given tiles
      */
     getDifferenceBetweenTiles(tile1, tile2) {
-        const center1 = this.getCenteredAbsPosition(this.getTileAbsPosition(tile1));
-        const center2 = this.getCenteredAbsPosition(this.getTileAbsPosition(tile2));
+        const center1 = this.getTileAbsPosition(tile1, true);
+        const center2 = this.getTileAbsPosition(tile2, true);
 
         return {
             rowDiff: center1[2] - center2[2],

@@ -11,8 +11,7 @@ export default class TurnState extends State {
     onClick(obj) {
         if (obj instanceof MyTile) {
             // Move the spotlight to the clicked tile
-            let tilePos = this._orchestrator.board.getTileAbsPosition(obj);
-            tilePos = this._orchestrator.board.getCenteredAbsPosition(tilePos);
+            const tilePos = this._orchestrator.board.getTileAbsPosition(obj, true);
             this._orchestrator.board.moveSpotlight(tilePos);
 
             // Select the piece
