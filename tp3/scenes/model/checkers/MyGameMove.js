@@ -13,10 +13,6 @@ export default class MyGameMove {
         this._board = board;
     }
 
-    animate() {
-        // TODO: implement animation
-    }
-
     /**
      * Validates the move
      */
