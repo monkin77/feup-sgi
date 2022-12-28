@@ -35,7 +35,7 @@ export default class BounceAnimation extends CheckersAnimation {
             keyframes.push(keyframe);
         }
 
-        keyframes.push(this.buildKeyFrame(BOUNCE_ANIMATION_DURATION / 1000, realTranslation, [0, 0, 0], [1, 1, 1]));
+        keyframes.push(this.buildKeyFrame(TIME_FACTOR, realTranslation, [0, 0, 0], [1, 1, 1]));
 
         return keyframes;
     }
