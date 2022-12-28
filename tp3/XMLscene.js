@@ -72,7 +72,6 @@ export class XMLscene extends CGFscene {
         for (const light of Object.values(this.graph.lights)) {
             updateLight(this.lights[light[0]], light);
         }
-        // console.log(this.lights)
     }
 
     /**

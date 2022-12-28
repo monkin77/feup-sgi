@@ -2,7 +2,6 @@ import { CGFtexture } from "../../../../lib/CGF.js";
 import { MyRectangle } from "../../../primitives/MyRectangle.js";
 import { tilesPerSide } from "../../../utils/checkers.js";
 import { pieceScaleFactor } from "./MyPiece.js";
-
 export default class MyStorage {
     /**
      *
@@ -26,6 +25,15 @@ export default class MyStorage {
 
         this._rectangle = new MyRectangle(scene, id, 0, this._storageWidth, 0, sideLength);
         this._texture = new CGFtexture(this._scene, "scenes/images/board/storage_wood.jpg");
+
+        const translateX = (this._storageWidth - 2 * this._storagePadding + (this._pieceLength/2)) / 2;
+        const translateY = (this._sideLength - 2 * this._storagePadding + (this._pieceLength/2)) / 6;
+        this.translations = [
+            [translateX, 0, 0],
+            [0, translateY, 0],
+            [-translateX, 0, 0],
+            [0, translateY, 0],
+        ];
     }
 
     display() {
@@ -36,8 +44,7 @@ export default class MyStorage {
         this._scene.pushMatrix();
 
         // Translate the storage to the correct position
-        const translateX = this._isWhite ? -this._storageWidth : this._sideLength;
-        this._scene.translate(translateX, 0, 0);
+        this._scene.translate(...this.getBoardTranslation());
 
         this._rectangle.display();
 
@@ -51,27 +58,51 @@ export default class MyStorage {
      * Displays the captured pieces
      */
     displayCapturedPieces() {
-        // Array of translation sequences for the captured pieces
-        const translateX = (this._storageWidth - 2 * this._storagePadding + (this._pieceLength/2)) / 2;
-        const translateY = (this._sideLength - 2 * this._storagePadding + (this._pieceLength/2)) / 6
-        const translations = [
-            [translateX, 0, 0],
-            [0, translateY, 0],
-            [-translateX, 0, 0],
-            [0, translateY, 0],
-        ]
-
-        this._scene.translate(this._storagePadding + (this._pieceLength/2), this._storagePadding + (this._pieceLength/2), 0);
+        this._scene.translate(...this.getPieceStartTranslation());
         for (const idx in this._captured) {
             const piece = this._captured[idx];
-
             if (idx > 0) {
-                // Translate the piece to the correct position
-                this._scene.translate(...translations[(idx-1) % 4]);
+                this._scene.translate(...this.translations[(idx - 1) % 4]);
             }
-
             piece.display();
         }
+    }
+
+    /**
+     * Returns the translation for a single captured piece
+     */
+    getSinglePieceTranslation(idx) {
+        let translation = [0, 0, 0];
+        for (let i = 0; i < idx; i++) {
+            translation = vec3.add(translation, translation, this.translations[i % 4]);
+        }
+        return translation;
+    }
+
+    /**
+     * Returns the translation for the start of the captured pieces
+     */
+    getPieceStartTranslation() {
+        return [this._storagePadding + (this._pieceLength/2), this._storagePadding + (this._pieceLength/2), 0];
+    }
+
+    /**
+     * Returns the translation for the storage
+     */
+    getBoardTranslation() {
+        return [this._isWhite ? -this._storageWidth : this._sideLength, 0, 0];
+    }
+
+    /**
+     * Gets the overall translation of a single captured piece
+     */
+    getPieceOverallTranslation(idx) {
+        const pieceTranslation = this.getSinglePieceTranslation(idx);
+        const startTranslation = this.getPieceStartTranslation();
+        const translation1 = vec3.add(vec3.create(), pieceTranslation, startTranslation);
+
+        const boardTranslation = this.getBoardTranslation();
+        return vec3.add(vec3.create(), translation1, boardTranslation);
     }
 
     /**
@@ -80,6 +111,14 @@ export default class MyStorage {
      */
     addPiece(piece) {
         this._captured.push(piece);
+    }
+
+    get numPieces() {
+        return this._captured.length;
+    }
+
+    get captured() {
+        return this._captured;
     }
 
     /**

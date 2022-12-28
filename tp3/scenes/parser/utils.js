@@ -258,8 +258,6 @@ export const calcVector = (src, target) => {
         // Note that the last 3 elements are only defined for spotlights, while the 4th last is optional
  */
 export const updateLight = (cgfLight, properties) => {
-    // console.log("Updating light: ", cgfLight, " with properties: ", properties);
-
     cgfLight.setVisible(true);
 
     if (properties[1] == true) cgfLight.enable();
