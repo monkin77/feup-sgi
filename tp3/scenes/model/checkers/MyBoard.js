@@ -1,5 +1,5 @@
 import { CGFappearance, CGFtexture } from "../../../../lib/CGF.js";
-import { startRowsWithDiscs, tilesPerSide } from "../../../utils/checkers.js";
+import { boardState, discsPerSide, noPossibleMoves, startRowsWithDiscs, tilesPerSide } from "../../../utils/checkers.js";
 import { updateLight } from "../../parser/utils.js";
 import MyGameOrchestrator from "./MyGameOrchestrator.js";
 import MyPiece from "./MyPiece.js";
@@ -134,7 +134,7 @@ export default class MyBoard {
     /**
      * Gets the possible moves of a given tile
      * @param {MyTile} tile
-     * @returns {MyTile[]} Array of possible tiles to move to
+     * @returns {[MyTile[], boolean]} List with 2 elements: [Array of possible tiles to move to, boolean indicating if a capture is possible (true) or not (false))]
      */
     getPossibleMoves(tile) {
         if (!tile.hasPiece()) return [];
@@ -142,6 +142,7 @@ export default class MyBoard {
         const piece = tile.piece;
         const { i: tileRow, j: tileCol } = this.getTileCoordinates(tile);
         const possibleMoves = [];
+        let canCapture = false;
 
         const directions = [];
         if (piece.isWhite || piece.isKing) directions.push({ i: 1, j: 1 }, { i: 1, j: -1 });
@@ -160,6 +161,11 @@ export default class MyBoard {
                         if (jumpedOver) break; // Can't jump over more than one piece
                         jumpedOver = true;
                     } else {
+                        if (jumpedOver) {
+                            // If a piece was jumped over, a capture is possible
+                            canCapture = true;
+                        }
+                        
                         possibleMoves.push(nextTile);
                     }
                 }
@@ -178,6 +184,9 @@ export default class MyBoard {
                     const jumpTile = this.getTileByCoordinates(jumpI, jumpJ);
 
                     if (jumpTile && !jumpTile.hasPiece()) {
+                        // if the tile after the jumped over piece is empty, a capture is possible
+                        canCapture = true;
+
                         possibleMoves.push(jumpTile);
                     }
                 } else {
@@ -186,7 +195,7 @@ export default class MyBoard {
             }
         }
 
-        return possibleMoves;
+        return [possibleMoves, canCapture];
     }
 
     /**
@@ -230,7 +239,7 @@ export default class MyBoard {
         this._boardMaterial.apply();
 
         // Calculate the possible moves from the selected tile
-        const possibleTiles = selectedTile ? this.getPossibleMoves(selectedTile) : [];
+        const [possibleTiles, canCapture] = selectedTile ? this.getPossibleMoves(selectedTile) : noPossibleMoves;
 
         // Draw the tiles
         this.drawTilesColor(true, turn, possibleTiles);
@@ -355,6 +364,32 @@ export default class MyBoard {
     disableSpotlight = () => {
         this._scene.lights[7].disable();
         this._scene.lights[7].update();
+    }
+
+    /**
+     * Analyzes the board's state and returns a value representing it
+     * @param {boolean} isWhite Whether the player is white or not
+     * @returns {number} Number representing the board's state according to the boardState Dictionary
+     */
+    checkBoardState = (isWhite) => {
+        const storage = isWhite ? this._whiteStorage : this._blackStorage;
+        if (storage.captured.length == discsPerSide) {
+            // Player has captured all the discs
+            return boardState.END;
+        }
+
+        for (const tile of this._tiles) {
+            if (tile.hasPiece() && tile.piece.isWhite == isWhite) {
+                const [possibleMoves, canCapture] = this.getPossibleMoves(tile);
+                console.log("tile: ", tile.id, "possibleMoves: ", possibleMoves, "canCapture: " + canCapture);
+                // If the player has one move that results in a capture, he can move again
+
+                // TODO: The player can only move again if the last move resulted in a capture
+                if (canCapture) return boardState.MOVE_AGAIN;
+            }
+        }
+
+        return boardState.SWITCH_PLAYER;
     }
 
     get x() {

@@ -1,4 +1,3 @@
-import { switchPlayer } from "../../../../utils/checkers.js";
 import MyGameMove from "../MyGameMove.js";
 import MyGameOrchestrator from "../MyGameOrchestrator.js";
 import MyTile from "../MyTile.js";
@@ -21,7 +20,7 @@ export default class PickedState extends State {
 
     onClick(obj) {
         if (obj instanceof MyTile) { // TODO Finish game logic
-            const possibleTiles = this.orchestrator._board.getPossibleMoves(this.tile);
+            const [possibleTiles, canCapture] = this.orchestrator._board.getPossibleMoves(this.tile);
             if (possibleTiles.includes(obj)) {
                 // Perform a Move to a new position
                 const move = new MyGameMove(
@@ -41,8 +40,7 @@ export default class PickedState extends State {
                 this.orchestrator.board = move.execute();
                 this._orchestrator.sequence.addMove(move);
 
-                const nextTurnState = new TurnState(this._orchestrator, switchPlayer(this.player));
-                return new MoveAnimState(this.orchestrator, move, nextTurnState);
+                return new MoveAnimState(this.orchestrator, move, this.player, initPiecePosition);
             } else if (obj.id === this.tile.id) {
                 // Deselect the piece
                 return new TurnState(this.orchestrator, this.player);

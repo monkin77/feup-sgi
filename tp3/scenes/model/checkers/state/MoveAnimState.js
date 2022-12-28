@@ -1,23 +1,26 @@
 import { getTranslation } from "../../../../utils/algebra.js";
+import { boardState, isWhitePlayer, switchPlayer } from "../../../../utils/checkers.js";
 import BounceAnimation from "../animation/BounceAnimation.js";
 import MoveAnimation from "../animation/MoveAnimation.js";
 import MyGameMove from "../MyGameMove.js";
 import MyGameOrchestrator from "../MyGameOrchestrator.js";
+import EndGameState from "./EndGameState.js";
 import State from "./State.js";
+import TurnState from "./TurnState.js";
 
 export default class MoveAnimState extends State {
     /**
      * 
      * @param {MyGameOrchestrator} orchestrator 
      * @param {MyGameMove} move 
-     * @param {*} nextPlayer 
+     * @param {number} currPlayer 
      * @param {number[]} initPiecePosition 3D position of the piece before the animation
      */
-    constructor(orchestrator, move, nextState) {
+    constructor(orchestrator, move, currPlayer, initPiecePosition) {
         super(orchestrator);
         this._move = move;
-        this._nextState = nextState;
-        this._initPiecePosition = this._move.board.getTileAbsPosition(move.fromTile, true);
+        this._currPlayer = currPlayer;
+        this._initPiecePosition = initPiecePosition;
 
         const { rowDiff, colDiff } = move.board.getDifferenceBetweenTiles(move.fromTile, move.toTile);
         this._animation = new MoveAnimation(
@@ -62,7 +65,25 @@ export default class MoveAnimState extends State {
             if (this._collisionAnimations.some(a => !a.ended)) return;
             this._move.piece.animation = null;
 
-            this._orchestrator.state = this._nextState;
+            // Check what is the next game's state
+            // TODO: For some reason the board inside checkBoardState is the one before the move
+            const newBoardState = board.checkBoardState(isWhitePlayer(this._currPlayer));
+            switch (newBoardState) {
+                case boardState.SWITCH_PLAYER:
+                    this._orchestrator.state = new TurnState(this._orchestrator, switchPlayer(this._currPlayer));
+                    break;
+                case boardState.MOVE_AGAIN:
+                    this._orchestrator.state = new TurnState(this._orchestrator, this._currPlayer);
+                    break;
+                case boardState.END:
+                    // The current player won
+                    // TODO: Complete the EndGameState class
+                    this._orchestrator.state = new EndGameState(this._orchestrator, this._currPlayer);
+                    break;
+                default:
+                    throw new Error("Invalid board state");
+            }
+
         }
     }
 

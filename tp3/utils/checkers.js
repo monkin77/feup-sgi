@@ -7,6 +7,15 @@ export const startRowsWithDiscs = 3;
 export const player1 = 0;
 export const player2 = 1;
 
+export const boardState = {
+    END: 0,
+    MOVE_AGAIN: 1,
+    SWITCH_PLAYER: 2,
+};
+
+// Variable to be returned when there are no possible moves [[list of moves], canCapture]
+export const noPossibleMoves = [[], false];
+
 /**
  * Method to check if the pieces of a given color correspond to the current player's turn
  * @param {*} turn 
@@ -20,3 +29,12 @@ export const isPlayerTurn = (turn, isWhite) => {
 export const switchPlayer = (turn) => {
     return turn == player1 ? player2 : player1;
 }
+
+/**
+ * 
+ * @param {number} player 
+ * @returns true if the player is white, false otherwise
+ */
+export const isWhitePlayer = (player) => (
+    player == player1
+)
