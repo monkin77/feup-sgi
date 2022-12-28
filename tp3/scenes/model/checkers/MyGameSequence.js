@@ -22,10 +22,7 @@ export default class MyGameSequence {
         return this._moves.pop();
     }
 
-    /**
-     * Replays the sequence of moves
-     */
-    replay() {
-        // TODO: Replay
+    get moves() {
+        return this._moves;
     }
 }

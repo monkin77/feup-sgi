@@ -14,11 +14,11 @@ export default class MoveAnimState extends State {
      * @param {*} nextPlayer 
      * @param {number[]} initPiecePosition 3D position of the piece before the animation
      */
-    constructor(orchestrator, move, nextPlayer, initPiecePosition) {
+    constructor(orchestrator, move, nextState) {
         super(orchestrator);
         this._move = move;
-        this._nextPlayer = nextPlayer;
-        this._initPiecePosition = initPiecePosition;
+        this._nextState = nextState;
+        this._initPiecePosition = this._move.board.getTileAbsPosition(move.fromTile, true);
 
         const { rowDiff, colDiff } = move.board.getDifferenceBetweenTiles(move.fromTile, move.toTile);
         this._animation = new MoveAnimation(
@@ -45,7 +45,7 @@ export default class MoveAnimState extends State {
         this.checkCollisionsAndAnimate();
 
         // === Move Spotlight to the new position ===
-        const board = this._orchestrator.board;
+        const board = this._move.board;
         // Calculate the progress of the animation to get the current position
         const animationProgress = Math.min(this._animation.animationTime / this._animation.getDuration(), 1);
         // Calculate the current position of the piece
@@ -60,7 +60,7 @@ export default class MoveAnimState extends State {
             if (this._collisionAnimations.some(a => !a.ended)) return;
             this._move.piece.animation = null;
 
-            this._orchestrator.state = new TurnState(this._orchestrator, this._nextPlayer);
+            this._orchestrator.state = this._nextState;
         }
     }
 
