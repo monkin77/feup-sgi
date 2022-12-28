@@ -31,9 +31,6 @@ export default class PickedState extends State {
                     this.orchestrator._board
                 );
                 if (!move.validate()) {
-                    // Turn off the spotlight
-                    this._orchestrator.board.disableSpotlight();
-
                     // Deselect the piece
                     return new TurnState(this.orchestrator, this.player);
                 }
@@ -46,16 +43,9 @@ export default class PickedState extends State {
 
                 return new MoveAnimState(this.orchestrator, move, switchPlayer(this.player), initPiecePosition);
             } else if (obj.id === this.tile.id) {
-                // Turn off the spotlight
-                this._orchestrator.board.disableSpotlight();
-
                 // Deselect the piece
                 return new TurnState(this.orchestrator, this.player);
             } else {
-                // Move the spotlight to the clicked tile
-                const tilePos = this._orchestrator.board.getTileAbsPosition(obj, true);
-                this._orchestrator.board.moveSpotlight(tilePos);
-
                 // Another piece was selected
                 return new PickedState(this.orchestrator, this.player, obj);
             }

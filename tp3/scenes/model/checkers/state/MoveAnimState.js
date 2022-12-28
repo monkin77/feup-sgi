@@ -54,8 +54,12 @@ export default class MoveAnimState extends State {
         board.moveSpotlight(currPos);
 
         if (this._animation.ended) {
+            // Disable the spotlight
+            board.disableSpotlight();
+
             if (this._collisionAnimations.some(a => !a.ended)) return;
             this._move.piece.animation = null;
+
             this._orchestrator.state = new TurnState(this._orchestrator, this._nextPlayer);
         }
     }

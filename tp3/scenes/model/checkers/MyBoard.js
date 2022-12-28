@@ -272,7 +272,7 @@ export default class MyBoard {
                 const isTargetTile = possibleTiles.includes(currTile);
                 currTile.registerPicking(turn, isTargetTile, MyGameOrchestrator.pickingId++);
 
-                if (isTargetTile) this.highlightMaterial(true);
+                if (isTargetTile) this.highlightMaterial(1);
 
                 currTile.display();
 
@@ -297,7 +297,7 @@ export default class MyBoard {
                     this._scene.pushMatrix();
                     this._scene.translate(j * this._tileSideLength, i * this._tileSideLength, 0);
 
-                    if (selectedTile == tile) this.highlightMaterial();
+                    if (selectedTile == tile) this.highlightMaterial(0.2);
                     
                     tile.displayPiece();
                     
@@ -311,12 +311,13 @@ export default class MyBoard {
 
     /**
      * Highlights the board's material
+     * @param {number} emissionVal Emission value (0-1)
      */
-    highlightMaterial(withEmission = false) {
+    highlightMaterial(emissionVal = 0) {
         this._boardMaterial.setAmbient(1.0, 0, 0, 1);
         this._boardMaterial.setDiffuse(1.0, 0, 0, 1);
         this._boardMaterial.setSpecular(1.0, 0, 0, 1);
-        if (withEmission) this._boardMaterial.setEmission(0.8, 0.8, 0.8, 1);
+        this._boardMaterial.setEmission(emissionVal, emissionVal, emissionVal, 1);
         this._boardMaterial.apply();
     }
 
