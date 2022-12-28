@@ -60,10 +60,10 @@ export default class CheckersAnimation extends MyAnimation {
         if (!this.started) return;
         if (!this.startTime) this.startTime = t;
 
-        const animationTime = t - this.startTime;
-        this.keyFrameAnimation.update(animationTime);
+        this.animationTime = t - this.startTime;
+        this.keyFrameAnimation.update(this.animationTime);
 
-        if (animationTime > this.getDuration()) {
+        if (this.animationTime > this.getDuration()) {
             this._ended = true;
         }
     }

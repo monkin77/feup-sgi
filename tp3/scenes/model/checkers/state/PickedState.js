@@ -11,7 +11,7 @@ export default class PickedState extends State {
      * 
      * @param {MyGameOrchestrator} orchestrator 
      * @param {number} player 
-     * @param {MyTile} tile 
+     * @param {MyTile} tile picked tile
      */
     constructor(orchestrator, player, tile) {
         super(orchestrator);
@@ -31,25 +31,21 @@ export default class PickedState extends State {
                     this.orchestrator._board
                 );
                 if (!move.validate()) {
+                    // Deselect the piece
                     return new TurnState(this.orchestrator, this.player);
                 }
+
+                // Store the initial position of the piece for the spotlight animation
+                const initPiecePosition = this._orchestrator.board.getTileAbsPosition(this.tile, true)
 
                 this.orchestrator.board = move.execute();
                 this._orchestrator.sequence.addMove(move);
 
-                return new MoveAnimState(this.orchestrator, move, switchPlayer(this.player));
+                return new MoveAnimState(this.orchestrator, move, switchPlayer(this.player), initPiecePosition);
             } else if (obj.id === this.tile.id) {
-                // Turn off the spotlight
-                this._orchestrator.board.disableSpotlight();
-
                 // Deselect the piece
                 return new TurnState(this.orchestrator, this.player);
             } else {
-                // Move the spotlight to the clicked tile
-                let tilePos = this._orchestrator.board.getTileAbsPosition(obj);
-                tilePos = this._orchestrator.board.getCenteredAbsPosition(tilePos);
-                this._orchestrator.board.moveSpotlight(tilePos);
-
                 // Another piece was selected
                 return new PickedState(this.orchestrator, this.player, obj);
             }

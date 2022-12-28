@@ -1,14 +1,24 @@
 import { getTranslation } from "../../../../utils/algebra.js";
 import BounceAnimation from "../animation/BounceAnimation.js";
 import MoveAnimation from "../animation/MoveAnimation.js";
+import MyGameMove from "../MyGameMove.js";
+import MyGameOrchestrator from "../MyGameOrchestrator.js";
 import State from "./State.js";
 import TurnState from "./TurnState.js";
 
 export default class MoveAnimState extends State {
-    constructor(orchestrator, move, nextPlayer) {
+    /**
+     * 
+     * @param {MyGameOrchestrator} orchestrator 
+     * @param {MyGameMove} move 
+     * @param {*} nextPlayer 
+     * @param {number[]} initPiecePosition 3D position of the piece before the animation
+     */
+    constructor(orchestrator, move, nextPlayer, initPiecePosition) {
         super(orchestrator);
         this._move = move;
         this._nextPlayer = nextPlayer;
+        this._initPiecePosition = initPiecePosition;
 
         const { rowDiff, colDiff } = move.board.getDifferenceBetweenTiles(move.fromTile, move.toTile);
         this._animation = new MoveAnimation(
@@ -34,17 +44,28 @@ export default class MoveAnimState extends State {
 
         this.checkCollisionsAndAnimate();
 
+        // === Move Spotlight to the new position ===
+        const board = this._orchestrator.board;
+        // Calculate the progress of the animation to get the current position
+        const animationProgress = Math.min(this._animation.animationTime / this._animation.getDuration(), 1);
+        // Calculate the current position of the piece
+        const currPos = [this._initPiecePosition[0] + this._animation.dx*animationProgress, this._initPiecePosition[1], this._initPiecePosition[2] - this._animation.dy*animationProgress];
+        // Move the spotlight to the current position
+        board.moveSpotlight(currPos);
+
         if (this._animation.ended) {
+            // Disable the spotlight
+            board.disableSpotlight();
+
             if (this._collisionAnimations.some(a => !a.ended)) return;
             this._move.piece.animation = null;
+
             this._orchestrator.state = new TurnState(this._orchestrator, this._nextPlayer);
         }
     }
 
     checkCollisionsAndAnimate() {
-        const initialPos = this._move.board.getCenteredAbsPosition(
-            this._move.board.getTileAbsPosition(this._move.fromTile)
-        );
+        const initialPos = this._move.board.getTileAbsPosition(this._move.fromTile, true);
         const transfMatrix = this._animation.keyFrameAnimation.transfMatrix;
         const translation = getTranslation(transfMatrix);
         const boardTranslation = [translation[0], translation[2], -translation[1]];
@@ -55,9 +76,7 @@ export default class MoveAnimState extends State {
                 return;
             }
 
-            const tilePos = this._move.board.getCenteredAbsPosition(
-                this._move.board.getTileAbsPosition(tile)
-            );
+            const tilePos = this._move.board.getTileAbsPosition(tile, true);
             if (vec3.dist(tilePos, curPos) < tile.piece.radius + this._move.piece.radius) {
                 if (tile.piece.animation) return;
 
