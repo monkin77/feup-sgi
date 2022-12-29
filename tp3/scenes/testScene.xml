@@ -1,21 +1,21 @@
 <sxs>
     <scene root="root" axis_length="5"/>
 
-    <views default="frontal">
-        <perspective id="frontal" near="0.1" far="500" angle="50">
-            <from x="0" y="15" z="30" />
-            <to x="0" y="-2" z="0" />
+    <views default="White">
+        <perspective id="White" near="0.1" far="500" angle="50">
+            <from x="5" y="15" z="20" />
+            <to x="5" y="-2" z="0" />
         </perspective>
 
-        <perspective id="profile" near="0.1" far="500" angle="45">
+        <perspective id="Black" near="0.1" far="500" angle="50">
+            <from x="5" y="15" z="-20" />
+            <to x="5" y="-2" z="0" />
+        </perspective>
+
+        <perspective id="Profile" near="0.1" far="500" angle="45">
             <from x="30" y="15" z="30" />
             <to x="0" y="-2" z="0" />
         </perspective>
-
-        <ortho id="ortho" near="1" far="250" left="-30" right="30" top="20" bottom="-11">
-            <from x="-25" y="0" z="-5" />
-            <to x="5" y="1" z="-5" />
-        </ortho>
 
     </views>
 
@@ -2516,20 +2516,6 @@
         </component>
 
         <!-- 4 (radius) x 30 -->
-        <component id="pillar3">
-            <transformation>
-                <translate x="10" y="0" z="-20" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit" />
-            <children>
-                <componentref id="basePillar" />
-            </children>
-        </component>
-
-        <!-- 4 (radius) x 30 -->
         <component id="pillar4">
             <transformation>
                 <translate x="40" y="-2" z="-30" />
@@ -2721,7 +2707,6 @@
             <children>
                 <componentref id="pillar1" />
                 <componentref id="pillar2" />
-                <componentref id="pillar3" />
                 <componentref id="pillar4" />
                 <componentref id="pillar5" />
                 <componentref id="pillar6" />
