@@ -48,7 +48,7 @@ export class MyInterface extends CGFinterface {
         // Selected View
         this.gui.add(this.scene, 'selectedView', this.scene.viewsSelector).name('Active Camera').onChange(this.scene.onViewChange);
 
-        this.gui.add(this.scene, 'rotateAutomatically').name("Auto Rotate");
+        this.gui.add(this.scene, 'rotateAutomatically').name("Auto Rotate").onChange(this.scene.onToggleAutoRotate);
         this.gui.add(this.scene, 'undo').name('Undo');
         this.gui.add(this.scene, 'replay').name('Replay Movie');
     }

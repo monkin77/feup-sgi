@@ -3,7 +3,10 @@ import { CGFaxis, CGFcamera } from "../lib/CGF.js";
 import { MyRectangle } from "./primitives/MyRectangle.js";
 import CameraAnimation from "./scenes/model/checkers/animation/CameraAnimation.js";
 import MyGameOrchestrator from "./scenes/model/checkers/MyGameOrchestrator.js";
+import PickedState from "./scenes/model/checkers/state/PickedState.js";
+import TurnState from "./scenes/model/checkers/state/TurnState.js";
 import { updateLight } from "./scenes/parser/utils.js";
+import { player1 } from "./utils/checkers.js";
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -161,7 +164,7 @@ export class XMLscene extends CGFscene {
         this.displayLights = false;
 
         // Automatically change perspectives at the start of each turn
-        this.rotateAutomatically = false;
+        this.rotateAutomatically = true;
 
         // Select the Active Camera
         this.viewsSelector = Object.keys(this.graph.viewsParser.views).reduce((accumulator, key) => {
@@ -201,6 +204,18 @@ export class XMLscene extends CGFscene {
         }
 
         this.onViewChange();
+    }
+
+    /**
+     * Method called when automatic perspective rotation is toggled
+     */
+    onToggleAutoRotate = () => {
+        if (this.rotateAutomatically) {
+            if (!this.gameOrchestrator.state instanceof TurnState &&
+                !this.gameOrchestrator.state instanceof PickedState) return;
+
+                this.changePerspective(this.gameOrchestrator.state.player === player1);
+        }
     }
 
     updateAllLights() {
