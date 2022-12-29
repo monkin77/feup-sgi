@@ -142,7 +142,7 @@ export default class MyBoard {
             if (tile.hasPiece() && (tile.piece.isWhite == isWhite)) {
                 // TOOD: This is creating an infinite loop. Need to create an additional method to get the moves
                 // without checking if it can capture
-                const [_, canCapture] = this.getPossibleMoves(tile);
+                const [_, canCapture] = this.getPossibleMoves(tile, false);
                 if (canCapture) return true;
             }
         }
@@ -153,12 +153,17 @@ export default class MyBoard {
     /**
      * Gets the possible moves of a given tile
      * @param {MyTile} tile
+     * @param {boolean} forceCapture If true, only returns the moves that follow strictly the rules of checkers. If false, returns all possible moves
      * @returns {[MyTile[], boolean]} List with 2 elements: [Array of possible tiles to move to, boolean indicating if a capture is possible (true) or not (false))]
      */
-    getPossibleMoves(tile) {
+    getPossibleMoves(tile, forceCapture = true) {
         if (!tile.hasPiece()) return [];
+        
+        // Variable stores whether the move on this tile must capture a piece
+        const requiresCapture = !forceCapture ? false : this.playerCanCapture(tile.piece.isWhite);
 
-        const canCapture = this.playerCanCapture(this.piece.isWhite);
+        // Variable stores whether a move on this tile can capture a piece
+        let canCapture = false;
 
         const piece = tile.piece;
         const { i: tileRow, j: tileCol } = this.getTileCoordinates(tile);
@@ -186,8 +191,9 @@ export default class MyBoard {
                             canCapture = true;
                         }
                         
-                        if (canCapture && jumpedOver) {
-                            // If a capture is possible, only jumps are allowed
+                        if (jumpedOver || !requiresCapture) {
+                            // If this move is a capture or 
+                            // if we don't need to force a capture, add it to the list of possible moves
                             possibleMoves.push(nextTile);
                         }
                     }
@@ -210,12 +216,12 @@ export default class MyBoard {
                         // if the tile after the jumped over piece is empty, a capture is possible
                         canCapture = true;
 
-                        possibleMoves.push(jumpTile, true);
+                        possibleMoves.push(jumpTile);
                     }
                 } else {
-                    if (!canCapture) {
+                    if (!requiresCapture) {
                         // If a capture is not possible, all moves are allowed
-                        possibleMoves.push(nextTile, false);
+                        possibleMoves.push(nextTile);
                     }
                 }
             }
