@@ -50,7 +50,6 @@ export default class MyStorage {
 
         this.displayCapturedPieces();
 
-
         this._scene.popMatrix();
     }
 

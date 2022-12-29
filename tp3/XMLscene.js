@@ -1,4 +1,4 @@
-import { CGFscene, CGFshader } from "../lib/CGF.js";
+import { CGFscene, CGFshader, CGFtexture } from "../lib/CGF.js";
 import { CGFaxis, CGFcamera } from "../lib/CGF.js";
 import MyGameOrchestrator from "./scenes/model/checkers/MyGameOrchestrator.js";
 import { updateLight } from "./scenes/parser/utils.js";
@@ -41,6 +41,7 @@ export class XMLscene extends CGFscene {
         this.axis = new CGFaxis(this);
 
         this.initShaders();
+        this.initTextures();
 
         this.setUpdatePeriod(100);
 
@@ -80,6 +81,7 @@ export class XMLscene extends CGFscene {
     initShaders() {
         this.highlightShader = new CGFshader(this.gl, './shaders/highlight.vert', './shaders/highlight.frag');
         this.pickingShader = new CGFshader(this.gl, './shaders/picking.vert', './shaders/picking.frag');
+        this.textShader = new CGFshader(this.gl, "./shaders/font.vert", "./shaders/font.frag");
 
         this.timeFactor = 0;
         this.totalSteps = 100;
@@ -87,6 +89,16 @@ export class XMLscene extends CGFscene {
         this.highlightAngVelocity = 2.0 * Math.PI / this.totalSteps;
 
         this.highlightShader.setUniformsValues({ highlightScale: 1, timeFactor: this.timeFactor, highlightColor: [1, 1, 1, 1] });
+
+        // set number of rows and columns in font texture
+		this.textShader.setUniformsValues({'dims': [16, 16]});
+    }
+
+    /**
+     * Initialize custom textures
+     */
+    initTextures() {
+        this.fontTexture = new CGFtexture(this, './scenes/images/oolite-font.trans.png');
     }
 
     setDefaultAppearance() {

@@ -16,13 +16,14 @@ export class MyRectangle extends CGFobject {
         this.y2 = y2;
         this.id = id;
 
+        // Kinda sus, but for some reason the textures were flipped with the "normal" order
         this.initialTexCoords = [
-            0, 0,
-            1, 0,
             0, 1,
-            1, 1
-        ]
-
+            1, 1,
+            0, 0,
+            1, 0
+        ];
+        
         this.initBuffers();
     }
 
