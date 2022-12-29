@@ -80,7 +80,6 @@ export default class MyGameOrchestrator {
      * Replays the moves of the game
      */
     replay() {
-        // TODO Check buggy situations in middle of animations
         if (!(this.state instanceof MenuState)) {
                 this.state = new ReplayState(this, this._sequence, this.state);
             }

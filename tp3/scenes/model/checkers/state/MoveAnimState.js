@@ -4,7 +4,6 @@ import MoveAnimation from "../animation/MoveAnimation.js";
 import MyGameMove from "../MyGameMove.js";
 import MyGameOrchestrator from "../MyGameOrchestrator.js";
 import State from "./State.js";
-import TurnState from "./TurnState.js";
 
 export default class MoveAnimState extends State {
     /**
@@ -40,7 +39,10 @@ export default class MoveAnimState extends State {
         }
 
         this._animation.update(t);
-        this._collisionAnimations.forEach(a => a.update(t));
+        this._collisionAnimations.forEach(a => {
+            a.update(t);
+            if (a.ended) a.piece.animation = null;
+        });
 
         this.checkCollisionsAndAnimate();
 
@@ -88,7 +90,7 @@ export default class MoveAnimState extends State {
 
                 const collisionAnimation = new BounceAnimation(
                     this._orchestrator._scene,
-                    tilePos, finalPos
+                    tilePos, finalPos, tile.piece
                 );
 
                 collisionAnimation.start();
