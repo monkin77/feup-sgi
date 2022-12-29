@@ -38,3 +38,4 @@ export const switchPlayer = (turn) => {
 export const isWhitePlayer = (player) => (
     player == player1
 )
+

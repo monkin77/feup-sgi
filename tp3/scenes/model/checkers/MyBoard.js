@@ -132,6 +132,25 @@ export default class MyBoard {
     }
 
     /**
+     * Verifies if the given player can capture a piece in the next move
+     * @param {boolean} isWhite true if the player is white, false if it is black
+     * @returns {boolean} true if the player can capture a piece in the next move, false otherwise
+     */
+    playerCanCapture(isWhite) {
+        for (const tile of this._tiles) {
+            // If the tile has a piece of the given player, check if it can capture a piece
+            if (tile.hasPiece() && (tile.piece.isWhite == isWhite)) {
+                // TOOD: This is creating an infinite loop. Need to create an additional method to get the moves
+                // without checking if it can capture
+                const [_, canCapture] = this.getPossibleMoves(tile);
+                if (canCapture) return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Gets the possible moves of a given tile
      * @param {MyTile} tile
      * @returns {[MyTile[], boolean]} List with 2 elements: [Array of possible tiles to move to, boolean indicating if a capture is possible (true) or not (false))]
@@ -139,10 +158,11 @@ export default class MyBoard {
     getPossibleMoves(tile) {
         if (!tile.hasPiece()) return [];
 
+        const canCapture = this.playerCanCapture(this.piece.isWhite);
+
         const piece = tile.piece;
         const { i: tileRow, j: tileCol } = this.getTileCoordinates(tile);
-        const possibleMoves = [];
-        let canCapture = false;
+        let possibleMoves = [];
 
         const directions = [];
         if (piece.isWhite || piece.isKing) directions.push({ i: 1, j: 1 }, { i: 1, j: -1 });
@@ -166,7 +186,10 @@ export default class MyBoard {
                             canCapture = true;
                         }
                         
-                        possibleMoves.push(nextTile);
+                        if (canCapture && jumpedOver) {
+                            // If a capture is possible, only jumps are allowed
+                            possibleMoves.push(nextTile);
+                        }
                     }
                 }
             } else {
@@ -187,10 +210,13 @@ export default class MyBoard {
                         // if the tile after the jumped over piece is empty, a capture is possible
                         canCapture = true;
 
-                        possibleMoves.push(jumpTile);
+                        possibleMoves.push(jumpTile, true);
                     }
                 } else {
-                    possibleMoves.push(nextTile);
+                    if (!canCapture) {
+                        // If a capture is not possible, all moves are allowed
+                        possibleMoves.push(nextTile, false);
+                    }
                 }
             }
         }
@@ -240,6 +266,8 @@ export default class MyBoard {
 
         // Calculate the possible moves from the selected tile
         const [possibleTiles, canCapture] = selectedTile ? this.getPossibleMoves(selectedTile) : noPossibleMoves;
+
+        // TODO: If a capture is possible, only show the possible capture tiles
 
         // Draw the tiles
         this.drawTilesColor(true, turn, possibleTiles);
