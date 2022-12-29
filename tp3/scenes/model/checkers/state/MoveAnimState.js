@@ -27,6 +27,7 @@ export default class MoveAnimState extends State {
             this.orchestrator._scene,
             colDiff, rowDiff
         );
+
         this._collisionAnimations = [];
     }
 
@@ -66,7 +67,13 @@ export default class MoveAnimState extends State {
             this._move.piece.animation = null;
 
             // Check what is the next game's state
-            const newBoardState = board.checkBoardState(isWhitePlayer(this._currPlayer));
+            // Get the (i, j) coordinates of the destination tile
+            const {i: iDest, j: jDest} = this._move.board.getTileCoordinates(this._move.toTile);
+            // Fetch the tile from the updated Board at the destination coordinates. 
+            // This is necessary because the move object contains the previous board state
+            const lastMoveTile = board.getTileByCoordinates(iDest, jDest);
+
+            const newBoardState = board.checkBoardState(lastMoveTile, this._collisionAnimations.length > 0);
             switch (newBoardState) {
                 case boardState.SWITCH_PLAYER:
                     this._orchestrator.state = new TurnState(this._orchestrator, switchPlayer(this._currPlayer));
