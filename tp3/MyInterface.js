@@ -47,10 +47,9 @@ export class MyInterface extends CGFinterface {
 
         // Selected View
         this.gui.add(this.scene, 'selectedView', this.scene.viewsSelector).name('Active View').onChange(this.scene.onViewChange);
-
         this.gui.add(this.scene, 'resetAnimation').name('Reset Animation').onChange(this.scene.resetAnimation);
-
         this.gui.add(this.scene, 'undo').name('Undo');
+        this.gui.add(this.scene, 'replay').name('Replay Movie');
 
         // Highlighted Components
         const highlightedComponents = this.scene.graph.componentsParser.highlightedComponents;

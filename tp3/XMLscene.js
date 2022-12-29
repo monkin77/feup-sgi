@@ -273,4 +273,8 @@ export class XMLscene extends CGFscene {
     undo() {
         this.gameOrchestrator.undo();
     }
+
+    replay() {
+        this.gameOrchestrator.replay();
+    }
 }

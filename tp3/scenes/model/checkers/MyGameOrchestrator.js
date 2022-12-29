@@ -80,11 +80,8 @@ export default class MyGameOrchestrator {
      * Replays the moves of the game
      */
     replay() {
-        // TODO: Implement replay
-        if (this.state instanceof TurnState ||
-            this.state instanceof PickedState) {
-                this.state = new ReplayState();
-                this._sequence.replay();
+        if (!(this.state instanceof MenuState)) {
+                this.state = new ReplayState(this, this._sequence, this.state);
             }
     }
 

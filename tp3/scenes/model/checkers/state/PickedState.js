@@ -41,7 +41,8 @@ export default class PickedState extends State {
                 this.orchestrator.board = move.execute();
                 this._orchestrator.sequence.addMove(move);
 
-                return new MoveAnimState(this.orchestrator, move, switchPlayer(this.player), initPiecePosition);
+                const nextTurnState = new TurnState(this._orchestrator, switchPlayer(this.player));
+                return new MoveAnimState(this.orchestrator, move, nextTurnState);
             } else if (obj.id === this.tile.id) {
                 // Deselect the piece
                 return new TurnState(this.orchestrator, this.player);

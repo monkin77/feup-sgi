@@ -8,10 +8,11 @@ const NUM_KEYFRAMES = 100;
 const QUADRATIC_SCALE_FACTOR = 15;
 
 export default class BounceAnimation extends CheckersAnimation {
-    constructor(scene, initialPos, finalPos) {
+    constructor(scene, initialPos, finalPos, piece) {
         super(scene);
         this._initialPos = initialPos;
         this._finalPos = finalPos;
+        this.piece = piece;
     }
 
     /**
