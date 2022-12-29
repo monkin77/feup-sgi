@@ -1,6 +1,7 @@
 import { CGFscene, CGFshader, CGFtexture } from "../lib/CGF.js";
 import { CGFaxis, CGFcamera } from "../lib/CGF.js";
 import { MyRectangle } from "./primitives/MyRectangle.js";
+import CameraAnimation from "./scenes/model/checkers/animation/CameraAnimation.js";
 import MyGameOrchestrator from "./scenes/model/checkers/MyGameOrchestrator.js";
 import { updateLight } from "./scenes/parser/utils.js";
 
@@ -48,6 +49,7 @@ export class XMLscene extends CGFscene {
 
         this.gameOrchestrator = new MyGameOrchestrator(this._filename, this);
         this.startTime = null;
+        this.cameraAnimation = null;
 
         // the activation of picking capabilities in WebCGF
         this.setPickEnabled(true);
@@ -64,6 +66,7 @@ export class XMLscene extends CGFscene {
             vec3.fromValues(15, 15, 15),
             vec3.fromValues(0, 0, 0)
         );
+        this.cameraId = null;
     }
 
     /**
@@ -118,6 +121,7 @@ export class XMLscene extends CGFscene {
 
         this.camera =
             this.graph.viewsParser.views[this.graph.viewsParser.defaultViewId];
+        this.cameraId = this.graph.viewsParser.defaultViewId;
 
         // Update the interface's camera
         this.interface.setActiveCamera(this.camera);
@@ -171,9 +175,12 @@ export class XMLscene extends CGFscene {
      */
     onViewChange = () => {
         if (this.selectedView) {
-            this.camera = this.graph.viewsParser.views[this.selectedView];
-            // Update the interface's camera
-            this.interface.setActiveCamera(this.camera);
+            this.cameraAnimation = new CameraAnimation(
+                this, this.camera, this.graph.viewsParser.views[this.selectedView],
+                (this.cameraId == "White" || this.cameraId == "Black") && (this.selectedView == "White" || this.selectedView == "Black")
+            );
+            this.cameraId = this.selectedView;
+            this.cameraAnimation.start();
         } else console.log("[Error] No view selected");
     }
 
@@ -204,6 +211,11 @@ export class XMLscene extends CGFscene {
         this.timeFactor = (1 + Math.sin(this.highlightAngVelocity * currTimeStep)) / 2.0;
 
         this.highlightShader.setUniformsValues({ timeFactor: this.timeFactor });
+
+        if (this.cameraAnimation) {
+            this.cameraAnimation.update(t);
+            if (this.cameraAnimation.ended) this.cameraAnimation = null;
+        }
     }
 
     /**
@@ -268,6 +280,7 @@ export class XMLscene extends CGFscene {
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
+            if (this.cameraAnimation) this.cameraAnimation.apply();
 
             this.updateAllLights();
 
