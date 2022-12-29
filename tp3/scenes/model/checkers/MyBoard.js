@@ -371,7 +371,7 @@ export default class MyBoard {
      * @param {boolean} isWhite Whether the player is white or not
      * @returns {number} Number representing the board's state according to the boardState Dictionary
      */
-    checkBoardState = (isWhite) => {
+    checkBoardState(isWhite) {
         const storage = isWhite ? this._whiteStorage : this._blackStorage;
         if (storage.captured.length == discsPerSide) {
             // Player has captured all the discs
@@ -381,7 +381,6 @@ export default class MyBoard {
         for (const tile of this._tiles) {
             if (tile.hasPiece() && tile.piece.isWhite == isWhite) {
                 const [possibleMoves, canCapture] = this.getPossibleMoves(tile);
-                console.log("tile: ", tile.id, "possibleMoves: ", possibleMoves, "canCapture: " + canCapture);
                 // If the player has one move that results in a capture, he can move again
 
                 // TODO: The player can only move again if the last move resulted in a capture

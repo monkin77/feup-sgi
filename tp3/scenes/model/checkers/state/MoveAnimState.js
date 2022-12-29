@@ -66,7 +66,6 @@ export default class MoveAnimState extends State {
             this._move.piece.animation = null;
 
             // Check what is the next game's state
-            // TODO: For some reason the board inside checkBoardState is the one before the move
             const newBoardState = board.checkBoardState(isWhitePlayer(this._currPlayer));
             switch (newBoardState) {
                 case boardState.SWITCH_PLAYER:
