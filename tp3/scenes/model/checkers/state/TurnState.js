@@ -1,12 +1,14 @@
 import MyTile from "../MyTile.js";
 import PickedState from "./PickedState.js";
 import State from "./State.js";
+import { player1 } from "../../../../utils/checkers.js";
 
 export default class TurnState extends State {
     constructor(orchestrator, player) {
         console.log("Orchestrator: " + orchestrator, "Player: " + player);
         super(orchestrator);
         this.player = player;
+        this._turnStarted = false;
     }
 
     onClick(obj) {
@@ -20,6 +22,10 @@ export default class TurnState extends State {
     }
 
     display() {
+        if (!this._turnStarted) {
+            this.orchestrator.scene.changePerspective(this.player === player1);
+            this._turnStarted = true;
+        }
         this.orchestrator.board.display(this.player);
     }
 }

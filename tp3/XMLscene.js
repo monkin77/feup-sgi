@@ -160,6 +160,9 @@ export class XMLscene extends CGFscene {
         // Display Lights Toggle
         this.displayLights = false;
 
+        // Automatically change perspectives at the start of each turn
+        this.rotateAutomatically = false;
+
         // Select the Active Camera
         this.viewsSelector = Object.keys(this.graph.viewsParser.views).reduce((accumulator, key) => {
             return {...accumulator, [key]: key }
@@ -175,6 +178,8 @@ export class XMLscene extends CGFscene {
      */
     onViewChange = () => {
         if (this.selectedView) {
+            if (this.selectedView === this.cameraId) return;
+
             this.cameraAnimation = new CameraAnimation(
                 this, this.camera, this.graph.viewsParser.views[this.selectedView],
                 (this.cameraId == "White" || this.cameraId == "Black") && (this.selectedView == "White" || this.selectedView == "Black")
@@ -182,6 +187,20 @@ export class XMLscene extends CGFscene {
             this.cameraId = this.selectedView;
             this.cameraAnimation.start();
         } else console.log("[Error] No view selected");
+    }
+
+    /**
+     * Changes the perspective to the current player's
+     */
+    changePerspective(isWhite) {
+        if (!this.rotateAutomatically) return;
+        if (isWhite) {
+            this.selectedView = "White";
+        } else {
+            this.selectedView = "Black";
+        }
+
+        this.onViewChange();
     }
 
     updateAllLights() {
