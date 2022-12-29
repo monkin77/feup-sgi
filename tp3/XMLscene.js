@@ -1,5 +1,6 @@
 import { CGFscene, CGFshader, CGFtexture } from "../lib/CGF.js";
 import { CGFaxis, CGFcamera } from "../lib/CGF.js";
+import { MyRectangle } from "./primitives/MyRectangle.js";
 import MyGameOrchestrator from "./scenes/model/checkers/MyGameOrchestrator.js";
 import { updateLight } from "./scenes/parser/utils.js";
 
@@ -99,6 +100,7 @@ export class XMLscene extends CGFscene {
      */
     initTextures() {
         this.fontTexture = new CGFtexture(this, './scenes/images/oolite-font.trans.png');
+        this.letter = new MyRectangle(this, "letter-rectangle", 0, 2.5, 0, 2.5);
     }
 
     setDefaultAppearance() {

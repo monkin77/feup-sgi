@@ -1,5 +1,5 @@
 import { MyRectangle } from "../../../primitives/MyRectangle.js";
-import { convertDigitToCharCoords, convertLowercaseLetterToCharCoords, convertUppercaseLetterToCharCoords } from "../../../utils/font.js";
+import { displayText } from "../../../utils/font.js";
 
 export default class MyScoreBoard {
     /**
@@ -10,14 +10,13 @@ export default class MyScoreBoard {
     constructor(scene, sideLength, boardMaterial) {
         this._scene = scene;
         this._sideLength = sideLength;
-        this._letterSize = sideLength / 8;
+        this._spacing = sideLength / 8;
 
         this._boardMaterial = boardMaterial;
 
         this._score1 = 0;
         this._score2 = 0;
 
-        this._letter = new MyRectangle(scene, "score-board-letter", 0, this._letterSize, 0, this._letterSize);
         this._card = new MyRectangle(scene, "score-board-card", 0, sideLength / 3, 0, sideLength / 5);
     }
 
@@ -37,66 +36,15 @@ export default class MyScoreBoard {
 
         this._scene.setActiveShaderSimple(this._scene.textShader);
 
-        this._scene.textShader.setUniformsValues({
-            "charCoords": convertDigitToCharCoords(Math.floor(this._score1 / 10))
-        });
-        this._letter.display();
+        const score1 = this._score1.toLocaleString("pt-PT", { minimumIntegerDigits: 2 });
+        const score2 = this._score2.toLocaleString("pt-PT", { minimumIntegerDigits: 2 });
+        displayText(this._scene, `${score1}-${score2}`, this._spacing / 2);
 
-        this._scene.translate(this._letterSize / 2, 0, 0);
-        this._scene.textShader.setUniformsValues({
-            "charCoords": convertDigitToCharCoords(Math.floor(this._score1 % 10))
-        });
-        this._letter.display();
-
-        this._scene.translate(this._letterSize / 2, 0, 0);
-        this._scene.textShader.setUniformsValues({ "charCoords": [6, 9] }); // -
-        this._letter.display();
-
-        this._scene.translate(this._letterSize / 2, 0, 0);
-        this._scene.textShader.setUniformsValues({
-            "charCoords": convertDigitToCharCoords(Math.floor(this._score2 / 10))
-        });
-        this._letter.display();
-
-        this._scene.translate(this._letterSize / 2, 0, 0);
-        this._scene.textShader.setUniformsValues({
-            "charCoords": convertDigitToCharCoords(Math.floor(this._score2 % 10))
-        });
-        this._letter.display();
-
-        this._scene.translate(-(3/2) * this._letterSize, this._letterSize, 0);
+        this._scene.translate(this._spacing / 2, this._spacing, 0);
         this._scene.scale(0.5, 0.5, 0.5);
-        this._scene.textShader.setUniformsValues({
-            "charCoords": convertUppercaseLetterToCharCoords("S")
-        });
-        this._letter.display();
-
-        this._scene.translate(this._letterSize / (5/3), 0, 0);
-        this._scene.textShader.setUniformsValues({
-            "charCoords": convertUppercaseLetterToCharCoords("C")
-        });
-        this._letter.display();
-
-        this._scene.translate(this._letterSize / (5/3), 0, 0);
-        this._scene.textShader.setUniformsValues({
-            "charCoords": convertUppercaseLetterToCharCoords("O")
-        });
-        this._letter.display();
-
-        this._scene.translate(this._letterSize / (5/3), 0, 0);
-        this._scene.textShader.setUniformsValues({
-            "charCoords": convertUppercaseLetterToCharCoords("R")
-        });
-        this._letter.display();
-
-        this._scene.translate(this._letterSize / (5/3), 0, 0);
-        this._scene.textShader.setUniformsValues({
-            "charCoords": convertUppercaseLetterToCharCoords("E")
-        });
-        this._letter.display();
+        displayText(this._scene, "SCORE", this._spacing / (5/3));
 
         this._scene.setActiveShaderSimple(this._scene.defaultShader);
-
         this._scene.popMatrix();
     }
 

@@ -27,3 +27,32 @@ export const convertLowercaseLetterToCharCoords = (letter) => {
         return [digit, 7];
     }
 };
+
+export const displayText = (scene, text, spacing, x = 0, y = 0, z = 0, scale = 1) => {
+    scene.pushMatrix();
+    scene.translate(x, y, z);
+    scene.scale(scale, scale, scale);
+
+    for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        let charCoords;
+
+        if (char >= "0" && char <= "9") {
+            charCoords = convertDigitToCharCoords(char);
+        } else if (char >= "A" && char <= "Z") {
+            charCoords = convertUppercaseLetterToCharCoords(char);
+        } else if (char >= "a" && char <= "z") {
+            charCoords = convertLowercaseLetterToCharCoords(char);
+        } else if (char == "-") {
+            charCoords = [6, 9];
+        } else {
+            throw new Error("Unknown character: ", char);
+        }
+
+        scene.textShader.setUniformsValues({ charCoords });
+        scene.letter.display();
+        scene.translate(spacing, 0, 0);
+    }
+
+    scene.popMatrix();
+};
