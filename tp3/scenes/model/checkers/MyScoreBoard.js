@@ -10,13 +10,15 @@ export default class MyScoreBoard {
     constructor(scene, sideLength, boardMaterial) {
         this._scene = scene;
         this._sideLength = sideLength;
-        this._width = sideLength / 4;
+        this._letterSize = sideLength / 8;
+
         this._boardMaterial = boardMaterial;
 
         this._score1 = 0;
         this._score2 = 0;
 
-        this._letter = new MyRectangle(scene, "score-board-letter", 0, this._width, 0, this._width);
+        this._letter = new MyRectangle(scene, "score-board-letter", 0, this._letterSize, 0, this._letterSize);
+        this._card = new MyRectangle(scene, "score-board-card", 0, sideLength / 3, 0, sideLength / 5);
     }
 
     /**
@@ -25,21 +27,72 @@ export default class MyScoreBoard {
     display() {
         this._scene.pushMatrix();
 
+        this._scene.translate(0, this._sideLength, 0);
+        this._scene.rotate(Math.PI / 2, 1, 0, 0);
+        this._card.display();
+        this._scene.translate(0, 0, 0.1);
+
         this._boardMaterial.setTexture(this._scene.fontTexture);
         this._boardMaterial.apply();
 
         this._scene.setActiveShaderSimple(this._scene.textShader);
-        this._scene.textShader.setUniformsValues({ "charCoords": convertDigitToCharCoords(this._score1) });
 
-        this._scene.translate(0, 5, 5);
+        this._scene.textShader.setUniformsValues({
+            "charCoords": convertDigitToCharCoords(Math.floor(this._score1 / 10))
+        });
         this._letter.display();
 
-        this._scene.translate(this._width / 2, 0, 0);
-        this._scene.textShader.setUniformsValues({ "charCoords": convertUppercaseLetterToCharCoords("P") });
+        this._scene.translate(this._letterSize / 2, 0, 0);
+        this._scene.textShader.setUniformsValues({
+            "charCoords": convertDigitToCharCoords(Math.floor(this._score1 % 10))
+        });
         this._letter.display();
 
-        this._scene.translate(this._width / 2, 0, 0);
-        this._scene.textShader.setUniformsValues({ "charCoords": convertLowercaseLetterToCharCoords("a") });
+        this._scene.translate(this._letterSize / 2, 0, 0);
+        this._scene.textShader.setUniformsValues({ "charCoords": [6, 9] }); // -
+        this._letter.display();
+
+        this._scene.translate(this._letterSize / 2, 0, 0);
+        this._scene.textShader.setUniformsValues({
+            "charCoords": convertDigitToCharCoords(Math.floor(this._score2 / 10))
+        });
+        this._letter.display();
+
+        this._scene.translate(this._letterSize / 2, 0, 0);
+        this._scene.textShader.setUniformsValues({
+            "charCoords": convertDigitToCharCoords(Math.floor(this._score2 % 10))
+        });
+        this._letter.display();
+
+        this._scene.translate(-(3/2) * this._letterSize, this._letterSize, 0);
+        this._scene.scale(0.5, 0.5, 0.5);
+        this._scene.textShader.setUniformsValues({
+            "charCoords": convertUppercaseLetterToCharCoords("S")
+        });
+        this._letter.display();
+
+        this._scene.translate(this._letterSize / (5/3), 0, 0);
+        this._scene.textShader.setUniformsValues({
+            "charCoords": convertUppercaseLetterToCharCoords("C")
+        });
+        this._letter.display();
+
+        this._scene.translate(this._letterSize / (5/3), 0, 0);
+        this._scene.textShader.setUniformsValues({
+            "charCoords": convertUppercaseLetterToCharCoords("O")
+        });
+        this._letter.display();
+
+        this._scene.translate(this._letterSize / (5/3), 0, 0);
+        this._scene.textShader.setUniformsValues({
+            "charCoords": convertUppercaseLetterToCharCoords("R")
+        });
+        this._letter.display();
+
+        this._scene.translate(this._letterSize / (5/3), 0, 0);
+        this._scene.textShader.setUniformsValues({
+            "charCoords": convertUppercaseLetterToCharCoords("E")
+        });
         this._letter.display();
 
         this._scene.setActiveShaderSimple(this._scene.defaultShader);
