@@ -30,6 +30,6 @@ export default class ReplayState extends State {
         }
 
         const move = this._sequence.moves[this._currentMove++];
-        this.orchestrator.state = new MoveAnimState(this.orchestrator, move, this);
+        this.orchestrator.state = new MoveAnimState(this.orchestrator, move, move.player, this);
     }
 }
