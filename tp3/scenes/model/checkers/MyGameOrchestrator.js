@@ -73,6 +73,7 @@ export default class MyGameOrchestrator {
         if (this.state instanceof TurnState ||
             this.state instanceof PickedState) {
                 const lastMove = this._sequence.undo();
+                if (!lastMove) return;
                 this._board = lastMove.board;
                 this.state = new TurnState(this, lastMove.player);
             }
