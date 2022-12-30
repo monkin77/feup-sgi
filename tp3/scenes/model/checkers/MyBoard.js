@@ -21,7 +21,7 @@ export default class MyBoard {
      * @param {*} sideLength
      */
     constructor(sceneGraph, x, y, z, sideLength) {
-        this._sceneGraph = sceneGraph; // TODO: Alternative to using the scene graph
+        this._sceneGraph = sceneGraph;
 
         this._scene = sceneGraph.scene;
         this._x = x;
@@ -494,7 +494,6 @@ export default class MyBoard {
      * @param {MyTile} tile
      */
     getTileCoordinates(tile) {
-        // TODO: Consider adding coordinates to the tile class
         const index = this._tiles.indexOf(tile);
         const i = Math.floor(index / tilesPerSide);
         const j = index % tilesPerSide;

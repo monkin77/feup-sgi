@@ -48,6 +48,7 @@ export default class MyGameOrchestrator {
             animation.update(t);
         this.state.update(t);
 
+        // TODO: Instantly lose game or pass turn when time is up
         if (!this.lastTimestamp) {
             this.resetTurnCounter();
         } else {
