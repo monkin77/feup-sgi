@@ -25,6 +25,7 @@ export default class ReplayState extends State {
 
     updateState() {
         if (this._currentMove >= this._sequence.moves.length) {
+            // Replay ended
             this.orchestrator.state = this._previousState;
             return;
         }

@@ -1,4 +1,3 @@
-import { switchPlayer } from "../../../../utils/checkers.js";
 import MyGameMove from "../MyGameMove.js";
 import MyGameOrchestrator from "../MyGameOrchestrator.js";
 import MyTile from "../MyTile.js";
@@ -21,27 +20,29 @@ export default class PickedState extends State {
 
     onClick(obj) {
         if (obj instanceof MyTile) { // TODO Finish game logic
-            const possibleTiles = this.orchestrator._board.getPossibleMoves(this.tile);
+            const [possibleTiles, canCapture] = this.orchestrator._board.getPossibleMoves(this.tile);
             if (possibleTiles.includes(obj)) {
+
                 // Perform a Move to a new position
                 const move = new MyGameMove(
                     this.tile.piece,
                     this.tile,
                     obj, this.player,
-                    this.orchestrator._board
+                    this._orchestrator.board
                 );
                 if (!move.validate()) {
                     // Deselect the piece
                     return new TurnState(this.orchestrator, this.player);
                 }
 
-                // Store the initial position of the piece for the spotlight animation
-                const initPiecePosition = this._orchestrator.board.getTileAbsPosition(this.tile, true)
-
                 this.orchestrator.board = move.execute();
                 this._orchestrator.sequence.addMove(move);
 
-                const nextTurnState = new TurnState(this._orchestrator, switchPlayer(this.player));
+                // ==== Check what is the next game's state ====
+                // If a player can capture, he must capture.
+                // So we can consider the canCapture parameter as an indicator of capture
+                const nextTurnState = this._orchestrator.getNextState(move, canCapture, this.player);
+
                 return new MoveAnimState(this.orchestrator, move, nextTurnState);
             } else if (obj.id === this.tile.id) {
                 // Deselect the piece

@@ -4,6 +4,7 @@ import State from "./State.js";
 
 export default class TurnState extends State {
     constructor(orchestrator, player) {
+        console.log("Orchestrator: " + orchestrator, "Player: " + player);
         super(orchestrator);
         this.player = player;
     }
@@ -19,6 +20,6 @@ export default class TurnState extends State {
     }
 
     display() {
-        this.orchestrator._board.display(this.player);
+        this.orchestrator.board.display(this.player);
     }
 }

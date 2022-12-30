@@ -17,7 +17,7 @@ export default class MyGameMove {
      * Validates the move
      */
     validate() {
-        const possibleMoves = this._board.getPossibleMoves(this._fromTile);
+        const [possibleMoves, canCapture] = this._board.getPossibleMoves(this._fromTile);
         if (!possibleMoves.includes(this._toTile)) return false;
         return true;
     }

@@ -10,8 +10,7 @@ export default class MoveAnimState extends State {
      * 
      * @param {MyGameOrchestrator} orchestrator 
      * @param {MyGameMove} move 
-     * @param {*} nextPlayer 
-     * @param {number[]} initPiecePosition 3D position of the piece before the animation
+     * @param {State} nextState The new game's state after the animation ends
      */
     constructor(orchestrator, move, nextState) {
         super(orchestrator);
@@ -24,6 +23,7 @@ export default class MoveAnimState extends State {
             this.orchestrator._scene,
             colDiff, rowDiff
         );
+
         this._collisionAnimations = [];
     }
 
@@ -47,7 +47,7 @@ export default class MoveAnimState extends State {
         this.checkCollisionsAndAnimate();
 
         // === Move Spotlight to the new position ===
-        const board = this._move.board;
+        const board = this._orchestrator.board;
         // Calculate the progress of the animation to get the current position
         const animationProgress = Math.min(this._animation.animationTime / this._animation.getDuration(), 1);
         // Calculate the current position of the piece
