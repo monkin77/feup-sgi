@@ -4,6 +4,7 @@ export default class EndGameState extends State {
     constructor(orchestrator, winner) {
         super(orchestrator);
         this.winner = winner;
+        this.orchestrator.board.scoreboard.increaseScore(this.winner);
     }
 
     onClick(obj) {
@@ -14,5 +15,6 @@ export default class EndGameState extends State {
     display() {
         // TODO: Display
         console.log("Winner: " + this.winner);
+        this.orchestrator.board.display();
     }
 }

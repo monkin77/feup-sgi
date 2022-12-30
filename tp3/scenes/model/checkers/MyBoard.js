@@ -462,6 +462,10 @@ export default class MyBoard {
         return this._blackStorage;
     }
 
+    get scoreboard() {
+        return this._scoreboard;
+    }
+
     /**
      * Returns the tile that is at the given distance from the board's origin
      * @param {*} x distance in the x axis
