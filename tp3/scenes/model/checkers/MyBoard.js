@@ -3,6 +3,7 @@ import { startRowsWithDiscs, tilesPerSide } from "../../../utils/checkers.js";
 import { updateLight } from "../../parser/utils.js";
 import MyGameOrchestrator from "./MyGameOrchestrator.js";
 import MyPiece from "./MyPiece.js";
+import MyScoreBoard from "./MyScoreBoard.js";
 import MyStorage from "./MyStorage.js";
 import MyTile from "./MyTile.js";
 
@@ -40,6 +41,7 @@ export default class MyBoard {
 
         this.buildTiles();
         this.buildStorages();
+        this._scoreboard = new MyScoreBoard(this._scene, this._sideLength, this._boardMaterial);
 
         /* 
         Initialize the Spotlight
@@ -241,6 +243,9 @@ export default class MyBoard {
         // Draw the Storages
         this._whiteStorage.display();
         this._blackStorage.display();
+
+        // Draw scoreboard
+        this._scoreboard.display();
 
         this._scene.popMatrix();
     }
