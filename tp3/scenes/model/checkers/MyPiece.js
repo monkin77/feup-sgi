@@ -101,7 +101,6 @@ export default class MyPiece {
      * Makes the piece a king
      */
     upgradeToKing() {
-        // TODO: Change the height and appearance of the piece to a king
         this._isKing = true;
     }
 

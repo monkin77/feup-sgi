@@ -49,12 +49,17 @@ export default class MyGameOrchestrator {
             animation.update(t);
         this.state.update(t);
 
-        // TODO: Instantly lose game or pass turn when time is up
+        if (this.state instanceof EndGameState ||
+            this.state instanceof MenuState) return;
+
         if (!this.lastTimestamp) {
             this.resetTurnCounter();
         } else {
             const secondsElapsed = (t - this.lastTimestamp) / 1000;
             this._turnCounter = Math.max(0, this._turnCounter - secondsElapsed);
+            if (this._turnCounter == 0) {
+                this.state = new EndGameState(this, switchPlayer(this.state.player));
+            }
         }
         this.lastTimestamp = t;
     }

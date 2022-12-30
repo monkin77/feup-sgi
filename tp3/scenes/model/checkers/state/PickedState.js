@@ -19,7 +19,7 @@ export default class PickedState extends State {
     }
 
     onClick(obj) {
-        if (obj instanceof MyTile) { // TODO Finish game logic
+        if (obj instanceof MyTile) {
             const [possibleTiles, canCapture] = this.orchestrator._board.getPossibleMoves(this.tile);
             if (possibleTiles.includes(obj)) {
 
@@ -57,6 +57,6 @@ export default class PickedState extends State {
     }
 
     display() {
-        this.orchestrator._board.display(this.player, this.tile);
+        this.orchestrator.board.display(this.player, this.tile);
     }
 }

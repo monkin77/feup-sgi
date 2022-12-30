@@ -74,7 +74,7 @@ export default class MyScoreBoard {
      * Increases the score of the given player
      * @param {number} player
      */
-    increaseScore(player) { // TODO: Increase score after a player wins
+    increaseScore(player) {
         player === 1 ? this._score1++ : this._score2++;
     }
 }
