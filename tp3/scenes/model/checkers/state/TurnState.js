@@ -1,7 +1,7 @@
 import MyTile from "../MyTile.js";
 import PickedState from "./PickedState.js";
 import State from "./State.js";
-import { player1 } from "../../../../utils/checkers.js";
+import { isWhitePlayer, player1 } from "../../../../utils/checkers.js";
 
 export default class TurnState extends State {
     constructor(orchestrator, player, playerChanged = false) {
@@ -23,7 +23,7 @@ export default class TurnState extends State {
 
     display() {
         if (!this._turnStarted) {
-            this.orchestrator.scene.changePerspective(this.player === player1);
+            this.orchestrator.scene.changePerspective(isWhitePlayer(this.player));
             this._turnStarted = true;
             if (this._playerChanged) this.orchestrator.resetTurnCounter();
         }

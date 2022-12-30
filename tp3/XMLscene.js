@@ -6,7 +6,7 @@ import MyGameOrchestrator from "./scenes/model/checkers/MyGameOrchestrator.js";
 import PickedState from "./scenes/model/checkers/state/PickedState.js";
 import TurnState from "./scenes/model/checkers/state/TurnState.js";
 import { updateLight } from "./scenes/parser/utils.js";
-import { player1 } from "./utils/checkers.js";
+import { isWhitePlayer, player1 } from "./utils/checkers.js";
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -214,7 +214,7 @@ export class XMLscene extends CGFscene {
             if (!this.gameOrchestrator.state instanceof TurnState &&
                 !this.gameOrchestrator.state instanceof PickedState) return;
 
-                this.changePerspective(this.gameOrchestrator.state.player === player1);
+                this.changePerspective(isWhitePlayer(this.gameOrchestrator.state.player));
         }
     }
 
