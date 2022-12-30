@@ -410,6 +410,10 @@ export default class MyBoard {
         // If the last move was not a capture, switch to the next player
         if (!hasCaptured) return boardState.SWITCH_PLAYER;
 
+        if (!lastMovedTile.hasPiece()) {
+            throw new Error("Last moved tile does not have a piece");
+        }
+        
         const isWhite = lastMovedTile.piece.isWhite;
         const storage = isWhite ? this._whiteStorage : this._blackStorage;
         if (storage.captured.length == discsPerSide) {

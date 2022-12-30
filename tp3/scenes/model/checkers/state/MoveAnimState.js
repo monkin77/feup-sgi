@@ -1,26 +1,22 @@
 import { getTranslation } from "../../../../utils/algebra.js";
-import { boardState, isWhitePlayer, switchPlayer } from "../../../../utils/checkers.js";
 import BounceAnimation from "../animation/BounceAnimation.js";
 import MoveAnimation from "../animation/MoveAnimation.js";
 import MyGameMove from "../MyGameMove.js";
 import MyGameOrchestrator from "../MyGameOrchestrator.js";
-import EndGameState from "./EndGameState.js";
 import State from "./State.js";
-import TurnState from "./TurnState.js";
 
 export default class MoveAnimState extends State {
     /**
      * 
      * @param {MyGameOrchestrator} orchestrator 
      * @param {MyGameMove} move 
-     * @param {number} currPlayer 
-     * @param {number[]} initPiecePosition 3D position of the piece before the animation
+     * @param {State} nextState The new game's state after the animation ends
      */
-    constructor(orchestrator, move, currPlayer, initPiecePosition) {
+    constructor(orchestrator, move, nextState) {
         super(orchestrator);
         this._move = move;
-        this._currPlayer = currPlayer;
-        this._initPiecePosition = initPiecePosition;
+        this._nextState = nextState;
+        this._initPiecePosition = this._move.board.getTileAbsPosition(move.fromTile, true);
 
         const { rowDiff, colDiff } = move.board.getDifferenceBetweenTiles(move.fromTile, move.toTile);
         this._animation = new MoveAnimation(
@@ -66,30 +62,7 @@ export default class MoveAnimState extends State {
             if (this._collisionAnimations.some(a => !a.ended)) return;
             this._move.piece.animation = null;
 
-            // Check what is the next game's state
-            // Get the (i, j) coordinates of the destination tile
-            const {i: iDest, j: jDest} = this._move.board.getTileCoordinates(this._move.toTile);
-            // Fetch the tile from the updated Board at the destination coordinates. 
-            // This is necessary because the move object contains the previous board state
-            const lastMoveTile = board.getTileByCoordinates(iDest, jDest);
-
-            const newBoardState = board.checkBoardState(lastMoveTile, this._collisionAnimations.length > 0);
-            switch (newBoardState) {
-                case boardState.SWITCH_PLAYER:
-                    this._orchestrator.state = new TurnState(this._orchestrator, switchPlayer(this._currPlayer));
-                    break;
-                case boardState.MOVE_AGAIN:
-                    this._orchestrator.state = new TurnState(this._orchestrator, this._currPlayer);
-                    break;
-                case boardState.END:
-                    // The current player won
-                    // TODO: Complete the EndGameState class
-                    this._orchestrator.state = new EndGameState(this._orchestrator, this._currPlayer);
-                    break;
-                default:
-                    throw new Error("Invalid board state");
-            }
-
+            this._orchestrator.state = this._nextState;
         }
     }
 
