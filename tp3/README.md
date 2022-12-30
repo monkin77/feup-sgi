@@ -58,4 +58,5 @@ This project is the continuation of the previous one (`tp1`). The main objective
 
 - White Wood texture by [rawpixel.com on Freepik](https://www.freepik.com/free-photo/white-wooden-floor_4139257.htm#query=white%20wood%20texture&position=0&from_view=keyword)
 - Dark Wood texture by [rawpixel.com on Freepik](https://www.freepik.com/free-photo/black-wooden-floor_4139258.htm#query=black%20wood%20texture&position=2&from_view=search&track=ais)
+- Crown icons created by [feen - Flaticon](https://www.flaticon.com/free-icons/crown)
 

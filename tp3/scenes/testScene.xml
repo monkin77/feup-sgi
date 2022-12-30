@@ -1,7 +1,7 @@
 <sxs>
     <scene root="root" axis_length="5"/>
 
-    <views default="White">
+    <views default="Black">
         <perspective id="White" near="0.1" far="500" angle="50">
             <from x="5" y="15" z="20" />
             <to x="5" y="-2" z="0" />

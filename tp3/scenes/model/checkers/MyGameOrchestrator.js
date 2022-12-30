@@ -1,5 +1,5 @@
 import { MySceneGraph } from "../../../MySceneGraph.js";
-import { boardState, player1, switchPlayer } from "../../../utils/checkers.js";
+import { boardState, player1, player2, switchPlayer } from "../../../utils/checkers.js";
 import MyBoard from "./MyBoard.js";
 import MyGameSequence from "./MyGameSequence.js";
 import MenuState from "./state/MenuState.js";
@@ -36,7 +36,8 @@ export default class MyGameOrchestrator {
     initBoard() {
         this._board = new MyBoard(this._theme, -5, 0, 10, 20);
         if (this.state instanceof MenuState) {
-            this.state = new TurnState(this, player1, this._board);
+            // Player 2 (black pieces) start the game
+            this.state = new TurnState(this, player2, this._board);
         }
     }
 

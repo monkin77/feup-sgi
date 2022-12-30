@@ -13,5 +13,6 @@ export default class EndGameState extends State {
 
     display() {
         // TODO: Display
+        console.log("Winner: " + this.winner);
     }
 }

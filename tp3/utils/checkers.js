@@ -16,6 +16,8 @@ export const boardState = {
 // Variable to be returned when there are no possible moves [[list of moves], canCapture]
 export const noPossibleMoves = [[], false];
 
+export const defaultFontSize = 2.5;
+
 /**
  * Method to check if the pieces of a given color correspond to the current player's turn
  * @param {*} turn 
