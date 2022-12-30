@@ -4,11 +4,11 @@ import State from "./State.js";
 import { player1 } from "../../../../utils/checkers.js";
 
 export default class TurnState extends State {
-    constructor(orchestrator, player) {
-        console.log("Orchestrator: " + orchestrator, "Player: " + player);
+    constructor(orchestrator, player, playerChanged = false) {
         super(orchestrator);
         this.player = player;
         this._turnStarted = false;
+        this._playerChanged = playerChanged;
     }
 
     onClick(obj) {
@@ -25,6 +25,7 @@ export default class TurnState extends State {
         if (!this._turnStarted) {
             this.orchestrator.scene.changePerspective(this.player === player1);
             this._turnStarted = true;
+            if (this._playerChanged) this.orchestrator.resetTurnCounter();
         }
         this.orchestrator.board.display(this.player);
     }

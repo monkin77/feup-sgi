@@ -6,6 +6,7 @@ import MyPiece from "./MyPiece.js";
 import MyScoreBoard from "./MyScoreBoard.js";
 import MyStorage from "./MyStorage.js";
 import MyTile from "./MyTile.js";
+import MyTimer from "./MyTimer.js";
 
 const spotlightDistance = 2;
 
@@ -42,6 +43,7 @@ export default class MyBoard {
         this.buildTiles();
         this.buildStorages();
         this._scoreboard = new MyScoreBoard(this._scene, this._sideLength, this._boardMaterial);
+        this._timer = new MyTimer(this._scene, this._sideLength, this._boardMaterial);
 
         /* 
         Initialize the Spotlight
@@ -289,6 +291,9 @@ export default class MyBoard {
 
         // Draw scoreboard
         this._scoreboard.display();
+
+        // Draw timer
+        this._timer.display(this._scene.gameOrchestrator.turnCounter);
 
         this._scene.popMatrix();
     }

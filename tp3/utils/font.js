@@ -45,6 +45,8 @@ export const displayText = (scene, text, spacing, x = 0, y = 0, z = 0, scale = 1
             charCoords = convertLowercaseLetterToCharCoords(char);
         } else if (char == "-") {
             charCoords = [6, 9];
+        } else if (char == ":") {
+            charCoords = [10, 3];
         } else {
             throw new Error("Unknown character: ", char);
         }
