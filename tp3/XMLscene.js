@@ -15,14 +15,15 @@ export class XMLscene extends CGFscene {
     /**
      * @constructor
      * @param {MyInterface} myinterface
-     * @param {string} filename name of the scene's file
      */
-    constructor(myinterface, filename) {
+    constructor(myinterface) {
         super();
 
         this.interface = myinterface;
         this.setUpdatePeriod(100);
-        this._filename = filename;
+
+        this._selectedFile = 0;
+        this._files = ["temple.xml", "bigCheckers.xml"];
     }
 
     /**
@@ -50,7 +51,7 @@ export class XMLscene extends CGFscene {
 
         this.setUpdatePeriod(100);
 
-        this.gameOrchestrator = new MyGameOrchestrator(this._filename, this);
+        this.gameOrchestrator = new MyGameOrchestrator(this._files[this._selectedFile], this);
         this.startTime = null;
         this.cameraAnimation = null;
 
