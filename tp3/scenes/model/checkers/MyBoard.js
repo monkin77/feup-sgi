@@ -6,6 +6,7 @@ import MyPiece from "./MyPiece.js";
 import MyScoreBoard from "./MyScoreBoard.js";
 import MyStorage from "./MyStorage.js";
 import MyTile from "./MyTile.js";
+import MyTimer from "./MyTimer.js";
 
 const spotlightDistance = 2;
 
@@ -20,7 +21,7 @@ export default class MyBoard {
      * @param {*} sideLength
      */
     constructor(sceneGraph, x, y, z, sideLength) {
-        this._sceneGraph = sceneGraph; // TODO: Alternative to using the scene graph
+        this._sceneGraph = sceneGraph;
 
         this._scene = sceneGraph.scene;
         this._x = x;
@@ -42,6 +43,7 @@ export default class MyBoard {
         this.buildTiles();
         this.buildStorages();
         this._scoreboard = new MyScoreBoard(this._scene, this._sideLength, this._boardMaterial);
+        this._timer = new MyTimer(this._scene, this._sideLength, this._boardMaterial);
 
         /* 
         Initialize the Spotlight
@@ -290,6 +292,9 @@ export default class MyBoard {
         // Draw scoreboard
         this._scoreboard.display();
 
+        // Draw timer
+        this._timer.display(this._scene.gameOrchestrator.turnCounter);
+
         this._scene.popMatrix();
     }
 
@@ -489,7 +494,6 @@ export default class MyBoard {
      * @param {MyTile} tile
      */
     getTileCoordinates(tile) {
-        // TODO: Consider adding coordinates to the tile class
         const index = this._tiles.indexOf(tile);
         const i = Math.floor(index / tilesPerSide);
         const j = index % tilesPerSide;

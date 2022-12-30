@@ -21,7 +21,7 @@ export default class MyPiece {
      * @param {*} height
      */
     constructor(sceneGraph, id, isWhite, sideLength, texture, boardMaterial, height = 1,) {
-        this._sceneGraph = sceneGraph; // TODO: Alternative to using the scene graph
+        this._sceneGraph = sceneGraph;
         this.animation = null;
 
         this._scene = sceneGraph.scene;

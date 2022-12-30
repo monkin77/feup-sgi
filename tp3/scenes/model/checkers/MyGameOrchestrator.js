@@ -9,6 +9,8 @@ import ReplayState from "./state/ReplayState.js";
 import MyGameMove from "./MyGameMove.js";
 import EndGameState from "./state/EndGameState.js";
 
+const TURN_DURATION_SECONDS = 60;
+
 /**
  * Class that orchestrates the execution of the checkers game
  * • Manages the entire game:
@@ -45,6 +47,15 @@ export default class MyGameOrchestrator {
         for (const animation of Object.values(this._theme.animations))
             animation.update(t);
         this.state.update(t);
+
+        // TODO: Instantly lose game or pass turn when time is up
+        if (!this.lastTimestamp) {
+            this.resetTurnCounter();
+        } else {
+            const secondsElapsed = (t - this.lastTimestamp) / 1000;
+            this._turnCounter = Math.max(0, this._turnCounter - secondsElapsed);
+        }
+        this.lastTimestamp = t;
     }
 
     /**
@@ -73,7 +84,12 @@ export default class MyGameOrchestrator {
         if (this.state instanceof TurnState ||
             this.state instanceof PickedState) {
                 const lastMove = this._sequence.undo();
+                if (!lastMove) return;
+
                 this._board = lastMove.board;
+                if (this.state.player !== lastMove.player) {
+                    this.resetTurnCounter();
+                }
                 this.state = new TurnState(this, lastMove.player);
             }
     }
@@ -127,7 +143,7 @@ export default class MyGameOrchestrator {
 
         switch (newStateIndicator) {
             case boardState.SWITCH_PLAYER:
-                return new TurnState(this, switchPlayer(player));
+                return new TurnState(this, switchPlayer(player), true);
             case boardState.MOVE_AGAIN:
                 return new TurnState(this, player);
             case boardState.END:
@@ -137,6 +153,13 @@ export default class MyGameOrchestrator {
             default:
                 throw new Error("Invalid board state");
         }
+    }
+
+    /*
+     * Resets the turn counter
+     */
+    resetTurnCounter() {
+        this._turnCounter = TURN_DURATION_SECONDS;
     }
 
     get sequence() {
@@ -157,5 +180,9 @@ export default class MyGameOrchestrator {
 
     get theme() {
         return this._theme;
+    }
+
+    get turnCounter() {
+        return this._turnCounter;
     }
 }

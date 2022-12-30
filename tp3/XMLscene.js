@@ -1,8 +1,12 @@
 import { CGFscene, CGFshader, CGFtexture } from "../lib/CGF.js";
 import { CGFaxis, CGFcamera } from "../lib/CGF.js";
 import { MyRectangle } from "./primitives/MyRectangle.js";
+import CameraAnimation from "./scenes/model/checkers/animation/CameraAnimation.js";
 import MyGameOrchestrator from "./scenes/model/checkers/MyGameOrchestrator.js";
+import PickedState from "./scenes/model/checkers/state/PickedState.js";
+import TurnState from "./scenes/model/checkers/state/TurnState.js";
 import { updateLight } from "./scenes/parser/utils.js";
+import { isWhitePlayer, player1 } from "./utils/checkers.js";
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -48,6 +52,7 @@ export class XMLscene extends CGFscene {
 
         this.gameOrchestrator = new MyGameOrchestrator(this._filename, this);
         this.startTime = null;
+        this.cameraAnimation = null;
 
         // the activation of picking capabilities in WebCGF
         this.setPickEnabled(true);
@@ -64,6 +69,7 @@ export class XMLscene extends CGFscene {
             vec3.fromValues(15, 15, 15),
             vec3.fromValues(0, 0, 0)
         );
+        this.cameraId = null;
     }
 
     /**
@@ -118,6 +124,7 @@ export class XMLscene extends CGFscene {
 
         this.camera =
             this.graph.viewsParser.views[this.graph.viewsParser.defaultViewId];
+        this.cameraId = this.graph.viewsParser.defaultViewId;
 
         // Update the interface's camera
         this.interface.setActiveCamera(this.camera);
@@ -156,6 +163,9 @@ export class XMLscene extends CGFscene {
         // Display Lights Toggle
         this.displayLights = false;
 
+        // Automatically change perspectives at the start of each turn
+        this.rotateAutomatically = true;
+
         // Select the Active Camera
         this.viewsSelector = Object.keys(this.graph.viewsParser.views).reduce((accumulator, key) => {
             return {...accumulator, [key]: key }
@@ -171,10 +181,41 @@ export class XMLscene extends CGFscene {
      */
     onViewChange = () => {
         if (this.selectedView) {
-            this.camera = this.graph.viewsParser.views[this.selectedView];
-            // Update the interface's camera
-            this.interface.setActiveCamera(this.camera);
+            if (this.selectedView === this.cameraId) return;
+
+            this.cameraAnimation = new CameraAnimation(
+                this, this.camera, this.graph.viewsParser.views[this.selectedView],
+                (this.cameraId == "White" || this.cameraId == "Black") && (this.selectedView == "White" || this.selectedView == "Black")
+            );
+            this.cameraId = this.selectedView;
+            this.cameraAnimation.start();
         } else console.log("[Error] No view selected");
+    }
+
+    /**
+     * Changes the perspective to the current player's
+     */
+    changePerspective(isWhite) {
+        if (!this.rotateAutomatically) return;
+        if (isWhite) {
+            this.selectedView = "White";
+        } else {
+            this.selectedView = "Black";
+        }
+
+        this.onViewChange();
+    }
+
+    /**
+     * Method called when automatic perspective rotation is toggled
+     */
+    onToggleAutoRotate = () => {
+        if (this.rotateAutomatically) {
+            if (!this.gameOrchestrator.state instanceof TurnState &&
+                !this.gameOrchestrator.state instanceof PickedState) return;
+
+                this.changePerspective(isWhitePlayer(this.gameOrchestrator.state.player));
+        }
     }
 
     updateAllLights() {
@@ -204,6 +245,11 @@ export class XMLscene extends CGFscene {
         this.timeFactor = (1 + Math.sin(this.highlightAngVelocity * currTimeStep)) / 2.0;
 
         this.highlightShader.setUniformsValues({ timeFactor: this.timeFactor });
+
+        if (this.cameraAnimation) {
+            this.cameraAnimation.update(t);
+            if (this.cameraAnimation.ended) this.cameraAnimation = null;
+        }
     }
 
     /**
@@ -268,6 +314,7 @@ export class XMLscene extends CGFscene {
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
+            if (this.cameraAnimation) this.cameraAnimation.apply();
 
             this.updateAllLights();
 

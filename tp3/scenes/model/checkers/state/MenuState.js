@@ -11,7 +11,7 @@ export default class MenuState extends State {
     }
 
     display() {
-        // TODO: Display Menu?
+        // TODO: Display Menu
         this._orchestrator._board.display();
     }
 }

@@ -12,7 +12,7 @@ export default class MyTile {
      * @param {MyPiece | null} piece MyPiece object if the tile has a piece on it, null otherwise
      */
     constructor(scene, id, sideLength, isWhite, isEdgeRow, piece = null) {
-        this._scene = scene; // TODO: Do we need the scene?
+        this._scene = scene;
         this._id = id;
         this._isWhite = isWhite;
         this._tileSideLength = sideLength;
