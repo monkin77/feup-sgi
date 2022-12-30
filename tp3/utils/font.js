@@ -64,6 +64,7 @@ export const displayText = (scene, text, spacing, x = 0, y = 0, z = 0, scale = 1
 
 /**
  * Display a single symbol in the font texture by specifying its coordinates
+ * Rectangle Dimensions: 2.5x2.5
  * @param {XMLscene} scene 
  * @param {number[]} charCoords 2D Array containing [x, y] coordinates in the font texture
  * @param {CGFappearance} material material to apply the texture

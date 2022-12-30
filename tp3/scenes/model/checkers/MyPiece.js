@@ -1,5 +1,6 @@
 import { CGFtexture } from "../../../../lib/CGF.js";
 import { MySceneGraph } from "../../../MySceneGraph.js";
+import { defaultFontSize } from "../../../utils/checkers.js";
 import { displaySymbol } from "../../../utils/font.js";
 import PickingInfo from "../PickingInfo.js";
 import MyTile from "./MyTile.js";
@@ -19,9 +20,8 @@ export default class MyPiece {
      * @param {number} sideLength sideLength length of the tile the piece is on
      * @param {CGFtexture} texture
      * @param {CGFappearance} boardMaterial
-     * @param {*} height
      */
-    constructor(sceneGraph, id, isWhite, sideLength, texture, boardMaterial, height = 1,) {
+    constructor(sceneGraph, id, isWhite, sideLength, texture, boardMaterial) {
         this._sceneGraph = sceneGraph;
         this.animation = null;
 
@@ -30,7 +30,7 @@ export default class MyPiece {
         this._isWhite = isWhite;
         this._sideLength = sideLength;
         this._discLength = sideLength * pieceScaleFactor;
-        this._height = height;
+        this._height = 2;   // Height of the piece
         this._texture = texture;
         this._boardMaterial = boardMaterial;
 
@@ -69,8 +69,21 @@ export default class MyPiece {
         this._sceneGraph.drawComponent(this._coveredCylinder, null, null, new PickingInfo(this._coveredCylinder.pickingId, tile));
 
         // If the piece is a king, draw a crown on top of it
-        if (!this._isKing) {
+        if (this._isKing && onBoard) {
+            this._scene.pushMatrix();
+
+            // Desired length of the crown
+            const fontSideLength = this._radius * 2 * 0.85;
+            // scale factor to achieve that length
+            const fontScaleFactor =  fontSideLength / defaultFontSize;
+
+            // Translate the crown to the top of the piece
+            this._scene.translate(-fontSideLength/2, -fontSideLength/2, this._height + 0.1);
+            this._scene.scale(fontScaleFactor, fontScaleFactor, 1);
+
             displaySymbol(this._scene, [9, 0], this._boardMaterial);
+
+            this._scene.popMatrix();
         }
 
         this._scene.popMatrix();

@@ -6,7 +6,7 @@ import MyGameOrchestrator from "./scenes/model/checkers/MyGameOrchestrator.js";
 import PickedState from "./scenes/model/checkers/state/PickedState.js";
 import TurnState from "./scenes/model/checkers/state/TurnState.js";
 import { updateLight } from "./scenes/parser/utils.js";
-import { isWhitePlayer, player1 } from "./utils/checkers.js";
+import { defaultFontSize, isWhitePlayer, player1 } from "./utils/checkers.js";
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -106,7 +106,7 @@ export class XMLscene extends CGFscene {
      */
     initTextures() {
         this.fontTexture = new CGFtexture(this, './scenes/images/oolite-font.trans.png');
-        this.letter = new MyRectangle(this, "letter-rectangle", 0, 2.5, 0, 2.5);
+        this.letter = new MyRectangle(this, "letter-rectangle", 0, defaultFontSize, 0, defaultFontSize);
     }
 
     setDefaultAppearance() {
