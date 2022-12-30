@@ -54,6 +54,7 @@ export class XMLscene extends CGFscene {
         this.gameOrchestrator = new MyGameOrchestrator(this._files[this._selectedFile], this);
         this.startTime = null;
         this.cameraAnimation = null;
+        // TODO: Check if this needs to be reset when changing scenes
 
         // the activation of picking capabilities in WebCGF
         this.setPickEnabled(true);
@@ -154,18 +155,25 @@ export class XMLscene extends CGFscene {
         this.sceneInited = true;
     }
 
+
+
     /**
      * Method called after the graph is loaded to setup the interface
      */
     setupInterface() {
-        // Display Axis Toggle
-        this.displayAxis = false;
+        if (this.rotateAutomatically == null) {
+            // First time the scene is loaded
 
-        // Display Lights Toggle
-        this.displayLights = false;
+            // Display Axis Toggle
+            this.displayAxis = false;
 
-        // Automatically change perspectives at the start of each turn
-        this.rotateAutomatically = true;
+            // Display Lights Toggle
+            this.displayLights = false;
+
+            // Automatically change perspectives at the start of each turn
+            this.rotateAutomatically = true;
+        }
+
 
         // Select the Active Camera
         this.viewsSelector = Object.keys(this.graph.viewsParser.views).reduce((accumulator, key) => {
@@ -338,5 +346,14 @@ export class XMLscene extends CGFscene {
 
     replay() {
         this.gameOrchestrator.replay();
+    }
+
+    onChangeScenery() {
+        console.log("Changing scenery...");
+        this.sceneInited = false;
+
+        // Swap the selected theme file
+        this._selectedFile = 1 - this._selectedFile;
+        this.gameOrchestrator.changeTheme(this._files[this._selectedFile]);
     }
 }
