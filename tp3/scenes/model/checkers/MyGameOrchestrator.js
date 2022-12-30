@@ -1,11 +1,13 @@
 import { MySceneGraph } from "../../../MySceneGraph.js";
-import { player1 } from "../../../utils/checkers.js";
+import { boardState, player1, switchPlayer } from "../../../utils/checkers.js";
 import MyBoard from "./MyBoard.js";
 import MyGameSequence from "./MyGameSequence.js";
 import MenuState from "./state/MenuState.js";
 import TurnState from "./state/TurnState.js";
 import PickedState from "./state/PickedState.js";
 import ReplayState from "./state/ReplayState.js";
+import MyGameMove from "./MyGameMove.js";
+import EndGameState from "./state/EndGameState.js";
 
 /**
  * Class that orchestrates the execution of the checkers game
@@ -105,6 +107,36 @@ export default class MyGameOrchestrator {
     onClick(obj) {
         // TODO: Handle general scene clicks
         this.state = this.state.onClick(obj);
+    }
+
+    /**
+     * This method contains the logic to calculate the next state of the game
+     * @param {MyGameMove} move last executed move 
+     * @param {boolean} hasCaptured whether the player has captured a piece
+     * @param {number} player player that executed the move
+     * @returns {State} next state of the game
+     */
+    getNextState(move, hasCaptured, player) {
+        // Get the (i, j) coordinates of the destination tile
+        const {i: iDest, j: jDest} = move.board.getTileCoordinates(move.toTile);
+        // Fetch the tile from the updated Board at the destination coordinates. 
+        // This is necessary because the move object contains the previous board state
+        const lastMoveTile = this.board.getTileByCoordinates(iDest, jDest);
+
+        const newStateIndicator = this.board.checkBoardState(lastMoveTile, hasCaptured);
+
+        switch (newStateIndicator) {
+            case boardState.SWITCH_PLAYER:
+                return new TurnState(this, switchPlayer(player));
+            case boardState.MOVE_AGAIN:
+                return new TurnState(this, player);
+            case boardState.END:
+                // The current player won
+                // TODO: Complete the EndGameState class
+                return new EndGameState(this, player);
+            default:
+                throw new Error("Invalid board state");
+        }
     }
 
     get sequence() {
