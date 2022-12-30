@@ -142,8 +142,6 @@ export default class MyBoard {
         for (const tile of this._tiles) {
             // If the tile has a piece of the given player, check if it can capture a piece
             if (tile.hasPiece() && (tile.piece.isWhite == isWhite)) {
-                // TOOD: This is creating an infinite loop. Need to create an additional method to get the moves
-                // without checking if it can capture
                 const [_, canCapture] = this.getPossibleMoves(tile, false);
                 if (canCapture) return true;
             }
@@ -274,8 +272,6 @@ export default class MyBoard {
 
         // Calculate the possible moves from the selected tile
         const [possibleTiles, canCapture] = selectedTile ? this.getPossibleMoves(selectedTile) : noPossibleMoves;
-
-        // TODO: If a capture is possible, only show the possible capture tiles
 
         // Draw the tiles
         this.drawTilesColor(true, turn, possibleTiles);

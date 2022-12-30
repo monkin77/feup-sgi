@@ -1,5 +1,6 @@
 import { CGFtexture } from "../../../../lib/CGF.js";
 import { MySceneGraph } from "../../../MySceneGraph.js";
+import { displaySymbol } from "../../../utils/font.js";
 import PickingInfo from "../PickingInfo.js";
 import MyTile from "./MyTile.js";
 
@@ -66,6 +67,11 @@ export default class MyPiece {
         // Covered cylinder contains a diameter of 2 and a height of 2
         // Currently, all the pieces are registering the picking id. If it's not selectable, it is being registered with -1
         this._sceneGraph.drawComponent(this._coveredCylinder, null, null, new PickingInfo(this._coveredCylinder.pickingId, tile));
+
+        // If the piece is a king, draw a crown on top of it
+        if (!this._isKing) {
+            displaySymbol(this._scene, [9, 0], this._boardMaterial);
+        }
 
         this._scene.popMatrix();
     }
