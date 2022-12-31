@@ -4,8 +4,8 @@ export const discsPerSide = 12;
 
 export const startRowsWithDiscs = 3;
 
-export const player1 = 0;
-export const player2 = 1;
+export const player1 = 0;   // Black player
+export const player2 = 1;   // White player
 
 export const boardState = {
     END: 0,
@@ -25,7 +25,7 @@ export const defaultFontSize = 2.5;
  * @returns true if it's the turn of the player with the given color, false otherwise
  */
 export const isPlayerTurn = (turn, isWhite) => {
-    return (turn == player1 && isWhite) || (turn == player2 && !isWhite);
+    return (turn == player1 && !isWhite) || (turn == player2 && isWhite);
 };
 
 export const switchPlayer = (turn) => {
@@ -38,6 +38,6 @@ export const switchPlayer = (turn) => {
  * @returns true if the player is white, false otherwise
  */
 export const isWhitePlayer = (player) => (
-    player == player1
+    player == player2
 )
 

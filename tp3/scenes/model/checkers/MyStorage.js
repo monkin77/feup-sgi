@@ -89,7 +89,7 @@ export default class MyStorage {
      * Returns the translation for the storage
      */
     getBoardTranslation() {
-        return [this._isWhite ? -this._storageWidth : this._sideLength, 0, 0];
+        return [!this._isWhite ? -this._storageWidth : this._sideLength, 0, 0];
     }
 
     /**
