@@ -39,7 +39,7 @@ export default class MyGameOrchestrator {
             this._board = new MyBoard(this._theme, -5, 0, 10, 20);
             if (this.state instanceof MenuState) {
                 // Player 2 (black pieces) start the game
-                this.state = new TurnState(this, player2, this._board);
+                this.state = new TurnState(this, player1, this._board);
             }
         }
     }

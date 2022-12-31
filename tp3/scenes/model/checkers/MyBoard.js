@@ -70,11 +70,11 @@ export default class MyBoard {
                 const isWhite = (j + offset) % 2 != 0;
 
                 let piece = null;
-                const pieceIsWhite = i < startRowsWithDiscs;
-                if (!isWhite && (pieceIsWhite || i > tilesPerSide - startRowsWithDiscs - 1)) {
+                const pieceIsBlack = i < startRowsWithDiscs;
+                if (!isWhite && (pieceIsBlack || i > tilesPerSide - startRowsWithDiscs - 1)) {
                     // If the tile is in the first or last rows, it has a piece
-                    const texture = pieceIsWhite ? this._whiteDiscTexture : this._blackDiscTexture;
-                    piece = new MyPiece(this._sceneGraph, `piece-${idNumber}`, pieceIsWhite, this._tileSideLength, texture, this._boardMaterial);
+                    const texture = pieceIsBlack ? this._blackDiscTexture : this._whiteDiscTexture;
+                    piece = new MyPiece(this._sceneGraph, `piece-${idNumber}`, !pieceIsBlack, this._tileSideLength, texture, this._boardMaterial);
 
                     // Add new Piece to the corresponding array
                     if (isWhite) whitePieces.push(piece);
@@ -170,8 +170,8 @@ export default class MyBoard {
         let possibleMoves = [];
 
         const directions = [];
-        if (piece.isWhite || piece.isKing) directions.push({ i: 1, j: 1 }, { i: 1, j: -1 });
-        if (!piece.isWhite || piece.isKing) directions.push({ i: -1, j: 1 }, { i: -1, j: -1 });
+        if (!piece.isWhite || piece.isKing) directions.push({ i: 1, j: 1 }, { i: 1, j: -1 });
+        if (piece.isWhite || piece.isKing) directions.push({ i: -1, j: 1 }, { i: -1, j: -1 });
 
         for (const direction of directions) {
             if (piece.isKing) {
