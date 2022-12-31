@@ -8,6 +8,8 @@ import TurnState from "./scenes/model/checkers/state/TurnState.js";
 import { updateLight } from "./scenes/parser/utils.js";
 import { defaultFontSize, isWhitePlayer, player1 } from "./utils/checkers.js";
 
+export const sceneFiles = ["temple.xml", "bigCheckers.xml"];
+
 /**
  * XMLscene class, representing the scene that is to be rendered.
  */
@@ -22,8 +24,7 @@ export class XMLscene extends CGFscene {
         this.interface = myinterface;
         this.setUpdatePeriod(100);
 
-        this._selectedFile = 0;
-        this._files = ["temple.xml", "bigCheckers.xml"];
+        this._selectedFile = 0; 
     }
 
     /**
@@ -51,7 +52,7 @@ export class XMLscene extends CGFscene {
 
         this.setUpdatePeriod(100);
 
-        this.gameOrchestrator = new MyGameOrchestrator(this._files[this._selectedFile], this);
+        this.gameOrchestrator = new MyGameOrchestrator(sceneFiles[this._selectedFile], this);
         this.startTime = null;
         this.cameraAnimation = null;
         // TODO: Check if this needs to be reset when changing scenes
@@ -150,7 +151,7 @@ export class XMLscene extends CGFscene {
         this.setupInterface();
 
         // Initialize Board
-        this.gameOrchestrator.initBoard();
+        this.gameOrchestrator.initBoard(sceneFiles[this._selectedFile]);
             
         this.sceneInited = true;
     }
@@ -354,6 +355,6 @@ export class XMLscene extends CGFscene {
 
         // Swap the selected theme file
         this._selectedFile = 1 - this._selectedFile;
-        this.gameOrchestrator.changeTheme(this._files[this._selectedFile]);
+        this.gameOrchestrator.changeTheme(sceneFiles[this._selectedFile]);
     }
 }
