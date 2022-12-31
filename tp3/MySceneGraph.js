@@ -21,6 +21,7 @@ import { Component } from "./scenes/model/Component.js";
 import { TexturesParser } from "./scenes/parser/TexturesParser.js";
 import { AnimationsParser } from "./scenes/parser/AnimationsParser.js";
 import PickingInfo from "./scenes/model/PickingInfo.js";
+import { BoardParser } from "./scenes/parser/BoardParser.js";
 
 // Order of the groups in the XML document.
 const SCENE_INDEX = 0;
@@ -33,6 +34,7 @@ const TRANSFORMATIONS_INDEX = 6;
 const PRIMITIVES_INDEX = 7;
 const ANIMATIONS_INDEX = 8;
 const COMPONENTS_INDEX = 9;
+const BOARD_INDEX = 10;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -226,6 +228,20 @@ export class MySceneGraph {
             if ((error = this.parseComponents(nodes[index])) != null)
                 return error;
         }
+
+        // <board>
+        if ((index = nodeNames.indexOf("board")) == -1)
+            return "tag <board> missing";
+        else {
+            if (index != BOARD_INDEX)
+                onXMLMinorError("tag <board> out of order");
+
+            //Parse components block
+            if ((error = this.parseBoard(nodes[index])) != null)
+                return error;
+        }
+
+
         log("all parsed");
     }
 
@@ -1086,6 +1102,23 @@ export class MySceneGraph {
         }
 
         log("Parsed Components");
+        return null;
+    }
+
+    /**
+     * Parses the <board> block.
+     * @param {board block element} boardNode
+     */
+    parseBoard(boardNode) {
+        this.boardParser = new BoardParser(
+            this.reader,
+            boardNode,
+        );
+
+        if (this.boardParser.hasReports())
+            return this.boardParser.reports[0];
+
+        log("Parsed Board");
         return null;
     }
 
