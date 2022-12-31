@@ -2,21 +2,20 @@
     <scene root="root" axis_length="5"/>
 
     <views default="Black">
-        <perspective id="White" near="0.1" far="500" angle="50">
+        <perspective id="Black" near="0.1" far="500" angle="50">
             <from x="5" y="15" z="20" />
-            <to x="5" y="-2" z="0" />
+            <to x="5" y="-1" z="0" />
         </perspective>
 
-        <perspective id="Black" near="0.1" far="500" angle="50">
+        <perspective id="White" near="0.1" far="500" angle="50">
             <from x="5" y="15" z="-20" />
-            <to x="5" y="-2" z="0" />
+            <to x="5" y="-1" z="0" />
         </perspective>
 
         <perspective id="Profile" near="0.1" far="500" angle="45">
-            <from x="30" y="15" z="30" />
-            <to x="0" y="-2" z="0" />
+            <from x="35" y="25" z="18" />
+            <to x="0" y="0" z="0" />
         </perspective>
-
     </views>
 
     <ambient>
@@ -2467,4 +2466,8 @@
         </component>
         
     </components>
+
+    <board>
+        <position />
+    </board>
 </sxs>
