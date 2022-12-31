@@ -73,6 +73,7 @@
         <texture id="fireTexture" file="scenes/images/fire.png" />
         <texture id="camoTexture" file="scenes/images/camo.jpg" />
         <texture id="woodTexture" file="scenes/images/trunk-image.jpg" />
+        <texture id="refinedWoodTexture" file="scenes/images/board/dark_wood_disc2.jpg" />
     </textures>
 
     <materials>
@@ -2751,6 +2752,7 @@
                 <componentref id="pillars" />
                 <componentref id="banner" />
                 <componentref id="barrelSet" />
+                <componentref id="barrelSet2" />
                 
                 <componentref id="campfire" />
             </children>
@@ -3044,6 +3046,65 @@
                 <componentref id="barrel5" />
                 <componentref id="barrel6" />
                 <componentref id="barrel7" />
+            </children>
+        </component>
+
+        <component id="barrelRow">
+            <transformation>
+                <!-- <translate x="8" y="-6.5" z="-38" />
+                <scale x="3.5" y="3.5" z="3.5" /> -->
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrel" />
+                <componentref id="barrel2" />
+                <componentref id="barrel3" />
+            </children>
+        </component>
+
+        <component id="barrelRow2">
+            <transformation>
+                <translate x="0" y="0" z="1.5" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrelRow" />
+            </children>
+        </component>
+
+        <component id="boardWood">
+            <transformation>
+                <translate x="-3.3" y="1.06" z="0.9" />
+                <scale x="3.3" y="0.1" z="4.4" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="refinedWoodTexture" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="barrelSet2">
+            <transformation>
+                <translate x="5" y="-5" z="-4" />
+                <scale x="4.5" y="4.5" z="4.5" />
+            </transformation>
+            <materials>
+                <material id="barrelMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="barrelRow" />
+                <componentref id="barrelRow2" />
+                <componentref id="boardWood" />
             </children>
         </component>
 
