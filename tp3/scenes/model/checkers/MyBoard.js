@@ -416,9 +416,15 @@ export default class MyBoard {
         }
         
         const isWhite = lastMovedTile.piece.isWhite;
-        const storage = isWhite ? this._whiteStorage : this._blackStorage;
-        if (storage.captured.length == discsPerSide) {
-            // Player has captured all the discs
+        let canOpponentPlay = this._tiles.some(tile => {
+            if (tile.hasPiece() && tile.piece.isWhite != isWhite) {
+                const [possibleMoves] = this.getPossibleMoves(tile);
+                return possibleMoves.length > 0;
+            }
+            return false;
+        });
+        if (!canOpponentPlay) {
+            // Opponent can't play, game ends
             return boardState.END;
         }
 
