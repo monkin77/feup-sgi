@@ -13,12 +13,12 @@ export default class MyStorage {
         this._scene = scene;
         this._id = id;
 
-        this.updatePosAndSize(sideLength);
-
         this._isWhite = isWhite;
         this._boardMaterial = boardMaterial;
         this._captured = [];
         this._texture = new CGFtexture(this._scene, "scenes/images/board/storage_wood.jpg");
+
+        this.updatePosAndSize(sideLength);
     }
 
     /**
@@ -41,6 +41,11 @@ export default class MyStorage {
             [-translateX, 0, 0],
             [0, translateY, 0],
         ];
+
+        const tileSideLength = newSideLength / tilesPerSide;
+        for (const piece of this._captured) {
+            piece.updatePosAndSize(tileSideLength);
+        }
     }
 
     display() {
