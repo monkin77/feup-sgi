@@ -2,6 +2,7 @@ import { CGFappearance, CGFtexture } from "../../../../lib/CGF.js";
 import { boardState, discsPerSide, noPossibleMoves, startRowsWithDiscs, tilesPerSide } from "../../../utils/checkers.js";
 import { updateLight } from "../../parser/utils.js";
 import MyGameOrchestrator from "./MyGameOrchestrator.js";
+import MyMonitor from "./MyMonitor.js";
 import MyPiece from "./MyPiece.js";
 import MyScoreBoard from "./MyScoreBoard.js";
 import MyStorage from "./MyStorage.js";
@@ -39,6 +40,8 @@ export default class MyBoard {
 
         this.buildTiles();
         this.buildStorages();
+
+        this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, this._boardMaterial);
         this._scoreboard = new MyScoreBoard(this._scene, this._sideLength, this._boardMaterial);
         this._timer = new MyTimer(this._scene, this._sideLength, this._boardMaterial);
 
@@ -310,9 +313,15 @@ export default class MyBoard {
         this.drawPiecesColor(true, selectedTile);
         this.drawPiecesColor(false, selectedTile);
 
+        // Clear The picking id currently in use
+        this._scene.clearPickRegistration();
+
         // Draw the Storages
         this._whiteStorage.display();
         this._blackStorage.display();
+
+        // Draw the Monitor
+        this._monitor.display();
 
         // Draw scoreboard
         this._scoreboard.display();

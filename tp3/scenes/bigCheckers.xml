@@ -2318,8 +2318,8 @@
         <!-- 100 x 30 x 1 -->
         <component id="leftWall">
             <transformation>
-                <translate x="-50" y="-10" z="50" />
-                <scale x="1" y="40" z="100" />
+                <translate x="-50" y="-10" z="75" />
+                <scale x="1" y="40" z="150" />
                 <rotate axis="y" angle="90" />
             </transformation>
             <materials>
@@ -2335,7 +2335,7 @@
         <!-- 100 x 30 x 1 -->
          <component id="rightWall">
             <transformation>
-                <translate x="-50" y="-10" z="-50" />
+                <translate x="-50" y="-10" z="-75" />
                 <scale x="100" y="40" z="1" />
             </transformation>
             <materials>
@@ -2351,7 +2351,7 @@
         <!-- 100 x 30 x 1 -->
         <component id="leftBehindWall">
             <transformation>
-                <translate x="50" y="-10" z="50" />
+                <translate x="50" y="-10" z="75" />
                 <scale x="100" y="40" z="1" />
                 <rotate axis="y" angle="180" />
             </transformation>
@@ -2368,8 +2368,8 @@
         <!-- 100 x 303 x 1 -->
          <component id="rightBehindWall">
             <transformation>
-                <translate x="50" y="-10" z="-50" />
-                <scale x="1" y="40" z="100" />
+                <translate x="50" y="-10" z="-75" />
+                <scale x="1" y="40" z="150" />
                 <rotate axis="y" angle="-90" />
             </transformation>
             <materials>
@@ -2385,7 +2385,7 @@
         <!-- 100 x 100 x 1 -->
         <component id="floor">
             <transformation>
-                <scale x="100" y="1" z="100" />
+                <scale x="100" y="1" z="150" />
                 <translate x="-0.5" y="-10" z="0.5" />
                 <rotate axis="x" angle="-90" />
             </transformation>
@@ -2403,7 +2403,7 @@
         <component id="ceiling">
             <transformation>
                 <translate x="0" y="30" z="0" />
-                <scale x="100" y="1" z="100" />
+                <scale x="100" y="1" z="150" />
                 <translate x="-0.5" y="0" z="-0.5" />
                 <rotate axis="x" angle="90" />
             </transformation>
