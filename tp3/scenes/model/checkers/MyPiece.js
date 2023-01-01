@@ -68,11 +68,13 @@ export default class MyPiece {
         this._boardMaterial.setTextureWrap("REPEAT", "REPEAT");
         this._boardMaterial.apply();
 
-        this._scene.pushMatrix();
-
         if (this._animation) {
+            // Add another matrix to hold the animation transformation
+            this._scene.pushMatrix();
             this._animation.apply();
         }
+
+        this._scene.pushMatrix();
 
         if (onBoard) this._scene.translate(this._sideLength/2, this._sideLength/2, 0);
 
@@ -106,6 +108,8 @@ export default class MyPiece {
 
             this._scene.popMatrix();
         }
+
+        if (this._animation) this._scene.popMatrix();
     }
 
     /**
