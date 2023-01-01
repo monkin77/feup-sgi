@@ -3,12 +3,12 @@
 
     <views default="Black">
         <perspective id="Black" near="0.1" far="500" angle="50">
-            <from x="0" y="20" z="85" />
+            <from x="0" y="20" z="70" />
             <to x="0" y="-1" z="0" />
         </perspective>
 
         <perspective id="White" near="0.1" far="500" angle="50">
-            <from x="0" y="20" z="-85" />
+            <from x="0" y="20" z="-70" />
             <to x="0" y="-1" z="0" />
         </perspective>
 
@@ -2452,6 +2452,140 @@
             </children>
         </component>
 
+        <component id="platFront">
+            <transformation>
+                <translate x="0" y="16" z="-14.5" />
+                <scale x="5.2" y="2" z="0.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="platFloorInter">
+            <transformation>
+                <translate x="0" y="14" z="-11" />
+                <rotate axis="x" angle="20" />
+                <scale x="5" y="0.5" z="7.05" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="platWallRightInter">
+            <transformation>
+                <translate x="10" y="16.5" z="-10" />
+                <rotate axis="x" angle="20" />
+                <scale x="0.25" y="5" z="7.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="platWallRight">
+            <transformation>
+                <translate x="10" y="16.5" z="-5" />
+                <scale x="0.25" y="5" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+         <component id="platWallLeftInter">
+            <transformation>
+                <translate x="0" y="16.5" z="-10" />
+                <rotate axis="x" angle="20" />
+                <scale x="0.25" y="5" z="7.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="platWallLeft">
+            <transformation>
+                <translate x="0" y="16.5" z="-5" />
+                <scale x="0.25" y="5" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="platformBase">
+            <transformation>
+                <!-- The quadrangularPrism draws half on top and half under, so we need to translate upwards  -->
+                <translate x="0" y="7" z="-5" />
+                <scale x="5" y="14" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="platform1">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="platformBase" />
+
+                <componentref id="platWallLeft" />
+                <componentref id="platWallLeftInter" />
+                <componentref id="platWallRight" />
+                <componentref id="platWallRightInter" />
+                <componentref id="platFloorInter" />
+                <componentref id="platFront" />
+            </children>
+        </component>
+
+        <component id="player1">
+            <transformation>
+                <translate x="-5" y="-10" z="70" />
+            </transformation>
+            <materials>
+                <material id="backgroundMaterial" />
+            </materials>
+            <texture id="wallTexture" length_s="1" length_t="1" />
+            <children>
+                <componentref id="platform1" />
+            </children>
+        </component>
+
         <component id="root">
             <transformation>
             </transformation>
@@ -2462,6 +2596,7 @@
             <children>
                 <!-- <componentref id="laraCroft" /> -->
                 <componentref id="temple" />
+                <componentref id="player1" />
             </children>
         </component>
         
