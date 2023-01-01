@@ -1,8 +1,13 @@
 import { CGFtexture } from "../../../../lib/CGF.js";
 import { MySceneGraph } from "../../../MySceneGraph.js";
+import MyScoreBoard from "./MyScoreBoard.js";
+import MyTimer from "./MyTimer.js";
 
 const ceilingHeight = 40;
 const quadPrismLargeSide = 2;
+const poleLength = 8;
+const poleWidth = 1;
+const monitorHeight = 8; 
 
 export default class MyMonitor {
     /**
@@ -10,8 +15,11 @@ export default class MyMonitor {
      * @param {MySceneGraph} sceneGraph
      * @param {number} sideLength
      * @param {CGFappearance} boardMaterial
+     * @param {MyScoreBoard} scoreboard
+     * @param {MyTimer} timer
+     * @param {boolean} enabled
      */
-    constructor(sceneGraph, sideLength, boardMaterial) {
+    constructor(sceneGraph, sideLength, boardMaterial, scoreboard, timer, enabled) {
         this._sceneGraph = sceneGraph;
         this._scene = sceneGraph.scene;
 
@@ -22,31 +30,34 @@ export default class MyMonitor {
         const quadrangularPrism = this._sceneComponents["quadrangularPrism"];
         this._quadPrism = quadrangularPrism.copy();
 
-        this.updatePosAndSize(sideLength);
+        this.updateTheme(sideLength, enabled);
+
+        this._scoreboard = scoreboard;
+        this._timer = timer;
     }
 
     /**
      * Method to update the dimensions of the Monitor and the components that depend on it
      * @param {*} newSideLength 
+     * @param {*} enabled whether the monitor is enabled or not
      */
-    updatePosAndSize(newSideLength) {
+    updateTheme(newSideLength, enabled) {
         this._sideLength = newSideLength;
-
-        this._poleLength = 8;
-        this._poleWidth = 1;
-
         this._monitorWidth = newSideLength / 2.5;
-        this._monitorHeight = 8; 
+
+        this._enabled = enabled;
     }
 
     display() {
+        if (!this._enabled) return;
+
         // Draw The Monitor
         this._scene.pushMatrix();
 
-        let translateHeight = ceilingHeight - (this._poleLength / 2) - (this._monitorHeight/2);
+        let translateHeight = ceilingHeight - (poleLength / 2) - (monitorHeight/2);
         let translateXY = this._sideLength / 2 - this._monitorWidth / 2;
-        this._scene.translate(translateXY, translateXY + this._monitorWidth/2, translateHeight);
-        this._scene.scale(this._monitorWidth/quadPrismLargeSide, this._monitorWidth, this._monitorHeight);
+        this._scene.translate(translateXY, this._sideLength/2, translateHeight);
+        this._scene.scale(this._monitorWidth/quadPrismLargeSide, this._monitorWidth, monitorHeight);
 
         this._sceneGraph.drawComponent(this._quadPrism);
 
@@ -55,18 +66,15 @@ export default class MyMonitor {
         // Draw the Pole
         this._scene.pushMatrix();
 
-        translateHeight = ceilingHeight - (this._poleLength / 2);
-        translateXY = this._sideLength / 2 - this._poleWidth / 2;
+        translateHeight = ceilingHeight - (poleLength / 2);
+        translateXY = this._sideLength / 2 - poleWidth / 2;
         this._scene.translate(translateXY, translateXY, translateHeight);
 
-        const scaleXFactor = this._poleWidth / quadPrismLargeSide;
-        this._scene.scale(scaleXFactor, this._poleWidth, this._poleLength);
+        const scaleXFactor = poleWidth / quadPrismLargeSide;
+        this._scene.scale(scaleXFactor, poleWidth, poleLength);
 
         this._sceneGraph.drawComponent(this._quadPrism)
 
         this._scene.popMatrix();
-
-
     }
-
 }

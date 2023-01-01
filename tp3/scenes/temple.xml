@@ -2897,6 +2897,6 @@
         <!-- Board's side length -->      
         <sideLength value="20" />
 
-
+        <options useMonitor="0" />
     </board>
 </sxs>

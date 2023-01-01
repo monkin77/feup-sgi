@@ -1,4 +1,5 @@
 import { CGFappearance, CGFtexture } from "../../../../lib/CGF.js";
+import { MySceneGraph } from "../../../MySceneGraph.js";
 import { boardState, discsPerSide, noPossibleMoves, startRowsWithDiscs, tilesPerSide } from "../../../utils/checkers.js";
 import { updateLight } from "../../parser/utils.js";
 import MyGameOrchestrator from "./MyGameOrchestrator.js";
@@ -28,8 +29,6 @@ export default class MyBoard {
         this._sideLength = sideLength;
         this._tileSideLength = sideLength / tilesPerSide;
 
-        console.log("tileSideLength: " + this._tileSideLength);
-
         this._boardMaterial = new CGFappearance(this._scene); // Appearence for wood with default values
         this._boardMaterial.setAmbient(1, 1, 1, 1);
         this._boardMaterial.setDiffuse(1, 1, 1, 1);
@@ -43,9 +42,11 @@ export default class MyBoard {
         this.buildTiles();
         this.buildStorages();
 
-        this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, this._boardMaterial);
         this._scoreboard = new MyScoreBoard(this._scene, this._sideLength, this._boardMaterial);
         this._timer = new MyTimer(this._scene, this._sideLength, this._boardMaterial);
+
+        this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, 
+            this._boardMaterial, this._scoreboard, this._timer, this._sceneGraph.boardParser.useMonitor);
 
         /* 
         Initialize the Spotlight
@@ -60,11 +61,15 @@ export default class MyBoard {
     /**
      * Method to update the position and size of the board.
      * Also updates the position and size of the components that depend on it
-     * @param {number[]} position 3D array with the new position of the board
-     * @param {number} sideLength 
+     * @param {MySceneGraph} newSceneGraph 
      */
-    updatePosAndSize(position, sideLength) {
+    updateTheme(newSceneGraph) {
+        const position = newSceneGraph.boardParser.position;
+        const sideLength = newSceneGraph.boardParser.sideLength
+
         if (position.length != 3) throw new Error("Invalid position array length (expected 3, got " + position.length);
+
+        this._sceneGraph = newSceneGraph;
 
         [this._x, this._y, this._z] = position;
         this._sideLength = sideLength;
@@ -84,6 +89,9 @@ export default class MyBoard {
 
         // Update the Timer
         this._timer.updatePosAndSize(this._sideLength);
+
+        // Update the Monitor
+        this._monitor.updateTheme(this._sideLength, this._sceneGraph.boardParser.useMonitor);
 
         // Update the Spotlight Properties
         this._spotlightHeight = this._tileSideLength * 0.5;

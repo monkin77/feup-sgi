@@ -2477,7 +2477,6 @@
          -->    
         <sideLength value="66.67" />
 
-        <!-- Timer Position -->
-
+        <options useMonitor="1" />
     </board>
 </sxs>
