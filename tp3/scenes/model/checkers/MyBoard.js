@@ -57,15 +57,13 @@ export default class MyBoard {
     /**
      * Method to update the position and size of the board.
      * Also updates the position and size of the components that depend on it
-     * @param {*} x 
-     * @param {*} y 
-     * @param {*} z 
-     * @param {*} sideLength 
+     * @param {number[]} position 3D array with the new position of the board
+     * @param {number} sideLength 
      */
-    updatePosAndSize(x, y, z, sideLength) {
-        this._x = x;
-        this._y = y;
-        this._z = z;
+    updatePosAndSize(position, sideLength) {
+        if (position.length != 3) throw new Error("Invalid position array length (expected 3, got " + position.length);
+
+        [this._x, this._y, this._z] = position;
         this._sideLength = sideLength;
         this._tileSideLength = sideLength / tilesPerSide;
 
@@ -75,6 +73,8 @@ export default class MyBoard {
         }
 
         // Update the Storages
+        this._whiteStorage.updatePosAndSize(this._sideLength);
+        this._blackStorage.updatePosAndSize(this._sideLength);
 
         // Update the Scoreboard
 
