@@ -30,10 +30,10 @@ export default class MyMonitor {
         const quadrangularPrism = this._sceneComponents["quadrangularPrism"];
         this._quadPrism = quadrangularPrism.copy();
 
-        this.updateTheme(sideLength, enabled);
-
         this._scoreboard = scoreboard;
         this._timer = timer;
+
+        this.updateTheme(sideLength, enabled);
     }
 
     /**
@@ -46,28 +46,23 @@ export default class MyMonitor {
         this._monitorWidth = newSideLength / 2.5;
 
         this._enabled = enabled;
+        if (this._enabled) {
+            this._timer.updatePosAndSize(this._monitorWidth, enabled);
+        }
     }
 
-    display() {
+    /**
+     * 
+     * @param {*} turnCounter 
+     */
+    display(turnCounter) {
         if (!this._enabled) return;
-
-        // Draw The Monitor
-        this._scene.pushMatrix();
-
-        let translateHeight = ceilingHeight - (poleLength / 2) - (monitorHeight/2);
-        let translateXY = this._sideLength / 2 - this._monitorWidth / 2;
-        this._scene.translate(translateXY, this._sideLength/2, translateHeight);
-        this._scene.scale(this._monitorWidth/quadPrismLargeSide, this._monitorWidth, monitorHeight);
-
-        this._sceneGraph.drawComponent(this._quadPrism);
-
-        this._scene.popMatrix();
 
         // Draw the Pole
         this._scene.pushMatrix();
 
-        translateHeight = ceilingHeight - (poleLength / 2);
-        translateXY = this._sideLength / 2 - poleWidth / 2;
+        let translateHeight = ceilingHeight - (poleLength / 2);
+        let translateXY = this._sideLength / 2 - poleWidth / 2;
         this._scene.translate(translateXY, translateXY, translateHeight);
 
         const scaleXFactor = poleWidth / quadPrismLargeSide;
@@ -76,5 +71,36 @@ export default class MyMonitor {
         this._sceneGraph.drawComponent(this._quadPrism)
 
         this._scene.popMatrix();
+
+        // Draw The Monitor
+        this._scene.pushMatrix();
+
+        translateHeight = ceilingHeight - (poleLength / 2) - (monitorHeight/2);
+        translateXY = this._sideLength / 2 - this._monitorWidth / 2;
+        this._scene.translate(translateXY, this._sideLength/2, translateHeight);
+        this._scene.scale(this._monitorWidth/quadPrismLargeSide, this._monitorWidth, monitorHeight);
+
+        this._sceneGraph.drawComponent(this._quadPrism);
+
+        this._scene.popMatrix();
+
+
+        // Draw the scoreboard
+
+        // Draw the timer
+        this._scene.pushMatrix();
+
+        translateHeight = ceilingHeight - (poleLength / 2) - monitorHeight;
+        translateXY = this._sideLength / 2 - this._monitorWidth/2;
+        this._scene.translate(translateXY, translateXY, translateHeight);
+
+        this._timer.display(turnCounter);
+
+        this._scene.popMatrix();
+
+    }
+
+    get enabled() {
+        return this._enabled;
     }
 }

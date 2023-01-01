@@ -84,14 +84,18 @@ export default class MyBoard {
         this._whiteStorage.updatePosAndSize(this._sideLength);
         this._blackStorage.updatePosAndSize(this._sideLength);
 
-        // Update the Scoreboard
-        this._scoreboard.updatePosAndSize(this._sideLength);
-
-        // Update the Timer
-        this._timer.updatePosAndSize(this._sideLength);
-
+        const monitorEnabled = this._sceneGraph.boardParser.useMonitor;
         // Update the Monitor
         this._monitor.updateTheme(this._sideLength, this._sceneGraph.boardParser.useMonitor);
+
+        // Since the monitor already updates the scoreboard and timer, only update them if the monitor is disabled
+        if (!monitorEnabled) {
+            // Update the Scoreboard
+            this._scoreboard.updatePosAndSize(this._sideLength);
+
+            // Update the Timer
+            this._timer.updatePosAndSize(this._sideLength);
+        }
 
         // Update the Spotlight Properties
         this._spotlightHeight = this._tileSideLength * 0.5;
@@ -331,14 +335,16 @@ export default class MyBoard {
         this._blackStorage.display();
 
         // Draw the Monitor
-        this._monitor.display();
+        if (this._monitor.enabled) {
+            this._monitor.display(this._scene.gameOrchestrator.turnCounter);
+        } else {
+            // Draw scoreboard
+            this._scoreboard.display();
 
-        // Draw scoreboard
-        this._scoreboard.display();
-
-        // Draw timer
-        this._timer.display(this._scene.gameOrchestrator.turnCounter);
-
+            // Draw timer
+            this._timer.display(this._scene.gameOrchestrator.turnCounter);
+        }
+  
         this._scene.popMatrix();
     }
 
