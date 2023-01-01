@@ -28,6 +28,8 @@ export default class MyBoard {
         this._sideLength = sideLength;
         this._tileSideLength = sideLength / tilesPerSide;
 
+        console.log("tileSideLength: " + this._tileSideLength);
+
         this._boardMaterial = new CGFappearance(this._scene); // Appearence for wood with default values
         this._boardMaterial.setAmbient(1, 1, 1, 1);
         this._boardMaterial.setDiffuse(1, 1, 1, 1);

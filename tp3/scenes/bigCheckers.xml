@@ -2315,7 +2315,7 @@
             </children>
         </component>
 
-        <!-- 100 x 30 x 1 -->
+        <!-- 150 x 40 x 1 -->
         <component id="leftWall">
             <transformation>
                 <translate x="-50" y="-10" z="75" />

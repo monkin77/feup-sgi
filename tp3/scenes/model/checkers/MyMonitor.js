@@ -2,6 +2,7 @@ import { CGFtexture } from "../../../../lib/CGF.js";
 import { MySceneGraph } from "../../../MySceneGraph.js";
 
 const ceilingHeight = 40;
+const quadPrismLargeSide = 2;
 
 export default class MyMonitor {
     /**
@@ -31,24 +32,41 @@ export default class MyMonitor {
     updatePosAndSize(newSideLength) {
         this._sideLength = newSideLength;
 
-        this._poleLength = 6;
+        this._poleLength = 8;
         this._poleWidth = 1;
 
-        this._monitorWidth = newSideLength / 3;
-        this._monitorHeight = 10; 
+        this._monitorWidth = newSideLength / 2.5;
+        this._monitorHeight = 8; 
     }
 
     display() {
+        // Draw The Monitor
         this._scene.pushMatrix();
 
-        const monitorHeight = ceilingHeight - this._poleLength - this._monitorHeight;
-        this._scene.translate(this._sideLength / 2, this._sideLength / 2, monitorHeight);
+        let translateHeight = ceilingHeight - (this._poleLength / 2) - (this._monitorHeight/2);
+        let translateXY = this._sideLength / 2 - this._monitorWidth / 2;
+        this._scene.translate(translateXY, translateXY + this._monitorWidth/2, translateHeight);
+        this._scene.scale(this._monitorWidth/quadPrismLargeSide, this._monitorWidth, this._monitorHeight);
 
-        // TODO: Confirm if I need to specify picking -1
         this._sceneGraph.drawComponent(this._quadPrism);
 
+        this._scene.popMatrix();
+
+        // Draw the Pole
+        this._scene.pushMatrix();
+
+        translateHeight = ceilingHeight - (this._poleLength / 2);
+        translateXY = this._sideLength / 2 - this._poleWidth / 2;
+        this._scene.translate(translateXY, translateXY, translateHeight);
+
+        const scaleXFactor = this._poleWidth / quadPrismLargeSide;
+        this._scene.scale(scaleXFactor, this._poleWidth, this._poleLength);
+
+        this._sceneGraph.drawComponent(this._quadPrism)
 
         this._scene.popMatrix();
+
+
     }
 
 }
