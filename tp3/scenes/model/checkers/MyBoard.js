@@ -15,18 +15,17 @@ export default class MyBoard {
     /**
      *
      * @param {MySceneGraph} sceneGraph MySceneGraph object to use already created components and access the scene object
-     * @param {*} x
-     * @param {*} y
-     * @param {*} z
+     * @param {number[]} position 3D array with the new position of the board
      * @param {*} sideLength
      */
-    constructor(sceneGraph, x, y, z, sideLength) {
-        this._sceneGraph = sceneGraph;
+    constructor(sceneGraph, position, sideLength) {
+        if (position.length != 3) throw new Error("Invalid position array length (expected 3, got " + position.length);
 
+        this._sceneGraph = sceneGraph;
         this._scene = sceneGraph.scene;
-        this._x = x;
-        this._y = y;
-        this._z = z;
+
+        [this._x, this._y, this._z] = position;
+
         this._sideLength = sideLength;
         this._tileSideLength = sideLength / tilesPerSide;
 

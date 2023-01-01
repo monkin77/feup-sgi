@@ -3,13 +3,13 @@
 
     <views default="Black">
         <perspective id="Black" near="0.1" far="500" angle="50">
-            <from x="5" y="15" z="20" />
-            <to x="5" y="-1" z="0" />
+            <from x="0" y="20" z="85" />
+            <to x="0" y="-1" z="0" />
         </perspective>
 
         <perspective id="White" near="0.1" far="500" angle="50">
-            <from x="5" y="15" z="-20" />
-            <to x="5" y="-1" z="0" />
+            <from x="0" y="20" z="-85" />
+            <to x="0" y="-1" z="0" />
         </perspective>
 
         <perspective id="Profile" near="0.1" far="500" angle="45">
@@ -2319,7 +2319,7 @@
         <component id="leftWall">
             <transformation>
                 <translate x="-50" y="-10" z="50" />
-                <scale x="1" y="50" z="100" />
+                <scale x="1" y="40" z="100" />
                 <rotate axis="y" angle="90" />
             </transformation>
             <materials>
@@ -2336,7 +2336,7 @@
          <component id="rightWall">
             <transformation>
                 <translate x="-50" y="-10" z="-50" />
-                <scale x="100" y="50" z="1" />
+                <scale x="100" y="40" z="1" />
             </transformation>
             <materials>
                 <material id="wallMaterial" />
@@ -2352,7 +2352,7 @@
         <component id="leftBehindWall">
             <transformation>
                 <translate x="50" y="-10" z="50" />
-                <scale x="100" y="50" z="1" />
+                <scale x="100" y="40" z="1" />
                 <rotate axis="y" angle="180" />
             </transformation>
             <materials>
@@ -2369,7 +2369,7 @@
          <component id="rightBehindWall">
             <transformation>
                 <translate x="50" y="-10" z="-50" />
-                <scale x="1" y="50" z="100" />
+                <scale x="1" y="40" z="100" />
                 <rotate axis="y" angle="-90" />
             </transformation>
             <materials>
@@ -2402,7 +2402,7 @@
         <!-- 100 x 100 x 1 -->
         <component id="ceiling">
             <transformation>
-                <translate x="0" y="40" z="0" />
+                <translate x="0" y="30" z="0" />
                 <scale x="100" y="1" z="100" />
                 <translate x="-0.5" y="0" z="-0.5" />
                 <rotate axis="x" angle="90" />

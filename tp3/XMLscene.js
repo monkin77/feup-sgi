@@ -24,7 +24,7 @@ export class XMLscene extends CGFscene {
         this.interface = myinterface;
         this.setUpdatePeriod(100);
 
-        this._selectedFile = 0; 
+        this._selectedFile = 1; 
     }
 
     /**

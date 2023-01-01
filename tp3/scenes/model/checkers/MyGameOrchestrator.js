@@ -38,7 +38,7 @@ export default class MyGameOrchestrator {
     initBoard(newFilename) {
         if (!this._board) {
             // If the board is not initialized, initialize it
-            this._board = new MyBoard(this._theme, -5, 0, 10, 20);
+            this._board = new MyBoard(this._theme, this._theme.boardParser.position, this._theme.boardParser.sideLength);
             if (this.state instanceof MenuState) {
                 // Player 2 (black pieces) start the game
                 this.state = new TurnState(this, player1, this._board);
