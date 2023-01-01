@@ -8,8 +8,6 @@ import MyStorage from "./MyStorage.js";
 import MyTile from "./MyTile.js";
 import MyTimer from "./MyTimer.js";
 
-const spotlightDistance = 2;
-
 // Class for a Checkers board
 export default class MyBoard {
     /**
@@ -49,7 +47,8 @@ export default class MyBoard {
         Properties structure: [sceneIdx, enabled, type, location, ambient, diffuse, 
             specular, attenuation, angle, exponent, target] 
         */
-        this.initSpotlightProperties = [7, true, "spot", [this._x + this._tileSideLength/2, this._y + spotlightDistance, this._z - this._tileSideLength/2, 1.0], [0, 0, 0, 1], [1, 1, 1, 1], 
+        this._spotlightHeight = this._tileSideLength * 0.5;
+        this.initSpotlightProperties = [7, true, "spot", [this._x + this._tileSideLength/2, this._y + this._spotlightHeight, this._z - this._tileSideLength/2, 1.0], [0, 0, 0, 1], [1, 1, 1, 1], 
             [1, 1, 1, 1], [0, 1, 0], 180, 1, [this._x, this._y, this._z]];
     }
 
@@ -80,6 +79,7 @@ export default class MyBoard {
         // Update the Timer
 
         // Update the Spotlight Properties
+        this._spotlightHeight = this._tileSideLength * 0.5;
     }
 
     /**
@@ -409,8 +409,8 @@ export default class MyBoard {
      * Moves the board's spotlight to a new position and updates the light
      * @param {number[]} position 3D array representing new position on the board
      */
-    moveSpotlight = (position) => {
-        const fromPos = [position[0], position[1] + spotlightDistance, position[2], 1.0];
+    moveSpotlight(position) {
+        const fromPos = [position[0], position[1] + this._spotlightHeight, position[2], 1.0];
         const toPos = [...position, 1.0];
 
         const newProps = this.initSpotlightProperties;
