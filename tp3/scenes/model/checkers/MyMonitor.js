@@ -90,7 +90,7 @@ export default class MyMonitor {
         // Draw the timer
         this._scene.pushMatrix();
 
-        translateHeight = ceilingHeight - (poleLength / 2) - monitorHeight;
+        translateHeight = ceilingHeight - (poleLength / 2) - monitorHeight + (this._timer.cardHeight/4);
         translateXY = this._sideLength / 2 - this._monitorWidth/2;
         this._scene.translate(translateXY, translateXY, translateHeight);
 

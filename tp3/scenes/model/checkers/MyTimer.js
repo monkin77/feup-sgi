@@ -27,9 +27,10 @@ export default class MyTimer {
         this._sideLength = newSideLength;
         this._spacing = newSideLength / 8;
         this._cardLength = newSideLength / 3;
+        this._cardHeight = newSideLength / 5;
         this._monitorEnabled = monitorEnabled;
 
-        this._card = new MyRectangle(this._scene, "timer-card", 0, this._cardLength, 0, newSideLength / 5);
+        this._card = new MyRectangle(this._scene, "timer-card", 0, this._cardLength, 0, this._cardHeight);
     }
 
     /**
@@ -81,5 +82,13 @@ export default class MyTimer {
 
         this._scene.setActiveShaderSimple(this._scene.defaultShader);
         this._scene.popMatrix();
+    }
+
+    get cardHeight() {
+        return this._cardHeight;
+    }
+
+    get cardLength() {
+        return this._cardLength;
     }
 }
