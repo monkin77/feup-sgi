@@ -5,7 +5,7 @@ import MyTimer from "./MyTimer.js";
 
 const ceilingHeight = 40;
 const quadPrismLargeSide = 2;
-const poleLength = 8;
+const poleLength = 5;
 const poleWidth = 1;
 const monitorHeight = 8; 
 
@@ -24,7 +24,7 @@ export default class MyMonitor {
         this._scene = sceneGraph.scene;
 
         this._boardMaterial = boardMaterial;
-        this._texture = new CGFtexture(this._scene, "scenes/images/board/storage_wood.jpg");
+        this._texture = new CGFtexture(this._scene, "scenes/images/light-wood.jpg");
 
         this._sceneComponents = this._sceneGraph.componentsParser.components;
         const quadrangularPrism = this._sceneComponents["quadrangularPrism"];
@@ -59,6 +59,10 @@ export default class MyMonitor {
     display(turnCounter) {
         if (!this._enabled) return;
 
+        this._boardMaterial.setTexture(this._texture);
+        this._boardMaterial.setTextureWrap("REPEAT", "REPEAT");
+        this._boardMaterial.apply();
+
         // Draw the Pole
         this._scene.pushMatrix();
 
@@ -85,7 +89,8 @@ export default class MyMonitor {
 
         this._scene.popMatrix();
 
-
+        
+        // Move the scene to the right position to draw the timer and scoreboard
         this._scene.pushMatrix();
         translateHeight = ceilingHeight - (poleLength / 2) - monitorHeight;
         translateXY = this._sideLength / 2 - this._monitorWidth/2;

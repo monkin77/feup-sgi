@@ -350,7 +350,6 @@ export class XMLscene extends CGFscene {
     }
 
     onChangeScenery() {
-        console.log("Changing scenery...");
         this.sceneInited = false;
 
         // Swap the selected theme file
