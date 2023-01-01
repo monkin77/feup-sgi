@@ -13,18 +13,25 @@ export default class MyStorage {
         this._scene = scene;
         this._id = id;
 
-        this._sideLength = sideLength;
-        this._storageWidth = sideLength / 4;
-        this._pieceLength = (this._sideLength * pieceScaleFactor) / tilesPerSide
-        this._storagePadding = this._pieceLength * 0.3;
-
         this._isWhite = isWhite;
         this._boardMaterial = boardMaterial;
-
         this._captured = [];
-
-        this._rectangle = new MyRectangle(scene, id, 0, this._storageWidth, 0, sideLength);
         this._texture = new CGFtexture(this._scene, "scenes/images/board/storage_wood.jpg");
+
+        this.updatePosAndSize(sideLength);
+    }
+
+    /**
+     * Method to update the sideLength of a Storage
+     * @param {*} newSideLength 
+     */
+    updatePosAndSize(newSideLength) {
+        this._sideLength = newSideLength;
+        this._storageWidth = newSideLength / 4;
+        this._pieceLength = (this._sideLength * pieceScaleFactor) / tilesPerSide;
+        this._storagePadding = this._pieceLength * 0.3;
+
+        this._rectangle = new MyRectangle(this._scene, this._id, 0, this._storageWidth, 0, newSideLength);
 
         const translateX = (this._storageWidth - 2 * this._storagePadding + (this._pieceLength/2)) / 2;
         const translateY = (this._sideLength - 2 * this._storagePadding + (this._pieceLength/2)) / 6;
@@ -34,6 +41,11 @@ export default class MyStorage {
             [-translateX, 0, 0],
             [0, translateY, 0],
         ];
+
+        const tileSideLength = newSideLength / tilesPerSide;
+        for (const piece of this._captured) {
+            piece.updatePosAndSize(tileSideLength);
+        }
     }
 
     display() {
@@ -89,7 +101,7 @@ export default class MyStorage {
      * Returns the translation for the storage
      */
     getBoardTranslation() {
-        return [this._isWhite ? -this._storageWidth : this._sideLength, 0, 0];
+        return [!this._isWhite ? -this._storageWidth : this._sideLength, 0, 0];
     }
 
     /**

@@ -8,6 +8,8 @@ import TurnState from "./scenes/model/checkers/state/TurnState.js";
 import { updateLight } from "./scenes/parser/utils.js";
 import { defaultFontSize, isWhitePlayer, player1 } from "./utils/checkers.js";
 
+export const sceneFiles = ["temple.xml", "bigCheckers.xml"];
+
 /**
  * XMLscene class, representing the scene that is to be rendered.
  */
@@ -15,14 +17,14 @@ export class XMLscene extends CGFscene {
     /**
      * @constructor
      * @param {MyInterface} myinterface
-     * @param {string} filename name of the scene's file
      */
-    constructor(myinterface, filename) {
+    constructor(myinterface) {
         super();
 
         this.interface = myinterface;
         this.setUpdatePeriod(100);
-        this._filename = filename;
+
+        this._selectedFile = 1; 
     }
 
     /**
@@ -50,9 +52,10 @@ export class XMLscene extends CGFscene {
 
         this.setUpdatePeriod(100);
 
-        this.gameOrchestrator = new MyGameOrchestrator(this._filename, this);
+        this.gameOrchestrator = new MyGameOrchestrator(sceneFiles[this._selectedFile], this);
         this.startTime = null;
         this.cameraAnimation = null;
+        // TODO: Check if this needs to be reset when changing scenes
 
         // the activation of picking capabilities in WebCGF
         this.setPickEnabled(true);
@@ -148,23 +151,30 @@ export class XMLscene extends CGFscene {
         this.setupInterface();
 
         // Initialize Board
-        this.gameOrchestrator.initBoard();
+        this.gameOrchestrator.initBoard(sceneFiles[this._selectedFile]);
             
         this.sceneInited = true;
     }
+
+
 
     /**
      * Method called after the graph is loaded to setup the interface
      */
     setupInterface() {
-        // Display Axis Toggle
-        this.displayAxis = false;
+        if (this.rotateAutomatically == null) {
+            // First time the scene is loaded
 
-        // Display Lights Toggle
-        this.displayLights = false;
+            // Display Axis Toggle
+            this.displayAxis = false;
 
-        // Automatically change perspectives at the start of each turn
-        this.rotateAutomatically = true;
+            // Display Lights Toggle
+            this.displayLights = false;
+
+            // Automatically change perspectives at the start of each turn
+            this.rotateAutomatically = true;
+        }
+
 
         // Select the Active Camera
         this.viewsSelector = Object.keys(this.graph.viewsParser.views).reduce((accumulator, key) => {
@@ -337,5 +347,14 @@ export class XMLscene extends CGFscene {
 
     replay() {
         this.gameOrchestrator.replay();
+    }
+
+    onChangeScenery() {
+        console.log("Changing scenery...");
+        this.sceneInited = false;
+
+        // Swap the selected theme file
+        this._selectedFile = 1 - this._selectedFile;
+        this.gameOrchestrator.changeTheme(sceneFiles[this._selectedFile]);
     }
 }

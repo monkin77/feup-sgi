@@ -8,25 +8,22 @@ import MyStorage from "./MyStorage.js";
 import MyTile from "./MyTile.js";
 import MyTimer from "./MyTimer.js";
 
-const spotlightDistance = 2;
-
 // Class for a Checkers board
 export default class MyBoard {
     /**
      *
      * @param {MySceneGraph} sceneGraph MySceneGraph object to use already created components and access the scene object
-     * @param {*} x
-     * @param {*} y
-     * @param {*} z
+     * @param {number[]} position 3D array with the new position of the board
      * @param {*} sideLength
      */
-    constructor(sceneGraph, x, y, z, sideLength) {
-        this._sceneGraph = sceneGraph;
+    constructor(sceneGraph, position, sideLength) {
+        if (position.length != 3) throw new Error("Invalid position array length (expected 3, got " + position.length);
 
+        this._sceneGraph = sceneGraph;
         this._scene = sceneGraph.scene;
-        this._x = x;
-        this._y = y;
-        this._z = z;
+
+        [this._x, this._y, this._z] = position;
+
         this._sideLength = sideLength;
         this._tileSideLength = sideLength / tilesPerSide;
 
@@ -50,8 +47,41 @@ export default class MyBoard {
         Properties structure: [sceneIdx, enabled, type, location, ambient, diffuse, 
             specular, attenuation, angle, exponent, target] 
         */
-        this.initSpotlightProperties = [7, true, "spot", [this._x + this._tileSideLength/2, this._y + spotlightDistance, this._z - this._tileSideLength/2, 1.0], [0, 0, 0, 1], [1, 1, 1, 1], 
+        this._spotlightHeight = this._tileSideLength * 0.5;
+        this.initSpotlightProperties = [7, true, "spot", [this._x + this._tileSideLength/2, this._y + this._spotlightHeight, this._z - this._tileSideLength/2, 1.0], [0, 0, 0, 1], [1, 1, 1, 1], 
             [1, 1, 1, 1], [0, 1, 0], 180, 1, [this._x, this._y, this._z]];
+    }
+
+    /**
+     * Method to update the position and size of the board.
+     * Also updates the position and size of the components that depend on it
+     * @param {number[]} position 3D array with the new position of the board
+     * @param {number} sideLength 
+     */
+    updatePosAndSize(position, sideLength) {
+        if (position.length != 3) throw new Error("Invalid position array length (expected 3, got " + position.length);
+
+        [this._x, this._y, this._z] = position;
+        this._sideLength = sideLength;
+        this._tileSideLength = sideLength / tilesPerSide;
+
+        // Update the Tiles and Pieces
+        for (const tile of this._tiles) {
+            tile.updatePosAndSize(this._tileSideLength);
+        }
+
+        // Update the Storages
+        this._whiteStorage.updatePosAndSize(this._sideLength);
+        this._blackStorage.updatePosAndSize(this._sideLength);
+
+        // Update the Scoreboard
+        this._scoreboard.updatePosAndSize(this._sideLength);
+
+        // Update the Timer
+        this._timer.updatePosAndSize(this._sideLength);
+
+        // Update the Spotlight Properties
+        this._spotlightHeight = this._tileSideLength * 0.5;
     }
 
     /**
@@ -70,11 +100,11 @@ export default class MyBoard {
                 const isWhite = (j + offset) % 2 != 0;
 
                 let piece = null;
-                const pieceIsWhite = i < startRowsWithDiscs;
-                if (!isWhite && (pieceIsWhite || i > tilesPerSide - startRowsWithDiscs - 1)) {
+                const pieceIsBlack = i < startRowsWithDiscs;
+                if (!isWhite && (pieceIsBlack || i > tilesPerSide - startRowsWithDiscs - 1)) {
                     // If the tile is in the first or last rows, it has a piece
-                    const texture = pieceIsWhite ? this._whiteDiscTexture : this._blackDiscTexture;
-                    piece = new MyPiece(this._sceneGraph, `piece-${idNumber}`, pieceIsWhite, this._tileSideLength, texture, this._boardMaterial);
+                    const texture = pieceIsBlack ? this._blackDiscTexture : this._whiteDiscTexture;
+                    piece = new MyPiece(this._sceneGraph, `piece-${idNumber}`, !pieceIsBlack, this._tileSideLength, texture, this._boardMaterial);
 
                     // Add new Piece to the corresponding array
                     if (isWhite) whitePieces.push(piece);
@@ -170,8 +200,8 @@ export default class MyBoard {
         let possibleMoves = [];
 
         const directions = [];
-        if (piece.isWhite || piece.isKing) directions.push({ i: 1, j: 1 }, { i: 1, j: -1 });
-        if (!piece.isWhite || piece.isKing) directions.push({ i: -1, j: 1 }, { i: -1, j: -1 });
+        if (!piece.isWhite || piece.isKing) directions.push({ i: 1, j: 1 }, { i: 1, j: -1 });
+        if (piece.isWhite || piece.isKing) directions.push({ i: -1, j: 1 }, { i: -1, j: -1 });
 
         for (const direction of directions) {
             if (piece.isKing) {
@@ -265,7 +295,6 @@ export default class MyBoard {
         // Rotate board to draw it in the XZ plane
         this._scene.translate(this._x, this._y, this._z);
         this._scene.rotate(-Math.PI / 2, 1, 0, 0);
-
 
         // Apply wood material
         this._boardMaterial.apply();
@@ -382,8 +411,8 @@ export default class MyBoard {
      * Moves the board's spotlight to a new position and updates the light
      * @param {number[]} position 3D array representing new position on the board
      */
-    moveSpotlight = (position) => {
-        const fromPos = [position[0], position[1] + spotlightDistance, position[2], 1.0];
+    moveSpotlight(position) {
+        const fromPos = [position[0], position[1] + this._spotlightHeight, position[2], 1.0];
         const toPos = [...position, 1.0];
 
         const newProps = this.initSpotlightProperties;

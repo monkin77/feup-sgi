@@ -8,6 +8,7 @@ import PickedState from "./state/PickedState.js";
 import ReplayState from "./state/ReplayState.js";
 import MyGameMove from "./MyGameMove.js";
 import EndGameState from "./state/EndGameState.js";
+import { sceneFiles } from "../../../XMLscene.js";
 
 const TURN_DURATION_SECONDS = 60;
 
@@ -32,12 +33,26 @@ export default class MyGameOrchestrator {
 
     /**
      * Initializes the board after the theme is loaded
+     * @param {string} newFilename Filename of the new Scene that was loaded
      */
-    initBoard() {
-        this._board = new MyBoard(this._theme, -5, 0, 10, 20);
-        if (this.state instanceof MenuState) {
-            // Player 2 (black pieces) start the game
-            this.state = new TurnState(this, player2, this._board);
+    initBoard(newFilename) {
+        if (!this._board) {
+            // If the board is not initialized, initialize it
+            this._board = new MyBoard(this._theme, this._theme.boardParser.position, this._theme.boardParser.sideLength);
+            if (this.state instanceof MenuState) {
+                // Player 2 (black pieces) start the game
+                this.state = new TurnState(this, player1, this._board);
+            }
+        } else {
+            this._board.updatePosAndSize(this._theme.boardParser.position, this._theme.boardParser.sideLength);
+            // The Scene was changed
+            if (newFilename == sceneFiles[0]) {
+                // Temple theme was loaded
+            } else if (newFilename == sceneFiles[1]) {
+                // Big Checkers theme was loaded
+            } else {
+                throw new Error("Unknown theme loaded");
+            }
         }
     }
 

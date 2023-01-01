@@ -7,6 +7,8 @@ import MyTile from "./MyTile.js";
 
 // Scale factor to make the piece smaller than the tile
 export const pieceScaleFactor = 0.65;
+const defaultCylinderHeight = 2;
+const defaultCylinderDiameter = 2;
 
 /**
  * This class represents a piece on the board
@@ -28,13 +30,11 @@ export default class MyPiece {
         this._scene = sceneGraph.scene;
         this._id = id;
         this._isWhite = isWhite;
-        this._sideLength = sideLength;
-        this._discLength = sideLength * pieceScaleFactor;
-        this._height = 2;   // Height of the piece
+
+        this.updatePosAndSize(sideLength);
+        
         this._texture = texture;
         this._boardMaterial = boardMaterial;
-
-        this._radius = this._discLength / 2;
 
         this._sceneComponents = this._sceneGraph.componentsParser.components;
         const coveredCylinder = this._sceneComponents["coveredCylinder"];
@@ -43,6 +43,19 @@ export default class MyPiece {
         this._coveredCylinder = coveredCylinder.copy();
         
         this._isKing = false;
+    }
+
+    /**
+     * Method to update the sideLength of a Piece.
+     * Also updates the height of the piece depending on the new sideLength
+     * @param {*} newSideLength 
+     */
+    updatePosAndSize(newSideLength) {
+        this._sideLength = newSideLength;
+        this._discLength = newSideLength * pieceScaleFactor;
+        this._radius = this._discLength / 2;
+
+        this._height = this._radius / 2;
     }
 
     /**
@@ -62,31 +75,37 @@ export default class MyPiece {
         }
 
         if (onBoard) this._scene.translate(this._sideLength/2, this._sideLength/2, 0);
-        this._scene.scale(this._radius, this._radius, 0.25);
+
+        // Scale factor to achieve the desired height
+        const scaleHeight = this._height / defaultCylinderHeight;
+        const scaleXY = this._discLength / defaultCylinderDiameter;
+        this._scene.scale(scaleXY, scaleXY, scaleHeight);
 
         // Covered cylinder contains a diameter of 2 and a height of 2
         // Currently, all the pieces are registering the picking id. If it's not selectable, it is being registered with -1
         this._sceneGraph.drawComponent(this._coveredCylinder, null, null, new PickingInfo(this._coveredCylinder.pickingId, tile));
 
+        this._scene.popMatrix();
+
         // If the piece is a king, draw a crown on top of it
         if (this._isKing && onBoard) {
             this._scene.pushMatrix();
 
+            if (onBoard) this._scene.translate(this._sideLength/2, this._sideLength/2, 0);
+
             // Desired length of the crown
-            const fontSideLength = this._radius * 2 * 0.85;
+            const fontSideLength = this._discLength * 0.85;
             // scale factor to achieve that length
             const fontScaleFactor =  fontSideLength / defaultFontSize;
 
             // Translate the crown to the top of the piece
-            this._scene.translate(-fontSideLength/2, -fontSideLength/2, this._height + 0.1);
+            this._scene.translate(-fontSideLength/2, -fontSideLength/2, this._height + 0.01);
             this._scene.scale(fontScaleFactor, fontScaleFactor, 1);
 
             displaySymbol(this._scene, [9, 0], this._boardMaterial);
 
             this._scene.popMatrix();
         }
-
-        this._scene.popMatrix();
     }
 
     /**

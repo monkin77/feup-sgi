@@ -18,13 +18,8 @@ export class MyInterface extends CGFinterface {
      */
     init(application) {
         super.init(application);
-        // init GUI. For more information on the methods, check:
-        //  http://workshop.chromeexperiments.com/examples/gui
-
-        this.gui = new dat.GUI();
 
         // add a group of controls (and open/expand by defult)
-
         this.initKeys();
 
         return true;
@@ -34,6 +29,13 @@ export class MyInterface extends CGFinterface {
      * Method that setups the interface after the graph has been loaded.
      */
     onGraphLoaded() {
+        // If the has been loaded before, destroy the old GUI
+        if (this.gui) this.gui.destroy();
+
+        // init GUI. For more information on the methods, check:
+        //  http://workshop.chromeexperiments.com/examples/gui
+        this.gui = new dat.GUI();
+
         this.gui.add(this.scene, 'displayAxis').name("Display Axis");
 
         // Lights
@@ -51,6 +53,7 @@ export class MyInterface extends CGFinterface {
         this.gui.add(this.scene, 'rotateAutomatically').name("Auto Rotate").onChange(this.scene.onToggleAutoRotate);
         this.gui.add(this.scene, 'undo').name('Undo');
         this.gui.add(this.scene, 'replay').name('Replay Movie');
+        this.gui.add(this.scene, 'onChangeScenery').name("Change Scenery");
     }
 
     /**
