@@ -48,6 +48,7 @@ export default class MyMonitor {
         this._enabled = enabled;
         if (this._enabled) {
             this._timer.updatePosAndSize(this._monitorWidth, enabled);
+            this._scoreboard.updatePosAndSize(this._monitorWidth, enabled);
         }
     }
 
@@ -85,16 +86,22 @@ export default class MyMonitor {
         this._scene.popMatrix();
 
 
-        // Draw the scoreboard
-
-        // Draw the timer
         this._scene.pushMatrix();
-
-        translateHeight = ceilingHeight - (poleLength / 2) - monitorHeight + (this._timer.cardHeight/4);
+        translateHeight = ceilingHeight - (poleLength / 2) - monitorHeight;
         translateXY = this._sideLength / 2 - this._monitorWidth/2;
         this._scene.translate(translateXY, translateXY, translateHeight);
 
+        // Draw the timer
+        this._scene.pushMatrix();
+        this._scene.translate(0, 0, this._timer.cardHeight/4)
         this._timer.display(turnCounter);
+        this._scene.popMatrix();
+
+        // Draw the scoreboard
+        this._scene.pushMatrix();
+        this._scene.translate(0, 0, this._scoreboard.cardHeight/4);
+        this._scoreboard.display();
+        this._scene.popMatrix();
 
         this._scene.popMatrix();
 
