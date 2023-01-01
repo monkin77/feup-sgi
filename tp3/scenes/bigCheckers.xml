@@ -2560,6 +2560,19 @@
             </children>
         </component>
 
+        <component id="player2">
+            <transformation>
+                <translate x="6" y="20.5" z="-5" />
+            </transformation>
+            <materials>
+                <material id="backgroundMaterial" />
+            </materials>
+            <texture id="wallTexture" length_s="1" length_t="1" />
+            <children>
+                <componentref id="laraCroft" />
+            </children>
+        </component>
+
         <component id="player1">
             <transformation>
                 <translate x="6" y="20.5" z="-5" />
@@ -2598,6 +2611,7 @@
             <texture id="wallTexture" length_s="1" length_t="1" />
             <children>
                 <componentref id="platform1" />
+                <componentref id="player2" />
             </children>
         </component>
 
