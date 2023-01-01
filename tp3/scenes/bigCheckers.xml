@@ -1556,7 +1556,7 @@
 
         <!-- Covered Cylinder -->
 
-        <!-- 2.0 x 1.0 x 1.0 Maybe?-->
+        <!-- 2.0 x 2.0 x 2.0 Maybe?-->
         <component id="coveredCylinder">
             <transformation>
             </transformation>

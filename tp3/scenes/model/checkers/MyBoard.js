@@ -295,7 +295,6 @@ export default class MyBoard {
         this._scene.translate(this._x, this._y, this._z);
         this._scene.rotate(-Math.PI / 2, 1, 0, 0);
 
-
         // Apply wood material
         this._boardMaterial.apply();
 
