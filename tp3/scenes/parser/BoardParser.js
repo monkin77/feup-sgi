@@ -23,6 +23,9 @@ export class BoardParser extends Parser {
     ) {
         super();
 
+        this._sideLength = null;
+        this._position = null;
+
         this.parse(xmlReader, boardNode);
     }
 
@@ -36,43 +39,52 @@ export class BoardParser extends Parser {
 
         let err;
 
-        for (const child of children) {
-            console.log("nodeName:", child.nodeName);
+        let position = boardNode.getElementsByTagName("position");
+        let sideLengthComp = boardNode.getElementsByTagName("sideLength");
 
-            switch (child.nodeName) {
-                case "position":
-                    const boardCoords = parseCoordinates3D(
-                        xmlReader,
-                        child,
-                        `${child.nodeName} child of <board>`
-                    );
-                    if (!Array.isArray(boardCoords)) {
-                        this.addReport(parserId, boardCoords);
-                        return;
-                    };
-            
-                    /* if ((err = this.parseBoard(xmlReader, child)) != null) {
-                        this.addReport(parserId, err);
-                        return;
-                    } */
-                    break;
-                case "sideLength":
-                    /* if ((err = this.parseComponents(xmlReader, child)) != null) {
-                        this.addReport(parserId, err);
-                        return;
-                    } */
-                    break;
-                default:
-                    onXMLMinorError(
-                        "unknown tag <" +
-                        child.nodeName +
-                        "> inside <board>"
-                    );
-                    break;
-            }
+        if (position.length != 1) {
+            this.addReport(parserId, "no 'position' child defined for <board>");
+            return;
         }
+        if (sideLengthComp.length != 1) {
+            this.addReport(parserId, "no 'sideLength' child defined for <board>");
+            return;
+        };
 
+        position = position[0];
+        sideLengthComp = sideLengthComp[0];
+
+        // Parse position
+        const boardCoords = parseCoordinates3D(
+            xmlReader,
+            position,
+            `${position.nodeName} child of <board>`
+        );
+        if (!Array.isArray(boardCoords)) {
+            this.addReport(parserId, boardCoords);
+            return;
+        };
+
+        // Parse sideLength
+        const sideLength = xmlReader.getFloat(sideLengthComp, "value", false);
+        if (invalidNumber(sideLength)) {
+            this.addReport(parserId, "no 'value' attribute defined for <sideLength> child of <board>");
+            return;
+        };
+        
+        console.log("boardCoords: ", boardCoords, "sideLength: ", sideLength);
+
+        this._position = boardCoords;
+        this._sideLength = sideLength;
         return;
+    }
+
+    get sideLength() {
+        return this._sideLength;
+    }
+
+    get position() {
+        return this._position;
     }
 }
 

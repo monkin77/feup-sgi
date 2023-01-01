@@ -55,6 +55,35 @@ export default class MyBoard {
     }
 
     /**
+     * Method to update the position and size of the board.
+     * Also updates the position and size of the components that depend on it
+     * @param {*} x 
+     * @param {*} y 
+     * @param {*} z 
+     * @param {*} sideLength 
+     */
+    updatePosAndSize(x, y, z, sideLength) {
+        this._x = x;
+        this._y = y;
+        this._z = z;
+        this._sideLength = sideLength;
+        this._tileSideLength = sideLength / tilesPerSide;
+
+        // Update the Tiles and Pieces
+        for (const tile of this._tiles) {
+            tile.updatePosAndSize(this._tileSideLength);
+        }
+
+        // Update the Storages
+
+        // Update the Scoreboard
+
+        // Update the Timer
+
+        // Update the Spotlight Properties
+    }
+
+    /**
      * Auxiliary function to build the tiles of the board
      */
     buildTiles() {

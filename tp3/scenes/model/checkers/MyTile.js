@@ -24,6 +24,18 @@ export default class MyTile {
     }
 
     /**
+     * Method to update the sideLength of a Tile
+     * Also updates the sideLength of the piece on the tile if there is one
+     * @param {*} newSideLength 
+     */
+    updatePosAndSize(newSideLength) {
+        this._tileSideLength = newSideLength;
+        this._rectangle = new MyRectangle(this._scene, this._id, 0, newSideLength, 0, newSideLength);
+
+        if (this.hasPiece()) this._piece.updatePosAndSize(newSideLength);
+    }
+
+    /**
      * Displays the tile
      */
     display() {

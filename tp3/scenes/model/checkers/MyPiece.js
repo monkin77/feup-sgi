@@ -46,6 +46,16 @@ export default class MyPiece {
     }
 
     /**
+     * Method to update the sideLength of a Piece
+     * @param {*} newSideLength 
+     */
+    updatePosAndSize(newSideLength) {
+        this._sideLength = newSideLength;
+        this._discLength = newSideLength * pieceScaleFactor;
+        this._radius = this._discLength / 2;
+    }
+
+    /**
      * Display the piece. If the piece is on the board, it is translated to the center of the tile.
      * @param {boolean} onBoard Whether the piece is on the board or not
      * @param {MyTile | null} tile Tile the piece is on. Used to register the piece for picking with a pointer to the tile
