@@ -2469,13 +2469,13 @@
 
     <board>
         <!-- Board's initial position -->        
-        <position x="-30" y="-9.99" z="30" />
+        <position x="-33.34" y="-9.99" z="33.34" />
 
         <!-- Board's side length -->
         <!-- Total board width = 0.25 * mainBoardWidth * 2 + mainBoardWidth = 1.5*mainBoardWidth
             mainBoardWidth = Total board width / 1.5
          -->    
-        <sideLength value="60" />
+        <sideLength value="66.67" />
 
         <!-- Timer Position -->
 
