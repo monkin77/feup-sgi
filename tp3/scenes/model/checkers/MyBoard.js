@@ -75,8 +75,10 @@ export default class MyBoard {
         this._blackStorage.updatePosAndSize(this._sideLength);
 
         // Update the Scoreboard
+        this._scoreboard.updatePosAndSize(this._sideLength);
 
         // Update the Timer
+        this._timer.updatePosAndSize(this._sideLength);
 
         // Update the Spotlight Properties
         this._spotlightHeight = this._tileSideLength * 0.5;

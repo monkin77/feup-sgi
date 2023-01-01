@@ -11,13 +11,23 @@ export default class MyTimer {
      */
     constructor(scene, sideLength, boardMaterial) {
         this._scene = scene;
-        this._sideLength = sideLength;
-        this._spacing = sideLength / 8;
-        this._cardLength = sideLength / 3;
 
         this._boardMaterial = boardMaterial;
-        this._card = new MyRectangle(scene, "timer-card", 0, this._cardLength, 0, sideLength / 5);
         this._texture = new CGFtexture(this._scene, "scenes/images/board/storage_wood.jpg");
+
+        this.updatePosAndSize(sideLength);
+    }
+
+    /**
+     * Method to update the dimensions of the timer
+     * @param {*} newSideLength 
+     */
+    updatePosAndSize(newSideLength) {
+        this._sideLength = newSideLength;
+        this._spacing = newSideLength / 8;
+        this._cardLength = newSideLength / 3;
+
+        this._card = new MyRectangle(this._scene, "timer-card", 0, this._cardLength, 0, newSideLength / 5);
     }
 
     /**
