@@ -26,8 +26,10 @@ export default class KeyFrameAnimation extends MyAnimation {
             if (t < this.keyframes[0].instant) return;
             this.started = true;
         }
+        if (!this.startTime) this.startTime = t;
+        const animationTime = t - this.startTime;
 
-        const {keyframe1, keyframe2} = this.getCurrentKeyFrames(t);
+        const {keyframe1, keyframe2} = this.getCurrentKeyFrames(animationTime);
         if (!keyframe2) {
             this.transfMatrix =
                 this.createTransformationMatrix(keyframe1.translation, keyframe1.scale, keyframe1.rotations);
@@ -37,7 +39,7 @@ export default class KeyFrameAnimation extends MyAnimation {
         // Interpolate 2 keyframes
         const t1 = keyframe1.instant;
         const t2 = keyframe2.instant;
-        const percentage = (t - t1) / (t2 - t1);
+        const percentage = (animationTime - t1) / (t2 - t1);
 
         const translation = vec3.create();
         vec3.lerp(translation, keyframe1.translation, keyframe2.translation, percentage);
