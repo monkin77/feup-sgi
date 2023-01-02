@@ -386,8 +386,8 @@ export default class MyBoard {
             this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._homeButton);
             this._homeButton.display();
 
-            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._replayButton);
-            this._replayButton.display();
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._rematchButton);
+            this._rematchButton.display();
         } else {
             this._scoreboard.display();
             this._timer.display(this._scene.gameOrchestrator.turnCounter);

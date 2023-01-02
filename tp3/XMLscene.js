@@ -348,6 +348,10 @@ export class XMLscene extends CGFscene {
         this.gameOrchestrator.replay();
     }
 
+    concede() {
+        this.gameOrchestrator.concede();
+    }
+
     onChangeScenery() {
         this.sceneInited = false;
 

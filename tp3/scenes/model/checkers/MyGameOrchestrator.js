@@ -121,6 +121,16 @@ export default class MyGameOrchestrator {
     }
 
     /**
+     * Concedes the game to the opponent
+     */
+    concede() {
+        if (this.state instanceof TurnState ||
+            this.state instanceof PickedState) {
+                this.state = new EndGameState(this, switchPlayer(this.state.player));
+            }
+    }
+
+    /**
      * Sets the pickId of the components to null
      */
     clearPickRegistration() {

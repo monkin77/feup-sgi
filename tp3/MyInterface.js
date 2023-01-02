@@ -54,6 +54,7 @@ export class MyInterface extends CGFinterface {
         this.gui.add(this.scene, 'undo').name('Undo');
         this.gui.add(this.scene, 'replay').name('Replay Movie');
         this.gui.add(this.scene, 'onChangeScenery').name("Change Scenery");
+        this.gui.add(this.scene, 'concede').name("Concede Game");
     }
 
     /**
