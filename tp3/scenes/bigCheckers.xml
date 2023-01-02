@@ -410,10 +410,6 @@
         </primitive>
 
         <!--  3D Objects -->
-        <primitive id="animeGirl">
-            <objfile file="anime-girl.obj" />
-        </primitive>
-
         <primitive id="humanModel">
             <objfile file="human.obj" />
         </primitive>
