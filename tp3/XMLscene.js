@@ -1,5 +1,6 @@
 import { CGFscene, CGFshader, CGFtexture } from "../lib/CGF.js";
 import { CGFaxis, CGFcamera } from "../lib/CGF.js";
+import { CGFOBJModel } from "./primitives/3dModels/CGFOBJModel.js";
 import { MyRectangle } from "./primitives/MyRectangle.js";
 import CameraAnimation from "./scenes/model/checkers/animation/CameraAnimation.js";
 import MyGameOrchestrator from "./scenes/model/checkers/MyGameOrchestrator.js";
@@ -58,6 +59,8 @@ export class XMLscene extends CGFscene {
 
         // the activation of picking capabilities in WebCGF
         this.setPickEnabled(true);
+
+        this.suzanne = new CGFOBJModel(this, 'scenes/3dModels/suzanne.obj');
     }
 
     /**
@@ -331,6 +334,8 @@ export class XMLscene extends CGFscene {
             this.customPrimitiveIdx = 0;    // Reset the custom primitive index
             this.gameOrchestrator.display();
         }
+
+        this.suzanne.display();
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
