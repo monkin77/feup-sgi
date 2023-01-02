@@ -20,8 +20,8 @@ export default class MyMonitor {
      * @param {MyTimer} timer
      * @param {boolean} enabled
      */
-    constructor(sceneGraph, sideLength, boardMaterial, scoreboard, timer, playButton,
-        switchSceneButton, undoButton, replayButton, winnerCard, homeButton, enabled) {
+    constructor(sceneGraph, sideLength, boardMaterial, scoreboard, timer, playButton, switchSceneButton,
+        undoButton, replayButton, winnerCard, homeButton, rematchButton, enabled) {
         this._sceneGraph = sceneGraph;
         this._scene = sceneGraph.scene;
 
@@ -40,6 +40,7 @@ export default class MyMonitor {
         this._replayButton = replayButton;
         this._winnerCard = winnerCard;
         this._homeButton = homeButton;
+        this._rematchButton = rematchButton;
 
         this.updateTheme(sideLength, enabled);
     }
@@ -63,6 +64,7 @@ export default class MyMonitor {
             this._replayButton.updatePosAndSize(this._monitorWidth, enabled);
             this._winnerCard.updatePosAndSize(this._monitorWidth, enabled);
             this._homeButton.updatePosAndSize(this._monitorWidth, enabled);
+            this._rematchButton.updatePosAndSize(this._monitorWidth, enabled);
         }
     }
 
@@ -122,6 +124,9 @@ export default class MyMonitor {
 
             this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._homeButton);
             this._homeButton.display();
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._rematchButton);
+            this._rematchButton.display();
         } else {
             this._timer.display(turnCounter);
 

@@ -105,10 +105,7 @@ export default class MyGameOrchestrator {
                 if (!lastMove) return this.state;
 
                 this._board = lastMove.board;
-                if (this.state.player !== lastMove.player) {
-                    this.resetTurnCounter();
-                }
-                this.state = new TurnState(this, lastMove.player);
+                this.state = new TurnState(this, lastMove.player, this.state.player !== lastMove.player);
             }
         return this.state;
     }
@@ -184,6 +181,23 @@ export default class MyGameOrchestrator {
      */
     resetTurnCounter() {
         this._turnCounter = TURN_DURATION_SECONDS;
+    }
+
+    /**
+     * Starts a new game
+     */
+    rematch() {
+        this._sequence.clear();
+        this._board.rematch();
+    }
+
+    /**
+     * Restarts the game
+     */
+    restart() {
+        this._sequence.clear();
+        this._board.restart();
+        this.lastTimestamp = null;
     }
 
     get sequence() {

@@ -7,6 +7,7 @@ import MyHomeButton from "./MyHomeButton.js";
 import MyMonitor from "./MyMonitor.js";
 import MyPiece from "./MyPiece.js";
 import MyPlayButton from "./MyPlayButton.js";
+import MyRematchButton from "./MyRematchButton.js";
 import MyReplayButton from "./MyReplayButton.js";
 import MyScoreBoard from "./MyScoreBoard.js";
 import MyStorage from "./MyStorage.js";
@@ -56,11 +57,12 @@ export default class MyBoard {
         this._replayButton = new MyReplayButton(this._scene, this._sideLength, this._boardMaterial);
         this._winnerCard = new MyWinner(this._scene, this._sideLength, this._boardMaterial);
         this._homeButton = new MyHomeButton(this._scene, this._sideLength, this._boardMaterial);
+        this._rematchButton = new MyRematchButton(this._scene, this._sideLength, this._boardMaterial);
 
         this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, this._boardMaterial,
             this._scoreboard, this._timer, this._playButton, this._switchSceneButton,
             this._undoButton, this._replayButton, this._winnerCard, this._homeButton,
-            this._sceneGraph.boardParser.useMonitor);
+            this._rematchButton, this._sceneGraph.boardParser.useMonitor);
 
         /* 
         Initialize the Spotlight
@@ -127,6 +129,9 @@ export default class MyBoard {
 
             // Update the Home Button
             this._homeButton.updatePosAndSize(this._sideLength);
+
+            // Update the Rematch Button
+            this._rematchButton.updatePosAndSize(this._sideLength);
         }
 
         // Update the Spotlight Properties
@@ -380,6 +385,9 @@ export default class MyBoard {
 
             this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._homeButton);
             this._homeButton.display();
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._replayButton);
+            this._replayButton.display();
         } else {
             this._scoreboard.display();
             this._timer.display(this._scene.gameOrchestrator.turnCounter);
@@ -632,6 +640,22 @@ export default class MyBoard {
             rowDiff: center1[2] - center2[2],
             colDiff: center2[0] - center1[0]
         };
+    }
+
+    /**
+     * Sets the board for a new game
+     */
+    rematch() {
+        this.buildTiles();
+        this.buildStorages();
+    }
+
+    /**
+     * Sets the board for a complete restart of the game
+     */
+    restart() {
+        this.rematch();
+        this._scoreboard.resetScore();
     }
 
     /**
