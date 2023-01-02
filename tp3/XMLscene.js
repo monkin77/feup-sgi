@@ -55,7 +55,6 @@ export class XMLscene extends CGFscene {
         this.gameOrchestrator = new MyGameOrchestrator(sceneFiles[this._selectedFile], this);
         this.startTime = null;
         this.cameraAnimation = null;
-        // TODO: Check if this needs to be reset when changing scenes
 
         // the activation of picking capabilities in WebCGF
         this.setPickEnabled(true);

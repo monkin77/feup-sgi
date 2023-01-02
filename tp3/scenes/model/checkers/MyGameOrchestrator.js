@@ -169,7 +169,6 @@ export default class MyGameOrchestrator {
                 return new TurnState(this, player);
             case boardState.END:
                 // The current player won
-                // TODO: Complete the EndGameState class
                 return new EndGameState(this, player);
             default:
                 throw new Error("Invalid board state");
