@@ -3,12 +3,19 @@ import { MySceneGraph } from "../../../MySceneGraph.js";
 import { boardState, discsPerSide, noPossibleMoves, startRowsWithDiscs, tilesPerSide } from "../../../utils/checkers.js";
 import { updateLight } from "../../parser/utils.js";
 import MyGameOrchestrator from "./MyGameOrchestrator.js";
+import MyHomeButton from "./MyHomeButton.js";
 import MyMonitor from "./MyMonitor.js";
 import MyPiece from "./MyPiece.js";
+import MyPlayButton from "./MyPlayButton.js";
+import MyRematchButton from "./MyRematchButton.js";
+import MyReplayButton from "./MyReplayButton.js";
 import MyScoreBoard from "./MyScoreBoard.js";
 import MyStorage from "./MyStorage.js";
+import MySwitchSceneButton from "./MySwitchSceneButton.js";
 import MyTile from "./MyTile.js";
 import MyTimer from "./MyTimer.js";
+import MyUndoButton from "./MyUndoButton.js";
+import MyWinner from "./MyWinner.js";
 
 // Class for a Checkers board
 export default class MyBoard {
@@ -44,9 +51,18 @@ export default class MyBoard {
 
         this._scoreboard = new MyScoreBoard(this._scene, this._sideLength, this._boardMaterial);
         this._timer = new MyTimer(this._scene, this._sideLength, this._boardMaterial);
+        this._playButton = new MyPlayButton(this._scene, this._sideLength, this._boardMaterial);
+        this._switchSceneButton = new MySwitchSceneButton(this._scene, this._sideLength, this._boardMaterial);
+        this._undoButton = new MyUndoButton(this._scene, this._sideLength, this._boardMaterial);
+        this._replayButton = new MyReplayButton(this._scene, this._sideLength, this._boardMaterial);
+        this._winnerCard = new MyWinner(this._scene, this._sideLength, this._boardMaterial);
+        this._homeButton = new MyHomeButton(this._scene, this._sideLength, this._boardMaterial);
+        this._rematchButton = new MyRematchButton(this._scene, this._sideLength, this._boardMaterial);
 
-        this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, 
-            this._boardMaterial, this._scoreboard, this._timer, this._sceneGraph.boardParser.useMonitor);
+        this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, this._boardMaterial,
+            this._scoreboard, this._timer, this._playButton, this._switchSceneButton,
+            this._undoButton, this._replayButton, this._winnerCard, this._homeButton,
+            this._rematchButton, this._sceneGraph.boardParser.useMonitor);
 
         /* 
         Initialize the Spotlight
@@ -95,6 +111,27 @@ export default class MyBoard {
 
             // Update the Timer
             this._timer.updatePosAndSize(this._sideLength);
+
+            // Update the Play Button
+            this._playButton.updatePosAndSize(this._sideLength);
+
+            // Update the Switch Scene Button
+            this._switchSceneButton.updatePosAndSize(this._sideLength);
+
+            // Update the Undo Button
+            this._undoButton.updatePosAndSize(this._sideLength);
+
+            // Update the Replay Button
+            this._replayButton.updatePosAndSize(this._sideLength);
+
+            // Update the Winner Card
+            this._winnerCard.updatePosAndSize(this._sideLength);
+
+            // Update the Home Button
+            this._homeButton.updatePosAndSize(this._sideLength);
+
+            // Update the Rematch Button
+            this._rematchButton.updatePosAndSize(this._sideLength);
         }
 
         // Update the Spotlight Properties
@@ -306,7 +343,7 @@ export default class MyBoard {
      * @param {number} turn
      * @param {MyTile} selectedTile
      */
-    display(turn = null, selectedTile = null) {
+    display(turn = null, selectedTile = null, displayMenu = false, winner = null) {
         this._scene.pushMatrix();
 
         // Rotate board to draw it in the XZ plane
@@ -334,15 +371,32 @@ export default class MyBoard {
         this._whiteStorage.display();
         this._blackStorage.display();
 
-        // Draw the Monitor
         if (this._monitor.enabled) {
-            this._monitor.display(this._scene.gameOrchestrator.turnCounter);
-        } else {
-            // Draw scoreboard
-            this._scoreboard.display();
+            this._monitor.display(this._scene.gameOrchestrator.turnCounter, displayMenu, winner);
+        } else if (displayMenu) {
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._playButton);
+            this._playButton.display();
 
-            // Draw timer
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._switchSceneButton);
+            this._switchSceneButton.display();
+        } else if (winner != null) {
+            this._scoreboard.display();
+            this._winnerCard.display(winner);
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._homeButton);
+            this._homeButton.display();
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._rematchButton);
+            this._rematchButton.display();
+        } else {
+            this._scoreboard.display();
             this._timer.display(this._scene.gameOrchestrator.turnCounter);
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._undoButton);
+            this._undoButton.display();
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._replayButton);
+            this._replayButton.display();
         }
   
         this._scene.popMatrix();
@@ -592,6 +646,22 @@ export default class MyBoard {
             rowDiff: center1[2] - center2[2],
             colDiff: center2[0] - center1[0]
         };
+    }
+
+    /**
+     * Sets the board for a new game
+     */
+    rematch() {
+        this.buildTiles();
+        this.buildStorages();
+    }
+
+    /**
+     * Sets the board for a complete restart of the game
+     */
+    restart() {
+        this.rematch();
+        this._scoreboard.resetScore();
     }
 
     /**

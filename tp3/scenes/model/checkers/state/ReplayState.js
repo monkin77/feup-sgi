@@ -31,6 +31,7 @@ export default class ReplayState extends State {
         }
 
         const move = this._sequence.moves[this._currentMove++];
+        move.board.updateTheme(this.orchestrator.theme);
         this.orchestrator.state = new MoveAnimState(this.orchestrator, move, this);
     }
 }

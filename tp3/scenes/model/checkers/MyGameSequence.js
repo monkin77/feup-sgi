@@ -22,6 +22,13 @@ export default class MyGameSequence {
         return this._moves.pop();
     }
 
+    /**
+     * Clears the sequence
+     */
+    clear() {
+        this._moves = [];
+    }
+
     get moves() {
         return this._moves;
     }

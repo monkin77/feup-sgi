@@ -2,6 +2,7 @@ import MyTile from "../MyTile.js";
 import PickedState from "./PickedState.js";
 import State from "./State.js";
 import { isWhitePlayer, player1 } from "../../../../utils/checkers.js";
+import MyUndoButton from "../MyUndoButton.js";
 
 export default class TurnState extends State {
     constructor(orchestrator, player, playerChanged = false) {
@@ -15,6 +16,8 @@ export default class TurnState extends State {
         if (obj instanceof MyTile) {
             // Select the piece
             return new PickedState(this.orchestrator, this.player, obj);
+        } else if (obj instanceof MyUndoButton) {
+            return this.orchestrator.undo();
         } else {
             console.log("Clicked object is not being handled");
             return this;

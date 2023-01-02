@@ -1,5 +1,6 @@
 import { CGFtexture } from "../../../../lib/CGF.js";
 import { MySceneGraph } from "../../../MySceneGraph.js";
+import MyGameOrchestrator from "./MyGameOrchestrator.js";
 import MyScoreBoard from "./MyScoreBoard.js";
 import MyTimer from "./MyTimer.js";
 
@@ -19,7 +20,8 @@ export default class MyMonitor {
      * @param {MyTimer} timer
      * @param {boolean} enabled
      */
-    constructor(sceneGraph, sideLength, boardMaterial, scoreboard, timer, enabled) {
+    constructor(sceneGraph, sideLength, boardMaterial, scoreboard, timer, playButton, switchSceneButton,
+        undoButton, replayButton, winnerCard, homeButton, rematchButton, enabled) {
         this._sceneGraph = sceneGraph;
         this._scene = sceneGraph.scene;
 
@@ -32,6 +34,13 @@ export default class MyMonitor {
 
         this._scoreboard = scoreboard;
         this._timer = timer;
+        this._playButton = playButton;
+        this._switchSceneButton = switchSceneButton;
+        this._undoButton = undoButton;
+        this._replayButton = replayButton;
+        this._winnerCard = winnerCard;
+        this._homeButton = homeButton;
+        this._rematchButton = rematchButton;
 
         this.updateTheme(sideLength, enabled);
     }
@@ -49,6 +58,13 @@ export default class MyMonitor {
         if (this._enabled) {
             this._timer.updatePosAndSize(this._monitorWidth, enabled);
             this._scoreboard.updatePosAndSize(this._monitorWidth, enabled);
+            this._playButton.updatePosAndSize(this._monitorWidth, enabled);
+            this._switchSceneButton.updatePosAndSize(this._monitorWidth, enabled);
+            this._undoButton.updatePosAndSize(this._monitorWidth, enabled);
+            this._replayButton.updatePosAndSize(this._monitorWidth, enabled);
+            this._winnerCard.updatePosAndSize(this._monitorWidth, enabled);
+            this._homeButton.updatePosAndSize(this._monitorWidth, enabled);
+            this._rematchButton.updatePosAndSize(this._monitorWidth, enabled);
         }
     }
 
@@ -56,7 +72,7 @@ export default class MyMonitor {
      * 
      * @param {*} turnCounter 
      */
-    display(turnCounter) {
+    display(turnCounter, displayMenu = false, winner = null) {
         if (!this._enabled) return;
 
         this._boardMaterial.setTexture(this._texture);
@@ -99,15 +115,42 @@ export default class MyMonitor {
         // Draw the timer
         this._scene.pushMatrix();
         this._scene.translate(0, 0, this._timer.cardHeight/4)
-        this._timer.display(turnCounter);
+
+        if (displayMenu) {
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._switchSceneButton);
+            this._switchSceneButton.display();
+        } else if (winner != null) {
+            this._winnerCard.display(winner);
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._homeButton);
+            this._homeButton.display();
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._rematchButton);
+            this._rematchButton.display();
+        } else {
+            this._timer.display(turnCounter);
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._undoButton);
+            this._undoButton.display();
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._replayButton);
+            this._replayButton.display();
+        }
         this._scene.popMatrix();
 
         // Draw the scoreboard
         this._scene.pushMatrix();
         this._scene.translate(0, 0, this._scoreboard.cardHeight/4);
-        this._scoreboard.display();
-        this._scene.popMatrix();
 
+        if (displayMenu) {
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._playButton);
+            this._playButton.display();
+        }
+        else {
+            this._scoreboard.display();
+        }
+
+        this._scene.popMatrix();
         this._scene.popMatrix();
 
     }

@@ -9,6 +9,8 @@ import ReplayState from "./state/ReplayState.js";
 import MyGameMove from "./MyGameMove.js";
 import EndGameState from "./state/EndGameState.js";
 import { sceneFiles } from "../../../XMLscene.js";
+import MyUndoButton from "./MyUndoButton.js";
+import MyReplayButton from "./MyReplayButton.js";
 
 const TURN_DURATION_SECONDS = 60;
 
@@ -39,10 +41,6 @@ export default class MyGameOrchestrator {
         if (!this._board) {
             // If the board is not initialized, initialize it
             this._board = new MyBoard(this._theme, this._theme.boardParser.position, this._theme.boardParser.sideLength);
-            if (this.state instanceof MenuState) {
-                // Player 2 (black pieces) start the game
-                this.state = new TurnState(this, player1, this._board);
-            }
         } else {
             this._board.updateTheme(this._theme);
             // The Scene was changed
@@ -94,7 +92,6 @@ export default class MyGameOrchestrator {
      * @param {string} filename Filename of the new theme
      */
     changeTheme(filename) {
-        // TODO: Think how to handle graph in scene/theme and orchestrator
         this._theme = new MySceneGraph(filename, this._scene);
     }
 
@@ -105,14 +102,13 @@ export default class MyGameOrchestrator {
         if (this.state instanceof TurnState ||
             this.state instanceof PickedState) {
                 const lastMove = this._sequence.undo();
-                if (!lastMove) return;
+                if (!lastMove) return this.state;
 
                 this._board = lastMove.board;
-                if (this.state.player !== lastMove.player) {
-                    this.resetTurnCounter();
-                }
-                this.state = new TurnState(this, lastMove.player);
+                this._board.updateTheme(this._theme);
+                this.state = new TurnState(this, lastMove.player, this.state.player !== lastMove.player);
             }
+        return this.state;
     }
 
     /**
@@ -121,6 +117,16 @@ export default class MyGameOrchestrator {
     replay() {
         if (!(this.state instanceof MenuState)) {
                 this.state = new ReplayState(this, this._sequence, this.state);
+            }
+    }
+
+    /**
+     * Concedes the game to the opponent
+     */
+    concede() {
+        if (this.state instanceof TurnState ||
+            this.state instanceof PickedState) {
+                this.state = new EndGameState(this, switchPlayer(this.state.player));
             }
     }
 
@@ -142,8 +148,13 @@ export default class MyGameOrchestrator {
      * @param {*} obj Object that was clicked. Can be of various classes 
      */
     onClick(obj) {
-        // TODO: Handle general scene clicks
-        this.state = this.state.onClick(obj);
+        if (obj instanceof MyUndoButton) {
+            this.undo();
+        } else if (obj instanceof MyReplayButton) {
+            this.replay();
+        } else {
+            this.state = this.state.onClick(obj);
+        }
     }
 
     /**
@@ -169,7 +180,6 @@ export default class MyGameOrchestrator {
                 return new TurnState(this, player);
             case boardState.END:
                 // The current player won
-                // TODO: Complete the EndGameState class
                 return new EndGameState(this, player);
             default:
                 throw new Error("Invalid board state");
@@ -181,6 +191,23 @@ export default class MyGameOrchestrator {
      */
     resetTurnCounter() {
         this._turnCounter = TURN_DURATION_SECONDS;
+    }
+
+    /**
+     * Starts a new game
+     */
+    rematch() {
+        this._sequence.clear();
+        this._board.rematch();
+    }
+
+    /**
+     * Restarts the game
+     */
+    restart() {
+        this._sequence.clear();
+        this._board.restart();
+        this.lastTimestamp = null;
     }
 
     get sequence() {

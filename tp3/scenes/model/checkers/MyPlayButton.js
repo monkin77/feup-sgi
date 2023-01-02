@@ -2,7 +2,7 @@ import { CGFtexture } from "../../../../lib/CGF.js";
 import { MyRectangle } from "../../../primitives/MyRectangle.js";
 import { displayText } from "../../../utils/font.js";
 
-export default class MyScoreBoard {
+export default class MyPlayButton {
     /**
      * 
      * @param {XMLscene} scene
@@ -11,8 +11,6 @@ export default class MyScoreBoard {
      */
     constructor(scene, sideLength, boardMaterial) {
         this._scene = scene;
-
-        this.resetScore();
 
         this._boardMaterial = boardMaterial;
         this._texture = new CGFtexture(this._scene, "scenes/images/board/storage_wood.jpg");
@@ -31,21 +29,21 @@ export default class MyScoreBoard {
         this._cardHeight = newSideLength / 5;
         this._monitorEnabled = monitorEnabled;
 
-        this._card = new MyRectangle(this._scene, "timer-card", 0, this._cardLength, 0, this._cardHeight);
+        this._card = new MyRectangle(this._scene, "play-card", 0, this._cardLength, 0, this._cardHeight);
     }
 
     /**
      * Displays the score board
      */
     display() {
-        this.displayScoreBoard(true);
-        this.displayScoreBoard(false);
+        this.displayPlayButton(true);
+        this.displayPlayButton(false);
     }
 
     /**
      * Displays a score board at either side of the board
      */
-    displayScoreBoard(isWhitePerspective) {
+    displayPlayButton(isWhitePerspective) {
         this._boardMaterial.setTexture(this._texture);
         this._boardMaterial.setTextureWrap("REPEAT", "REPEAT");
         this._boardMaterial.apply();
@@ -72,32 +70,11 @@ export default class MyScoreBoard {
 
         this._scene.setActiveShaderSimple(this._scene.textShader);
 
-        const score1 = this._score1.toLocaleString("pt-PT", { minimumIntegerDigits: 2 });
-        const score2 = this._score2.toLocaleString("pt-PT", { minimumIntegerDigits: 2 });
-        displayText(this._scene, `${score1}-${score2}`, this._spacing / 2);
-
-        this._scene.translate(this._spacing / 2, this._spacing, 0);
-        this._scene.scale(0.5, 0.5, 0.5);
-        displayText(this._scene, "SCORE", this._spacing / (5/3));
+        this._scene.translate(this._spacing / 6, this._spacing / 3, 0);
+        displayText(this._scene, "PLAY", this._spacing / 2);
 
         this._scene.setActiveShaderSimple(this._scene.defaultShader);
         this._scene.popMatrix();
-    }
-
-    /**
-     * Increases the score of the given player
-     * @param {number} player
-     */
-    increaseScore(player) {
-        player === 1 ? this._score1++ : this._score2++;
-    }
-
-    /**
-     * Resets the scoreboard
-     */
-    resetScore() {
-        this._score1 = 0;
-        this._score2 = 0;
     }
 
     get cardHeight() {
