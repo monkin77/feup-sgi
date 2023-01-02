@@ -9,54 +9,42 @@
 ----
 ## Project information
 
-The scene is based on the famous video-game character Lara Croft, inspired by the original game from 1996.
-The character is displayed in a temple, a very iconic theme across the Tomb Raider games.
+For this third project, we implemented a graphical interface for the board game "Checkers", with the help of the parser developed in the first and second assignments.
 
-This project is the continuation of the previous one (`tp1`). The main objective was to explore some more advanced techniques, namely: **NURBS**, **Shaders**, and **Animations**.
+The game is made for two players (humans), the white and the black. It follows the regular rules of checkers and begins with the player with the black pieces. This version of the game allows the checkers previously upgraded to “kings” to move any number of tiles in any diagonal direction. The game ends when either a player runs out of pieces or cannot move any of their pieces. Each player has one minute for each of their turns. If they run out of time, they instantly lose the game.
+
+Similarly to the previous assignments, the scenes used for this project are inspired by the famous video-game character Lara Croft and the respective video-game, Tomb Rider, from 1996. One of the scenes also has some inspiration from the Yu-Gi-Oh! animated series.
 
 ### Main New Features:
-- Robust parser capable of analyzing a XML and subsequently displaying the scene described in it.
-  - Added support for specifying the 'w' property of each control point in the NURBS. If not specified, it is assumed to be 1.
-- Base WebGL primitives powering the developed scenes.
-- Effort to make the code organized and as modular as possible.
-- Scene capable of properly displaying the project's features.
-- The code is regularly documented.
-- Interface folder to toggle the `highlighted` property of components.
-- Scene
-  - Inspired by the 1996 Tomb Raider.
-  - Focused on the main charater, Lara Croft.
-  - Displays an ancient temple full of pillars.
-  - Makes use of several textures to recreate the aspect of the original game.
-  - Secondary ambient inspired by the `Nether` world from Minecraft, activated by pressing the `m` key.
-  - Added components using the created NURBS, such as the **Barrels**, the **Tent**, and the **Poster** in the wall.
-- Animations
-  - It's possible to animate components by using keyframes and transformations. These work hierarchically and can be shared between components.
-  - We tried to make the animations as efficient as we could. When updating them, instead of updating all the components, we only update the ones that are actually animated (if an animation is shared then it only updates once). The current keyframe(s) are retrieved by using binary search with the current timestamp.
-  - The animations are interpolated between keyframes.
-  - The inteface has a button to reset the animations.
+- Two different scenes with a lot variety (detail over quantity).
+- Well composed animations for some objects and when changing cameras.
+- Automatically rotating cameras between players' perspectives on the respective turns.
+- Extra options in the DAT GUI interface, such as the ability to concede the game, change the theme in the middle of it, change cameras and the option to toggle whether to automatically rotate between players' perspectives.
+- The application is fluid, even when changing themes in the middle of the game.
+- Some OBJ modeling was used, for models such as the white player, tree and skull in the Yu-Gi-Oh! scene.
+- Modular and organized code
+- Code Documentation
 ----
 ## Issues/Problems
 
-- We think we did everything in the specification. However, we were afraid of certain scenarios where the parser could supposedly be more robust instead of displaying an error and aborting.
-- The Lara Croft's animation was pretty challenging due to the complexity of the movement and the fact that we had to make it look relatively natural.
-- The shader highlight animation is not very efficient if applied to many objects at once.
+- We think we did everything in the specification and some little extras.
+- We had some scenaris where we wanted to do slightly different than the specification (for a better game experience) but were unsure as to whether we should do it. An example of this is the absence of the global timer, which seemed unintuitive for the players and didn't highlight any technical skills, since it's the game implementation as the turn clock. We also wanted to select a random play when the turn was over, but the specification asked for the player to concede the game, so we decided to follow it.
 
 ## Screenshots
 
 ![Screenshot 1](./screenshots/screenshot1.png)
 ![Screenshot 1](./screenshots/screenshot2.png)
 ![Screenshot 1](./screenshots/screenshot3.png)
+![Screenshot 1](./screenshots/screenshot4.png)
 
 ## Gifs
-### Lara Croft's Animation
-![Lara Croft Animation](./screenshots/laraCroftAnimation.gif)
 
-### Campfire Highlighting
-![Campfire Highlighting](./screenshots/fireHighlight.gif)
+![Checkers game](./screenshots/gif1.gif)
 
 ## References
 
 - White Wood texture by [rawpixel.com on Freepik](https://www.freepik.com/free-photo/white-wooden-floor_4139257.htm#query=white%20wood%20texture&position=0&from_view=keyword)
 - Dark Wood texture by [rawpixel.com on Freepik](https://www.freepik.com/free-photo/black-wooden-floor_4139258.htm#query=black%20wood%20texture&position=2&from_view=search&track=ais)
 - Crown icons created by [feen - Flaticon](https://www.flaticon.com/free-icons/crown)
+- Spritesheet taken from Moddle's example
 
