@@ -9,6 +9,8 @@ import ReplayState from "./state/ReplayState.js";
 import MyGameMove from "./MyGameMove.js";
 import EndGameState from "./state/EndGameState.js";
 import { sceneFiles } from "../../../XMLscene.js";
+import MyUndoButton from "./MyUndoButton.js";
+import MyReplayButton from "./MyReplayButton.js";
 
 const TURN_DURATION_SECONDS = 60;
 
@@ -138,8 +140,13 @@ export default class MyGameOrchestrator {
      * @param {*} obj Object that was clicked. Can be of various classes 
      */
     onClick(obj) {
-        // TODO: Handle general scene clicks
-        this.state = this.state.onClick(obj);
+        if (obj instanceof MyUndoButton) {
+            this.undo();
+        } else if (obj instanceof MyReplayButton) {
+            this.replay();
+        } else {
+            this.state = this.state.onClick(obj);
+        }
     }
 
     /**

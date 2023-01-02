@@ -2,7 +2,7 @@ import { CGFtexture } from "../../../../lib/CGF.js";
 import { MyRectangle } from "../../../primitives/MyRectangle.js";
 import { displayText } from "../../../utils/font.js";
 
-export default class MyUndoButton {
+export default class MyReplayButton {
     /**
      * 
      * @param {XMLscene} scene
@@ -29,21 +29,21 @@ export default class MyUndoButton {
         this._cardHeight = newSideLength / 10;
         this._monitorEnabled = monitorEnabled;
 
-        this._card = new MyRectangle(this._scene, "undo-button-card", 0, this._cardLength, 0, this._cardHeight);
+        this._card = new MyRectangle(this._scene, "replay-button-card", 0, this._cardLength, 0, this._cardHeight);
     }
 
     /**
      * Displays the score board
      */
     display() {
-        this.displayUndoButton(true);
-        this.displayUndoButton(false);
+        this.displayReplayButton(true);
+        this.displayReplayButton(false);
     }
 
     /**
      * Displays a score board at either side of the board
      */
-    displayUndoButton(isWhitePerspective) {
+    displayReplayButton(isWhitePerspective) {
         this._boardMaterial.setTexture(this._texture);
         this._boardMaterial.setTextureWrap("REPEAT", "REPEAT");
         this._boardMaterial.apply();
@@ -62,7 +62,6 @@ export default class MyUndoButton {
             this._scene.rotate(Math.PI, 0, 1, 0);
         }
 
-        this._scene.translate(0, this._cardHeight, 0);
         this._card.display();
         this._scene.translate(0, 0, 0.1);
 
@@ -71,9 +70,9 @@ export default class MyUndoButton {
 
         this._scene.setActiveShaderSimple(this._scene.textShader);
 
-        this._scene.translate(this._spacing / 2, this._spacing / 15, 0);
+        this._scene.translate(this._spacing / 5, this._spacing / 15, 0);
         this._scene.scale(0.7, 0.7, 0.7);
-        displayText(this._scene, "UNDO", this._spacing / 2);
+        displayText(this._scene, "REPLAY", this._spacing / 2);
 
         this._scene.setActiveShaderSimple(this._scene.defaultShader);
         this._scene.popMatrix();
