@@ -199,6 +199,7 @@ export default class MyGameOrchestrator {
     rematch() {
         this._sequence.clear();
         this._board.rematch();
+        this.lastTimestamp = null;
     }
 
     /**
