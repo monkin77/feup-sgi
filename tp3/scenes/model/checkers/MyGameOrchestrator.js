@@ -105,6 +105,7 @@ export default class MyGameOrchestrator {
                 if (!lastMove) return this.state;
 
                 this._board = lastMove.board;
+                this._board.updateTheme(this._theme);
                 this.state = new TurnState(this, lastMove.player, this.state.player !== lastMove.player);
             }
         return this.state;
