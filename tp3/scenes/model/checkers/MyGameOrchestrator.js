@@ -100,7 +100,7 @@ export default class MyGameOrchestrator {
         if (this.state instanceof TurnState ||
             this.state instanceof PickedState) {
                 const lastMove = this._sequence.undo();
-                if (!lastMove) return;
+                if (!lastMove) return this.state;
 
                 this._board = lastMove.board;
                 if (this.state.player !== lastMove.player) {
@@ -108,6 +108,7 @@ export default class MyGameOrchestrator {
                 }
                 this.state = new TurnState(this, lastMove.player);
             }
+        return this.state;
     }
 
     /**

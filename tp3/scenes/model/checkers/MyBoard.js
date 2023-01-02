@@ -11,6 +11,7 @@ import MyStorage from "./MyStorage.js";
 import MySwitchSceneButton from "./MySwitchSceneButton.js";
 import MyTile from "./MyTile.js";
 import MyTimer from "./MyTimer.js";
+import MyUndoButton from "./MyUndoButton.js";
 
 // Class for a Checkers board
 export default class MyBoard {
@@ -48,10 +49,11 @@ export default class MyBoard {
         this._timer = new MyTimer(this._scene, this._sideLength, this._boardMaterial);
         this._playButton = new MyPlayButton(this._scene, this._sideLength, this._boardMaterial);
         this._switchSceneButton = new MySwitchSceneButton(this._scene, this._sideLength, this._boardMaterial);
+        this._undoButton = new MyUndoButton(this._scene, this._sideLength, this._boardMaterial);
 
         this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, this._boardMaterial,
             this._scoreboard, this._timer, this._playButton, this._switchSceneButton,
-            this._sceneGraph.boardParser.useMonitor);
+            this._undoButton, this._sceneGraph.boardParser.useMonitor);
 
         /* 
         Initialize the Spotlight
@@ -106,6 +108,9 @@ export default class MyBoard {
 
             // Update the Switch Scene Button
             this._switchSceneButton.updatePosAndSize(this._sideLength);
+
+            // Update the Undo Button
+            this._undoButton.updatePosAndSize(this._sideLength);
         }
 
         // Update the Spotlight Properties
@@ -356,6 +361,9 @@ export default class MyBoard {
         } else {
             this._scoreboard.display();
             this._timer.display(this._scene.gameOrchestrator.turnCounter);
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._undoButton);
+            this._undoButton.display();
         }
   
         this._scene.popMatrix();

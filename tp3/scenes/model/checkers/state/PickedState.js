@@ -51,6 +51,8 @@ export default class PickedState extends State {
                 // Another piece was selected
                 return new PickedState(this.orchestrator, this.player, obj);
             }
+        } else if (obj instanceof MyUndoButton) {
+            return this.orchestrator.undo();
         } else {
             return new TurnState(this.orchestrator, this.player);
         }

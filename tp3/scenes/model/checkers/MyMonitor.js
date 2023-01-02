@@ -20,7 +20,7 @@ export default class MyMonitor {
      * @param {MyTimer} timer
      * @param {boolean} enabled
      */
-    constructor(sceneGraph, sideLength, boardMaterial, scoreboard, timer, playButton, switchSceneButton, enabled) {
+    constructor(sceneGraph, sideLength, boardMaterial, scoreboard, timer, playButton, switchSceneButton, undoButton, enabled) {
         this._sceneGraph = sceneGraph;
         this._scene = sceneGraph.scene;
 
@@ -35,6 +35,7 @@ export default class MyMonitor {
         this._timer = timer;
         this._playButton = playButton;
         this._switchSceneButton = switchSceneButton;
+        this._undoButton = undoButton;
 
         this.updateTheme(sideLength, enabled);
     }
@@ -54,6 +55,7 @@ export default class MyMonitor {
             this._scoreboard.updatePosAndSize(this._monitorWidth, enabled);
             this._playButton.updatePosAndSize(this._monitorWidth, enabled);
             this._switchSceneButton.updatePosAndSize(this._monitorWidth, enabled);
+            this._undoButton.updatePosAndSize(this._monitorWidth, enabled);
         }
     }
 
@@ -123,6 +125,9 @@ export default class MyMonitor {
         }
         else {
             this._scoreboard.display();
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._undoButton);
+            this._undoButton.display();
         }
 
         this._scene.popMatrix();
