@@ -8,6 +8,7 @@ import MyPiece from "./MyPiece.js";
 import MyPlayButton from "./MyPlayButton.js";
 import MyScoreBoard from "./MyScoreBoard.js";
 import MyStorage from "./MyStorage.js";
+import MySwitchSceneButton from "./MySwitchSceneButton.js";
 import MyTile from "./MyTile.js";
 import MyTimer from "./MyTimer.js";
 
@@ -46,9 +47,11 @@ export default class MyBoard {
         this._scoreboard = new MyScoreBoard(this._scene, this._sideLength, this._boardMaterial);
         this._timer = new MyTimer(this._scene, this._sideLength, this._boardMaterial);
         this._playButton = new MyPlayButton(this._scene, this._sideLength, this._boardMaterial);
+        this._switchSceneButton = new MySwitchSceneButton(this._scene, this._sideLength, this._boardMaterial);
 
-        this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, 
-            this._boardMaterial, this._scoreboard, this._timer, this._playButton, this._sceneGraph.boardParser.useMonitor);
+        this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, this._boardMaterial,
+            this._scoreboard, this._timer, this._playButton, this._switchSceneButton,
+            this._sceneGraph.boardParser.useMonitor);
 
         /* 
         Initialize the Spotlight
@@ -100,6 +103,9 @@ export default class MyBoard {
 
             // Update the Play Button
             this._playButton.updatePosAndSize(this._sideLength);
+
+            // Update the Switch Scene Button
+            this._switchSceneButton.updatePosAndSize(this._sideLength);
         }
 
         // Update the Spotlight Properties
@@ -339,17 +345,17 @@ export default class MyBoard {
         this._whiteStorage.display();
         this._blackStorage.display();
 
-        if (displayMenu) {
-            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._playButton);
-        }
-
         if (this._monitor.enabled) {
             this._monitor.display(this._scene.gameOrchestrator.turnCounter, displayMenu);
         } else if (displayMenu) {
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._playButton);
             this._playButton.display();
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._switchSceneButton);
+            this._switchSceneButton.display();
         } else {
             this._scoreboard.display();
-            this._timer.display(turn);
+            this._timer.display(this._scene.gameOrchestrator.turnCounter);
         }
   
         this._scene.popMatrix();

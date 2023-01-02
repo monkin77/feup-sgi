@@ -1,5 +1,6 @@
 import { CGFtexture } from "../../../../lib/CGF.js";
 import { MySceneGraph } from "../../../MySceneGraph.js";
+import MyGameOrchestrator from "./MyGameOrchestrator.js";
 import MyScoreBoard from "./MyScoreBoard.js";
 import MyTimer from "./MyTimer.js";
 
@@ -19,7 +20,7 @@ export default class MyMonitor {
      * @param {MyTimer} timer
      * @param {boolean} enabled
      */
-    constructor(sceneGraph, sideLength, boardMaterial, scoreboard, timer, playButton, enabled) {
+    constructor(sceneGraph, sideLength, boardMaterial, scoreboard, timer, playButton, switchSceneButton, enabled) {
         this._sceneGraph = sceneGraph;
         this._scene = sceneGraph.scene;
 
@@ -33,6 +34,7 @@ export default class MyMonitor {
         this._scoreboard = scoreboard;
         this._timer = timer;
         this._playButton = playButton;
+        this._switchSceneButton = switchSceneButton;
 
         this.updateTheme(sideLength, enabled);
     }
@@ -51,6 +53,7 @@ export default class MyMonitor {
             this._timer.updatePosAndSize(this._monitorWidth, enabled);
             this._scoreboard.updatePosAndSize(this._monitorWidth, enabled);
             this._playButton.updatePosAndSize(this._monitorWidth, enabled);
+            this._switchSceneButton.updatePosAndSize(this._monitorWidth, enabled);
         }
     }
 
@@ -101,15 +104,26 @@ export default class MyMonitor {
         // Draw the timer
         this._scene.pushMatrix();
         this._scene.translate(0, 0, this._timer.cardHeight/4)
-        this._timer.display(turnCounter);
+
+        if (displayMenu) {
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._switchSceneButton);
+            this._switchSceneButton.display();
+        } else {
+            this._timer.display(turnCounter);
+        }
         this._scene.popMatrix();
 
         // Draw the scoreboard
         this._scene.pushMatrix();
         this._scene.translate(0, 0, this._scoreboard.cardHeight/4);
 
-        if (displayMenu) this._playButton.display();
-        else this._scoreboard.display();
+        if (displayMenu) {
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._playButton);
+            this._playButton.display();
+        }
+        else {
+            this._scoreboard.display();
+        }
 
         this._scene.popMatrix();
         this._scene.popMatrix();
