@@ -394,6 +394,18 @@
             </patch>
         </primitive>
 
+        <!--  3D Objects -->
+        <primitive id="suzanne">
+            <objfile file="suzanne.obj" />
+        </primitive>
+
+        <primitive id="animeGirl">
+            <objfile file="anime-girl.obj" />
+        </primitive>
+
+        <primitive id="humanModel">
+            <objfile file="human.obj" />
+        </primitive>
     </primitives>
 
     <animations>
@@ -2441,7 +2453,7 @@
                 <componentref id="rightBehindWall" />
                 <componentref id="floor" />
                 <componentref id="ceiling" />
-                <componentref id="banner" />
+                <componentref id="banner" />                
             </children>
         </component>
 
@@ -2585,6 +2597,21 @@
             </children>
         </component>
 
+        <component id="player2Model">
+            <transformation>
+                <translate x="-1" y="-5" z="1.5" />
+                <scale x="0.6" y="0.5" z="1" />
+                <rotate axis="y" angle="180" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="humanModel" />
+            </children>
+        </component>
+
         <component id="player2">
             <transformation>
                 <translate x="6" y="20.5" z="-5" />
@@ -2594,7 +2621,8 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <componentref id="laraCroft" />
+                <!-- <componentref id="laraCroft" /> -->
+                <componentref id="player2Model" />
             </children>
         </component>
 

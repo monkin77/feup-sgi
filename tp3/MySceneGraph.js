@@ -22,6 +22,7 @@ import { TexturesParser } from "./scenes/parser/TexturesParser.js";
 import { AnimationsParser } from "./scenes/parser/AnimationsParser.js";
 import PickingInfo from "./scenes/model/PickingInfo.js";
 import { BoardParser } from "./scenes/parser/BoardParser.js";
+import { buildObjPath, CGFOBJModel } from "./primitives/3dModels/CGFOBJModel.js";
 
 // Order of the groups in the XML document.
 const SCENE_INDEX = 0;
@@ -595,7 +596,7 @@ export class MySceneGraph {
 
             // Get id of the current primitive.
             var primitiveId = this.reader.getString(children[i], "id", false);
-            if (primitiveId == null) return "no ID defined for texture";
+            if (primitiveId == null) return "no ID defined for primitive";
 
             // Checks for repeated IDs.
             if (this.primitives[primitiveId] != null)
@@ -617,6 +618,7 @@ export class MySceneGraph {
                     "sphere",
                     "torus",
                     "patch",
+                    "objfile"
                 ].includes(grandChildren[0].nodeName)
             ) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus or patch)";
@@ -1054,6 +1056,14 @@ export class MySceneGraph {
                     controlPoints
                 );
                 this.primitives[primitiveId] = currPatch;
+            } else if (primitiveType == "objfile") {
+                const fileName = this.reader.getString(grandChildren[0], "file", false);
+                if (fileName == null) {
+                    return `unable to parse file name of the primitive with ID = ${primitiveId}`;
+                }
+
+                const new3dObj = new CGFOBJModel(this.scene, buildObjPath(fileName));
+                this.primitives[primitiveId] = new3dObj;
             }
         }
 

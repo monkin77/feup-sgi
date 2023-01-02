@@ -59,8 +59,6 @@ export class XMLscene extends CGFscene {
 
         // the activation of picking capabilities in WebCGF
         this.setPickEnabled(true);
-
-        this.suzanne = new CGFOBJModel(this, 'scenes/3dModels/suzanne.obj');
     }
 
     /**
@@ -334,8 +332,6 @@ export class XMLscene extends CGFscene {
             this.customPrimitiveIdx = 0;    // Reset the custom primitive index
             this.gameOrchestrator.display();
         }
-
-        this.suzanne.display();
 
         this.popMatrix();
         // ---- END Background, camera and axis setup

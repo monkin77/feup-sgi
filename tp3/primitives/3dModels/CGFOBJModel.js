@@ -13,6 +13,8 @@
 import { CGFobject } from '../../../lib/CGF.js';
 import {CGFresourceReader} from './CGFResourceReader.js';
 
+export const buildObjPath = (fileName) => `scenes/3dModels/${fileName}`;
+
 export class CGFOBJModel extends CGFobject {
 
 	constructor(scene, url, wireframe) 
@@ -169,4 +171,13 @@ export class CGFOBJModel extends CGFobject {
 		
 		this.initGLBuffers();
 	};
+
+
+    scaleTexCoords(s, t) {
+        return;
+    }
+
+    copy(idx) {
+        return this;
+    }
 }
