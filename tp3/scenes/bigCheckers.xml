@@ -64,6 +64,7 @@
         <texture id="camoTexture" file="scenes/images/camo.jpg" />
         <texture id="woodTexture" file="scenes/images/trunk-image.jpg" />
         <texture id="lightWoodTexture" file="scenes/images/light-wood.jpg" />
+        <texture id="robotTexture" file="scenes/images/robot.jpg" />
     </textures>
 
     <materials>
@@ -219,6 +220,13 @@
             <ambient r="0.6" g="0.1" b="0" a="1.0" />
             <diffuse r="0.6" g="0.1" b="0" a="1.0" />
             <specular r="0.6" g="0.1" b="0" a="1.0" />
+        </material>
+
+        <material id="skullMaterial" shininess="100">
+            <emission r="0.1" g="0.1" b="0.1" a="1.0" />
+            <ambient r="0.25" g="0.125" b="0.125" a="1.0" />
+            <diffuse r="1" g="0.5" b="0.5" a="1.0" />
+            <specular r="1" g="0.5" b="0.5" a="1.0" />
         </material>
     </materials>
 
@@ -395,16 +403,16 @@
         </primitive>
 
         <!--  3D Objects -->
-        <primitive id="suzanne">
-            <objfile file="suzanne.obj" />
-        </primitive>
-
         <primitive id="animeGirl">
             <objfile file="anime-girl.obj" />
         </primitive>
 
         <primitive id="humanModel">
             <objfile file="human.obj" />
+        </primitive>
+
+        <primitive id="skull">
+            <objfile file="skull.obj" />
         </primitive>
     </primitives>
 
@@ -2453,7 +2461,50 @@
                 <componentref id="rightBehindWall" />
                 <componentref id="floor" />
                 <componentref id="ceiling" />
-                <componentref id="banner" />                
+                <componentref id="banner" />    
+
+                <componentref id="3dObjects" />            
+            </children>
+        </component>
+
+        <component id="skullWallP1">
+            <transformation>
+                <scale x="-1" y="1" z="-1" />
+            </transformation>
+            <materials>
+                <material id="skullMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="skullWallP2" />
+            </children>
+        </component>
+
+        <component id="skullWallP2">
+            <transformation>
+                <translate x="30" y="5" z="-71.5" />
+                <scale x="0.3" y="0.3" z="0.3" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="skullMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="skull" />
+            </children>
+        </component>
+
+        <component id="3dObjects">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="skullWallP2" />
+                <componentref id="skullWallP1" />
             </children>
         </component>
 
@@ -2606,7 +2657,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" />
+            <texture id="robotTexture" />
             <children>
                 <primitiveref id="humanModel" />
             </children>
