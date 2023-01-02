@@ -39,10 +39,10 @@ export default class MyGameOrchestrator {
         if (!this._board) {
             // If the board is not initialized, initialize it
             this._board = new MyBoard(this._theme, this._theme.boardParser.position, this._theme.boardParser.sideLength);
-            if (this.state instanceof MenuState) {
+            /* if (this.state instanceof MenuState) {
                 // Player 2 (black pieces) start the game
                 this.state = new TurnState(this, player1, this._board);
-            }
+            } */
         } else {
             this._board.updateTheme(this._theme);
             // The Scene was changed
@@ -94,7 +94,6 @@ export default class MyGameOrchestrator {
      * @param {string} filename Filename of the new theme
      */
     changeTheme(filename) {
-        // TODO: Think how to handle graph in scene/theme and orchestrator
         this._theme = new MySceneGraph(filename, this._scene);
     }
 

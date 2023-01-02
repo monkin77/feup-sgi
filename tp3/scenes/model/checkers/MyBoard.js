@@ -5,6 +5,7 @@ import { updateLight } from "../../parser/utils.js";
 import MyGameOrchestrator from "./MyGameOrchestrator.js";
 import MyMonitor from "./MyMonitor.js";
 import MyPiece from "./MyPiece.js";
+import MyPlayButton from "./MyPlayButton.js";
 import MyScoreBoard from "./MyScoreBoard.js";
 import MyStorage from "./MyStorage.js";
 import MyTile from "./MyTile.js";
@@ -44,6 +45,7 @@ export default class MyBoard {
 
         this._scoreboard = new MyScoreBoard(this._scene, this._sideLength, this._boardMaterial);
         this._timer = new MyTimer(this._scene, this._sideLength, this._boardMaterial);
+        this._playButton = new MyPlayButton(this._scene, this._sideLength, this._boardMaterial);
 
         this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, 
             this._boardMaterial, this._scoreboard, this._timer, this._sceneGraph.boardParser.useMonitor);
@@ -95,6 +97,9 @@ export default class MyBoard {
 
             // Update the Timer
             this._timer.updatePosAndSize(this._sideLength);
+
+            // Update the Play Button
+            this._playButton.updatePosAndSize(this._sideLength);
         }
 
         // Update the Spotlight Properties
@@ -306,7 +311,7 @@ export default class MyBoard {
      * @param {number} turn
      * @param {MyTile} selectedTile
      */
-    display(turn = null, selectedTile = null) {
+    display(turn = null, selectedTile = null, displayMenu = false) {
         this._scene.pushMatrix();
 
         // Rotate board to draw it in the XZ plane
@@ -334,15 +339,24 @@ export default class MyBoard {
         this._whiteStorage.display();
         this._blackStorage.display();
 
-        // Draw the Monitor
-        if (this._monitor.enabled) {
-            this._monitor.display(this._scene.gameOrchestrator.turnCounter);
-        } else {
-            // Draw scoreboard
-            this._scoreboard.display();
+        if (displayMenu) {
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._playButton);
+            if (this._monitor.enabled) {
 
-            // Draw timer
-            this._timer.display(this._scene.gameOrchestrator.turnCounter);
+            } else {
+                this._playButton.display();
+            }
+        } else {
+            // Draw the Monitor
+            if (this._monitor.enabled) {
+                this._monitor.display(this._scene.gameOrchestrator.turnCounter);
+            } else {
+                // Draw scoreboard
+                this._scoreboard.display();
+
+                // Draw timer
+                this._timer.display(this._scene.gameOrchestrator.turnCounter);
+            }
         }
   
         this._scene.popMatrix();
