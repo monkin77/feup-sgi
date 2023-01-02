@@ -19,7 +19,7 @@ export default class MyMonitor {
      * @param {MyTimer} timer
      * @param {boolean} enabled
      */
-    constructor(sceneGraph, sideLength, boardMaterial, scoreboard, timer, enabled) {
+    constructor(sceneGraph, sideLength, boardMaterial, scoreboard, timer, playButton, enabled) {
         this._sceneGraph = sceneGraph;
         this._scene = sceneGraph.scene;
 
@@ -32,6 +32,7 @@ export default class MyMonitor {
 
         this._scoreboard = scoreboard;
         this._timer = timer;
+        this._playButton = playButton;
 
         this.updateTheme(sideLength, enabled);
     }
@@ -49,6 +50,7 @@ export default class MyMonitor {
         if (this._enabled) {
             this._timer.updatePosAndSize(this._monitorWidth, enabled);
             this._scoreboard.updatePosAndSize(this._monitorWidth, enabled);
+            this._playButton.updatePosAndSize(this._monitorWidth, enabled);
         }
     }
 
@@ -56,7 +58,7 @@ export default class MyMonitor {
      * 
      * @param {*} turnCounter 
      */
-    display(turnCounter) {
+    display(turnCounter, displayMenu = false) {
         if (!this._enabled) return;
 
         this._boardMaterial.setTexture(this._texture);
@@ -105,9 +107,11 @@ export default class MyMonitor {
         // Draw the scoreboard
         this._scene.pushMatrix();
         this._scene.translate(0, 0, this._scoreboard.cardHeight/4);
-        this._scoreboard.display();
-        this._scene.popMatrix();
 
+        if (displayMenu) this._playButton.display();
+        else this._scoreboard.display();
+
+        this._scene.popMatrix();
         this._scene.popMatrix();
 
     }

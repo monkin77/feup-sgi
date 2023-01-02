@@ -48,7 +48,7 @@ export default class MyBoard {
         this._playButton = new MyPlayButton(this._scene, this._sideLength, this._boardMaterial);
 
         this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, 
-            this._boardMaterial, this._scoreboard, this._timer, this._sceneGraph.boardParser.useMonitor);
+            this._boardMaterial, this._scoreboard, this._timer, this._playButton, this._sceneGraph.boardParser.useMonitor);
 
         /* 
         Initialize the Spotlight
@@ -341,22 +341,15 @@ export default class MyBoard {
 
         if (displayMenu) {
             this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._playButton);
-            if (this._monitor.enabled) {
+        }
 
-            } else {
-                this._playButton.display();
-            }
+        if (this._monitor.enabled) {
+            this._monitor.display(this._scene.gameOrchestrator.turnCounter, displayMenu);
+        } else if (displayMenu) {
+            this._playButton.display();
         } else {
-            // Draw the Monitor
-            if (this._monitor.enabled) {
-                this._monitor.display(this._scene.gameOrchestrator.turnCounter);
-            } else {
-                // Draw scoreboard
-                this._scoreboard.display();
-
-                // Draw timer
-                this._timer.display(this._scene.gameOrchestrator.turnCounter);
-            }
+            this._scoreboard.display();
+            this._timer.display(turn);
         }
   
         this._scene.popMatrix();
