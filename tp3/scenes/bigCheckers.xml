@@ -224,9 +224,16 @@
 
         <material id="skullMaterial" shininess="100">
             <emission r="0.1" g="0.1" b="0.1" a="1.0" />
-            <ambient r="0.25" g="0.125" b="0.125" a="1.0" />
+            <ambient r="0.125" g="0.05" b="0.05" a="1.0" />
             <diffuse r="1" g="0.5" b="0.5" a="1.0" />
             <specular r="1" g="0.5" b="0.5" a="1.0" />
+        </material>
+
+        <material id="treeMaterial" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0" g="0.2" b="0" a="1.0" />
+            <diffuse r="0" g="0.6" b="0.3" a="1.0" />
+            <specular r="0" g="0.6" b="0.3" a="1.0" />
         </material>
     </materials>
 
@@ -413,6 +420,10 @@
 
         <primitive id="skull">
             <objfile file="skull.obj" />
+        </primitive>
+
+        <primitive id="lowpolyTree">
+            <objfile file="lowpoly-tree.obj" />
         </primitive>
     </primitives>
 
@@ -2495,6 +2506,33 @@
             </children>
         </component>
 
+        <component id="treeP1">
+            <transformation>
+                <scale x="-1" y="1" z="-1" />
+            </transformation>
+            <materials>
+                <material id="treeMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="treeP2" />
+            </children>
+        </component>
+
+        <component id="treeP2">
+            <transformation>
+                <translate x="-30" y="-10" z="-60" />
+                <scale x="0.8" y="0.8" z="0.8" />
+            </transformation>
+            <materials>
+                <material id="treeMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="lowpolyTree" />
+            </children>
+        </component>
+
         <component id="3dObjects">
             <transformation>
             </transformation>
@@ -2505,6 +2543,8 @@
             <children>
                 <componentref id="skullWallP2" />
                 <componentref id="skullWallP1" />
+                <componentref id="treeP2" />
+                <componentref id="treeP1" />
             </children>
         </component>
 
