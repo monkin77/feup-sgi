@@ -1,3 +1,5 @@
+import MyHomeButton from "../MyHomeButton.js";
+import MenuState from "./MenuState.js";
 import State from "./State.js";
 
 export default class EndGameState extends State {
@@ -8,7 +10,9 @@ export default class EndGameState extends State {
     }
 
     onClick(obj) {
-        console.log("Game is over");
+        if (obj instanceof MyHomeButton) {
+            return new MenuState(this.orchestrator);
+        }
         return this;
     }
 

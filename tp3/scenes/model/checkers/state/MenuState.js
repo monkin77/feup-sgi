@@ -1,6 +1,7 @@
 import { player1 } from "../../../../utils/checkers.js";
 import MyPlayButton from "../MyPlayButton.js";
 import MySwitchSceneButton from "../MySwitchSceneButton.js";
+import EndGameState from "./EndGameState.js";
 import State from "./State.js";
 import TurnState from "./TurnState.js";
 

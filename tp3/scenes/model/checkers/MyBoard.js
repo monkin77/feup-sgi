@@ -3,6 +3,7 @@ import { MySceneGraph } from "../../../MySceneGraph.js";
 import { boardState, discsPerSide, noPossibleMoves, startRowsWithDiscs, tilesPerSide } from "../../../utils/checkers.js";
 import { updateLight } from "../../parser/utils.js";
 import MyGameOrchestrator from "./MyGameOrchestrator.js";
+import MyHomeButton from "./MyHomeButton.js";
 import MyMonitor from "./MyMonitor.js";
 import MyPiece from "./MyPiece.js";
 import MyPlayButton from "./MyPlayButton.js";
@@ -54,10 +55,11 @@ export default class MyBoard {
         this._undoButton = new MyUndoButton(this._scene, this._sideLength, this._boardMaterial);
         this._replayButton = new MyReplayButton(this._scene, this._sideLength, this._boardMaterial);
         this._winnerCard = new MyWinner(this._scene, this._sideLength, this._boardMaterial);
+        this._homeButton = new MyHomeButton(this._scene, this._sideLength, this._boardMaterial);
 
         this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, this._boardMaterial,
             this._scoreboard, this._timer, this._playButton, this._switchSceneButton,
-            this._undoButton, this._replayButton, this._winnerCard,
+            this._undoButton, this._replayButton, this._winnerCard, this._homeButton,
             this._sceneGraph.boardParser.useMonitor);
 
         /* 
@@ -122,6 +124,9 @@ export default class MyBoard {
 
             // Update the Winner Card
             this._winnerCard.updatePosAndSize(this._sideLength);
+
+            // Update the Home Button
+            this._homeButton.updatePosAndSize(this._sideLength);
         }
 
         // Update the Spotlight Properties
@@ -372,6 +377,9 @@ export default class MyBoard {
         } else if (winner != null) {
             this._scoreboard.display();
             this._winnerCard.display(winner);
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._homeButton);
+            this._homeButton.display();
         } else {
             this._scoreboard.display();
             this._timer.display(this._scene.gameOrchestrator.turnCounter);
