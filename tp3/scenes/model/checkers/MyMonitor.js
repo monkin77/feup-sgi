@@ -20,7 +20,8 @@ export default class MyMonitor {
      * @param {MyTimer} timer
      * @param {boolean} enabled
      */
-    constructor(sceneGraph, sideLength, boardMaterial, scoreboard, timer, playButton, switchSceneButton, undoButton, replayButton, enabled) {
+    constructor(sceneGraph, sideLength, boardMaterial, scoreboard, timer, playButton,
+        switchSceneButton, undoButton, replayButton, winnerCard, enabled) {
         this._sceneGraph = sceneGraph;
         this._scene = sceneGraph.scene;
 
@@ -37,6 +38,7 @@ export default class MyMonitor {
         this._switchSceneButton = switchSceneButton;
         this._undoButton = undoButton;
         this._replayButton = replayButton;
+        this._winnerCard = winnerCard;
 
         this.updateTheme(sideLength, enabled);
     }
@@ -58,6 +60,7 @@ export default class MyMonitor {
             this._switchSceneButton.updatePosAndSize(this._monitorWidth, enabled);
             this._undoButton.updatePosAndSize(this._monitorWidth, enabled);
             this._replayButton.updatePosAndSize(this._monitorWidth, enabled);
+            this._winnerCard.updatePosAndSize(this._monitorWidth, enabled);
         }
     }
 
@@ -65,7 +68,7 @@ export default class MyMonitor {
      * 
      * @param {*} turnCounter 
      */
-    display(turnCounter, displayMenu = false) {
+    display(turnCounter, displayMenu = false, winner = null) {
         if (!this._enabled) return;
 
         this._boardMaterial.setTexture(this._texture);
@@ -112,8 +115,16 @@ export default class MyMonitor {
         if (displayMenu) {
             this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._switchSceneButton);
             this._switchSceneButton.display();
+        } else if (winner != null) {
+            this._winnerCard.display(winner);
         } else {
             this._timer.display(turnCounter);
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._undoButton);
+            this._undoButton.display();
+
+            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._replayButton);
+            this._replayButton.display();
         }
         this._scene.popMatrix();
 
@@ -127,12 +138,6 @@ export default class MyMonitor {
         }
         else {
             this._scoreboard.display();
-
-            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._undoButton);
-            this._undoButton.display();
-
-            this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._replayButton);
-            this._replayButton.display();
         }
 
         this._scene.popMatrix();

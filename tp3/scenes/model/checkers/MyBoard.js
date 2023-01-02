@@ -13,6 +13,7 @@ import MySwitchSceneButton from "./MySwitchSceneButton.js";
 import MyTile from "./MyTile.js";
 import MyTimer from "./MyTimer.js";
 import MyUndoButton from "./MyUndoButton.js";
+import MyWinner from "./MyWinner.js";
 
 // Class for a Checkers board
 export default class MyBoard {
@@ -52,10 +53,12 @@ export default class MyBoard {
         this._switchSceneButton = new MySwitchSceneButton(this._scene, this._sideLength, this._boardMaterial);
         this._undoButton = new MyUndoButton(this._scene, this._sideLength, this._boardMaterial);
         this._replayButton = new MyReplayButton(this._scene, this._sideLength, this._boardMaterial);
+        this._winnerCard = new MyWinner(this._scene, this._sideLength, this._boardMaterial);
 
         this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, this._boardMaterial,
             this._scoreboard, this._timer, this._playButton, this._switchSceneButton,
-            this._undoButton, this._replayButton, this._sceneGraph.boardParser.useMonitor);
+            this._undoButton, this._replayButton, this._winnerCard,
+            this._sceneGraph.boardParser.useMonitor);
 
         /* 
         Initialize the Spotlight
@@ -116,6 +119,9 @@ export default class MyBoard {
 
             // Update the Replay Button
             this._replayButton.updatePosAndSize(this._sideLength);
+
+            // Update the Winner Card
+            this._winnerCard.updatePosAndSize(this._sideLength);
         }
 
         // Update the Spotlight Properties
@@ -327,7 +333,7 @@ export default class MyBoard {
      * @param {number} turn
      * @param {MyTile} selectedTile
      */
-    display(turn = null, selectedTile = null, displayMenu = false) {
+    display(turn = null, selectedTile = null, displayMenu = false, winner = null) {
         this._scene.pushMatrix();
 
         // Rotate board to draw it in the XZ plane
@@ -356,13 +362,16 @@ export default class MyBoard {
         this._blackStorage.display();
 
         if (this._monitor.enabled) {
-            this._monitor.display(this._scene.gameOrchestrator.turnCounter, displayMenu);
+            this._monitor.display(this._scene.gameOrchestrator.turnCounter, displayMenu, winner);
         } else if (displayMenu) {
             this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._playButton);
             this._playButton.display();
 
             this._scene.registerForPick(MyGameOrchestrator.pickingId++, this._switchSceneButton);
             this._switchSceneButton.display();
+        } else if (winner != null) {
+            this._scoreboard.display();
+            this._winnerCard.display(winner);
         } else {
             this._scoreboard.display();
             this._timer.display(this._scene.gameOrchestrator.turnCounter);
