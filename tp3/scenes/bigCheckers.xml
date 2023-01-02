@@ -26,17 +26,17 @@
     <lights>
         <omni id="black" enabled="1">
             <location x="0" y="25" z="50" w="1.0" />
-            <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
-            <diffuse r="0.2" g="0.2" b="0.2" a="1.0" />
-            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
+            <ambient r="0.125" g="0.125" b="0.125" a="1.0" />
+            <diffuse r="0.125" g="0.125" b="0.125" a="1.0" />
+            <specular r="0.125" g="0.125" b="0.125" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
 
         <omni id="white" enabled="1">
             <location x="0" y="25" z="-50" w="1.0" />
-            <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
-            <diffuse r="0.2" g="0.2" b="0.2" a="1.0" />
-            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
+            <ambient r="0.125" g="0.125" b="0.125" a="1.0" />
+            <diffuse r="0.125" g="0.125" b="0.125" a="1.0" />
+            <specular r="0.125" g="0.125" b="0.125" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
 
@@ -64,6 +64,7 @@
         <texture id="camoTexture" file="scenes/images/camo.jpg" />
         <texture id="woodTexture" file="scenes/images/trunk-image.jpg" />
         <texture id="lightWoodTexture" file="scenes/images/light-wood.jpg" />
+        <texture id="robotTexture" file="scenes/images/robot.jpg" />
     </textures>
 
     <materials>
@@ -219,6 +220,20 @@
             <ambient r="0.6" g="0.1" b="0" a="1.0" />
             <diffuse r="0.6" g="0.1" b="0" a="1.0" />
             <specular r="0.6" g="0.1" b="0" a="1.0" />
+        </material>
+
+        <material id="skullMaterial" shininess="100">
+            <emission r="0.1" g="0.1" b="0.1" a="1.0" />
+            <ambient r="0.125" g="0.05" b="0.05" a="1.0" />
+            <diffuse r="1" g="0.5" b="0.5" a="1.0" />
+            <specular r="1" g="0.5" b="0.5" a="1.0" />
+        </material>
+
+        <material id="treeMaterial" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0" g="0.2" b="0" a="1.0" />
+            <diffuse r="0" g="0.6" b="0.3" a="1.0" />
+            <specular r="0" g="0.6" b="0.3" a="1.0" />
         </material>
     </materials>
 
@@ -394,6 +409,18 @@
             </patch>
         </primitive>
 
+        <!--  3D Objects -->
+        <primitive id="humanModel">
+            <objfile file="human.obj" />
+        </primitive>
+
+        <primitive id="skull">
+            <objfile file="skull.obj" />
+        </primitive>
+
+        <primitive id="lowpolyTree">
+            <objfile file="lowpoly-tree.obj" />
+        </primitive>
     </primitives>
 
     <animations>
@@ -2441,7 +2468,79 @@
                 <componentref id="rightBehindWall" />
                 <componentref id="floor" />
                 <componentref id="ceiling" />
-                <componentref id="banner" />
+                <componentref id="banner" />    
+
+                <componentref id="3dObjects" />            
+            </children>
+        </component>
+
+        <component id="skullWallP1">
+            <transformation>
+                <scale x="-1" y="1" z="-1" />
+            </transformation>
+            <materials>
+                <material id="skullMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="skullWallP2" />
+            </children>
+        </component>
+
+        <component id="skullWallP2">
+            <transformation>
+                <translate x="30" y="5" z="-71.5" />
+                <scale x="0.3" y="0.3" z="0.3" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="skullMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="skull" />
+            </children>
+        </component>
+
+        <component id="treeP1">
+            <transformation>
+                <scale x="-1" y="1" z="-1" />
+            </transformation>
+            <materials>
+                <material id="treeMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="treeP2" />
+            </children>
+        </component>
+
+        <component id="treeP2">
+            <transformation>
+                <translate x="-30" y="-10" z="-60" />
+                <scale x="0.8" y="0.8" z="0.8" />
+            </transformation>
+            <materials>
+                <material id="treeMaterial" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="lowpolyTree" />
+            </children>
+        </component>
+
+        <component id="3dObjects">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="skullWallP2" />
+                <componentref id="skullWallP1" />
+                <componentref id="treeP2" />
+                <componentref id="treeP1" />
             </children>
         </component>
 
@@ -2585,6 +2684,21 @@
             </children>
         </component>
 
+        <component id="player2Model">
+            <transformation>
+                <translate x="-1" y="-5" z="1.5" />
+                <scale x="0.6" y="0.5" z="1" />
+                <rotate axis="y" angle="180" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="robotTexture" />
+            <children>
+                <primitiveref id="humanModel" />
+            </children>
+        </component>
+
         <component id="player2">
             <transformation>
                 <translate x="6" y="20.5" z="-5" />
@@ -2594,7 +2708,8 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <componentref id="laraCroft" />
+                <!-- <componentref id="laraCroft" /> -->
+                <componentref id="player2Model" />
             </children>
         </component>
 

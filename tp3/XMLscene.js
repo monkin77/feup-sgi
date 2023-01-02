@@ -1,5 +1,6 @@
 import { CGFscene, CGFshader, CGFtexture } from "../lib/CGF.js";
 import { CGFaxis, CGFcamera } from "../lib/CGF.js";
+import { CGFOBJModel } from "./primitives/3dModels/CGFOBJModel.js";
 import { MyRectangle } from "./primitives/MyRectangle.js";
 import CameraAnimation from "./scenes/model/checkers/animation/CameraAnimation.js";
 import MyGameOrchestrator from "./scenes/model/checkers/MyGameOrchestrator.js";
