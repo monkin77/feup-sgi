@@ -3,12 +3,12 @@
 
     <views default="Black">
         <perspective id="Black" near="0.1" far="500" angle="50">
-            <from x="0" y="20" z="85" />
+            <from x="0" y="20" z="70" />
             <to x="0" y="-1" z="0" />
         </perspective>
 
         <perspective id="White" near="0.1" far="500" angle="50">
-            <from x="0" y="20" z="-85" />
+            <from x="0" y="20" z="-70" />
             <to x="0" y="-1" z="0" />
         </perspective>
 
@@ -72,6 +72,7 @@
         <texture id="fireTexture" file="scenes/images/fire.png" />
         <texture id="camoTexture" file="scenes/images/camo.jpg" />
         <texture id="woodTexture" file="scenes/images/trunk-image.jpg" />
+        <texture id="lightWoodTexture" file="scenes/images/light-wood.jpg" />
     </textures>
 
     <materials>
@@ -213,6 +214,20 @@
             <ambient r="0.8" g="0.4" b="0.32" a="1.0" />
             <diffuse r="0.8" g="0.4" b="0.32" a="1.0" />
             <specular r="1.0" g="0.20" b="0.16" a="1.0" />
+        </material>
+
+        <material id="plat1Material" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0" g="0.2" b="0.6" a="1.0" />
+            <diffuse r="0" g="0.2" b="0.6" a="1.0" />
+            <specular r="0" g="0.2" b="0.6" a="1.0" />
+        </material>
+
+        <material id="plat2Material" shininess="10">
+            <emission r="0" g="0" b="0" a="1.0" />
+            <ambient r="0.6" g="0.1" b="0" a="1.0" />
+            <diffuse r="0.6" g="0.1" b="0" a="1.0" />
+            <specular r="0.6" g="0.1" b="0" a="1.0" />
         </material>
     </materials>
 
@@ -1859,7 +1874,6 @@
                 <rotate axis="x" angle="20" />
                 <scale x="0.5" y="0.5" z="0.5" />
             </transformation>
-            <animation id="baseArmAnimation" />
             <materials>
                 <material id="skinMaterial" />
             </materials>
@@ -1881,7 +1895,6 @@
                 <rotate axis="x" angle="90" />
                 <rotate axis="z" angle="180" />
             </transformation>
-            <animation id="rightArmAnimation" />
             <materials>
                 <material id="inherit" />
             </materials>
@@ -1898,7 +1911,6 @@
                 <scale x="0.75" y="0.75" z="0.75" />
                 <rotate axis="y" angle="-90" />
             </transformation>
-            <animation id="leftArmAnimation" />
             <materials>
                 <material id="inherit" />
             </materials>
@@ -1977,7 +1989,6 @@
             <transformation>
                 <rotate axis="x" angle="-10" />
             </transformation>
-            <animation id="thighAnimation" />
             <materials>
                 <material id="skinMaterial" />
             </materials>
@@ -2127,7 +2138,6 @@
         <component id="lowerLegBaseNoFoot">
             <transformation>
             </transformation>
-            <animation id="lowerLegBaseNoFootAnimation" />
             <materials>
                 <material id="inherit" />
             </materials>
@@ -2162,7 +2172,6 @@
             <transformation>
                 <translate x="0" y="-4.4" z="2.42" />
             </transformation>
-            <animation id="lowerLegRightAnimation" />
             <materials>
                 <material id="skinMaterial" />
             </materials>
@@ -2194,7 +2203,6 @@
             <transformation>
                 <translate x="0" y="-4.4" z="2.42" />
             </transformation>
-            <animation id="lowerLegLeftAnimation" />
             <materials>
                 <material id="skinMaterial" />
             </materials>
@@ -2239,7 +2247,6 @@
                 <translate x="1.0" y="-1.2" z="0" />
                 <scale x="0.5" y="0.5" z="0.5" />
             </transformation>
-            <animation id="rightLegAnimation" />
             <materials>
                 <material id="inherit" />
             </materials>
@@ -2256,7 +2263,6 @@
                 <translate x="0.2" y="-1.1" z="0" />
                 <scale x="0.5" y="0.5" z="0.5" />
             </transformation>
-            <animation id="leftLegAnimation" />
             <materials>
                 <material id="inherit" />
             </materials>
@@ -2283,7 +2289,6 @@
         <component id="upperBody" >
             <transformation>
             </transformation>
-            <animation id="upperBodyAnimation" />
             <materials>
                 <material id="inherit" />
             </materials>
@@ -2300,11 +2305,8 @@
         <!-- SIZES -->
         <component id="laraCroft">
             <transformation>
-                <scale x="1.3" y="1.3" z="1.3" />
-                <translate x="0" y="-1" z="0" />
-                <rotate axis="y" angle="-45" />
+                <rotate axis="y" angle="-180" />
             </transformation>
-            <animation id="laraAnimation" />
             <materials>
                 <material id="skinMaterial" />
             </materials>
@@ -2315,11 +2317,11 @@
             </children>
         </component>
 
-        <!-- 100 x 30 x 1 -->
+        <!-- 150 x 40 x 1 -->
         <component id="leftWall">
             <transformation>
-                <translate x="-50" y="-10" z="50" />
-                <scale x="1" y="40" z="100" />
+                <translate x="-50" y="-10" z="75" />
+                <scale x="1" y="40" z="150" />
                 <rotate axis="y" angle="90" />
             </transformation>
             <materials>
@@ -2335,7 +2337,7 @@
         <!-- 100 x 30 x 1 -->
          <component id="rightWall">
             <transformation>
-                <translate x="-50" y="-10" z="-50" />
+                <translate x="-50" y="-10" z="-75" />
                 <scale x="100" y="40" z="1" />
             </transformation>
             <materials>
@@ -2351,7 +2353,7 @@
         <!-- 100 x 30 x 1 -->
         <component id="leftBehindWall">
             <transformation>
-                <translate x="50" y="-10" z="50" />
+                <translate x="50" y="-10" z="75" />
                 <scale x="100" y="40" z="1" />
                 <rotate axis="y" angle="180" />
             </transformation>
@@ -2368,8 +2370,8 @@
         <!-- 100 x 303 x 1 -->
          <component id="rightBehindWall">
             <transformation>
-                <translate x="50" y="-10" z="-50" />
-                <scale x="1" y="40" z="100" />
+                <translate x="50" y="-10" z="-75" />
+                <scale x="1" y="40" z="150" />
                 <rotate axis="y" angle="-90" />
             </transformation>
             <materials>
@@ -2385,7 +2387,7 @@
         <!-- 100 x 100 x 1 -->
         <component id="floor">
             <transformation>
-                <scale x="100" y="1" z="100" />
+                <scale x="100" y="1" z="150" />
                 <translate x="-0.5" y="-10" z="0.5" />
                 <rotate axis="x" angle="-90" />
             </transformation>
@@ -2403,7 +2405,7 @@
         <component id="ceiling">
             <transformation>
                 <translate x="0" y="30" z="0" />
-                <scale x="100" y="1" z="100" />
+                <scale x="100" y="1" z="150" />
                 <translate x="-0.5" y="0" z="-0.5" />
                 <rotate axis="x" angle="90" />
             </transformation>
@@ -2452,6 +2454,201 @@
             </children>
         </component>
 
+        <component id="platFront">
+            <transformation>
+                <translate x="0" y="16" z="-14.5" />
+                <scale x="5.2" y="2" z="0.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="platFloorInter">
+            <transformation>
+                <translate x="0" y="14" z="-11" />
+                <rotate axis="x" angle="20" />
+                <scale x="5" y="0.5" z="7.05" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="platWallRightInter">
+            <transformation>
+                <translate x="10" y="16.5" z="-10" />
+                <rotate axis="x" angle="20" />
+                <scale x="0.25" y="5" z="7.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="platWallRight">
+            <transformation>
+                <translate x="10" y="16.5" z="-5" />
+                <scale x="0.25" y="5" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+         <component id="platWallLeftInter">
+            <transformation>
+                <translate x="0" y="16.5" z="-10" />
+                <rotate axis="x" angle="20" />
+                <scale x="0.25" y="5" z="7.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="platWallLeft">
+            <transformation>
+                <translate x="0" y="16.5" z="-5" />
+                <scale x="0.25" y="5" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="platformBase">
+            <transformation>
+                <!-- The quadrangularPrism draws half on top and half under, so we need to translate upwards  -->
+                <translate x="0" y="7" z="-5" />
+                <scale x="5" y="14" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="quadrangularPrism" />
+            </children>
+        </component>
+
+        <component id="platform1">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="plat1Material" />
+            </materials>
+            <texture id="lightWoodTexture" />
+            <children>
+                <componentref id="platformBase" />
+
+                <componentref id="platWallLeft" />
+                <componentref id="platWallLeftInter" />
+                <componentref id="platWallRight" />
+                <componentref id="platWallRightInter" />
+                <componentref id="platFloorInter" />
+                <componentref id="platFront" />
+            </children>
+        </component>
+
+        <component id="platform2">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="plat2Material" />
+            </materials>
+            <texture id="lightWoodTexture" />
+            <children>
+                <componentref id="platformBase" />
+
+                <componentref id="platWallLeft" />
+                <componentref id="platWallLeftInter" />
+                <componentref id="platWallRight" />
+                <componentref id="platWallRightInter" />
+                <componentref id="platFloorInter" />
+                <componentref id="platFront" />
+            </children>
+        </component>
+
+        <component id="player2">
+            <transformation>
+                <translate x="6" y="20.5" z="-5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="laraCroft" />
+            </children>
+        </component>
+
+        <component id="player1">
+            <transformation>
+                <translate x="6" y="20.5" z="-5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="laraCroft" />
+            </children>
+        </component>
+
+        <component id="playZone1">
+            <transformation>
+                <translate x="-5" y="-10" z="70" />
+            </transformation>
+            <materials>
+                <material id="backgroundMaterial" />
+            </materials>
+            <texture id="wallTexture" length_s="1" length_t="1" />
+            <children>
+                <componentref id="platform1" />
+                <componentref id="player1" />
+            </children>
+        </component>
+
+        <component id="playzone2">
+            <transformation>
+                <rotate axis="y" angle="180" />
+                <translate x="-5" y="-10" z="70" />
+            </transformation>
+            <materials>
+                <material id="backgroundMaterial" />
+            </materials>
+            <texture id="wallTexture" length_s="1" length_t="1" />
+            <children>
+                <componentref id="platform2" />
+                <componentref id="player2" />
+            </children>
+        </component>
+
         <component id="root">
             <transformation>
             </transformation>
@@ -2462,6 +2659,9 @@
             <children>
                 <!-- <componentref id="laraCroft" /> -->
                 <componentref id="temple" />
+
+                <componentref id="playZone1" />
+                <componentref id="playzone2" />
             </children>
         </component>
         
@@ -2477,7 +2677,6 @@
          -->    
         <sideLength value="66.67" />
 
-        <!-- Timer Position -->
-
+        <options useMonitor="1" />
     </board>
 </sxs>

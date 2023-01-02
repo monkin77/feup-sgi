@@ -25,12 +25,14 @@ export default class MyScoreBoard {
      * Method to update the dimensions of the scoreboard
      * @param {*} newSideLength 
      */
-    updatePosAndSize(newSideLength) {
+    updatePosAndSize(newSideLength, monitorEnabled = false) {
         this._sideLength = newSideLength;
         this._spacing = newSideLength / 8;
         this._cardLength = newSideLength / 3;
+        this._cardHeight = newSideLength / 5;
+        this._monitorEnabled = monitorEnabled;
 
-        this._card = new MyRectangle(this._scene, "timer-card", 0, this._cardLength, 0, newSideLength / 5);
+        this._card = new MyRectangle(this._scene, "timer-card", 0, this._cardLength, 0, this._cardHeight);
     }
 
     /**
@@ -51,11 +53,14 @@ export default class MyScoreBoard {
 
         this._scene.pushMatrix();
 
+        // Offset to take into account if displaying in the monitor or in the board
+        const offset = this._monitorEnabled ? this._sideLength + 0.01 : -0.1;
+
         if (isWhitePerspective) {
-            this._scene.translate(0, this._sideLength, 0);
+            this._scene.translate(0, this._sideLength - offset, 0);
             this._scene.rotate(Math.PI / 2, 1, 0, 0);
         } else {
-            this._scene.translate(this._sideLength, 0, 0);
+            this._scene.translate(this._sideLength, offset, 0);
             this._scene.rotate(Math.PI / 2, 1, 0, 0);
             this._scene.rotate(Math.PI, 0, 1, 0);
         }
@@ -86,5 +91,9 @@ export default class MyScoreBoard {
      */
     increaseScore(player) {
         player === 1 ? this._score1++ : this._score2++;
+    }
+
+    get cardHeight() {
+        return this._cardHeight;
     }
 }

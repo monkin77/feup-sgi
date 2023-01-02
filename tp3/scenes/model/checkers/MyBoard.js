@@ -1,7 +1,9 @@
 import { CGFappearance, CGFtexture } from "../../../../lib/CGF.js";
+import { MySceneGraph } from "../../../MySceneGraph.js";
 import { boardState, discsPerSide, noPossibleMoves, startRowsWithDiscs, tilesPerSide } from "../../../utils/checkers.js";
 import { updateLight } from "../../parser/utils.js";
 import MyGameOrchestrator from "./MyGameOrchestrator.js";
+import MyMonitor from "./MyMonitor.js";
 import MyPiece from "./MyPiece.js";
 import MyScoreBoard from "./MyScoreBoard.js";
 import MyStorage from "./MyStorage.js";
@@ -39,8 +41,12 @@ export default class MyBoard {
 
         this.buildTiles();
         this.buildStorages();
+
         this._scoreboard = new MyScoreBoard(this._scene, this._sideLength, this._boardMaterial);
         this._timer = new MyTimer(this._scene, this._sideLength, this._boardMaterial);
+
+        this._monitor = new MyMonitor(this._sceneGraph, this._sideLength, 
+            this._boardMaterial, this._scoreboard, this._timer, this._sceneGraph.boardParser.useMonitor);
 
         /* 
         Initialize the Spotlight
@@ -55,11 +61,15 @@ export default class MyBoard {
     /**
      * Method to update the position and size of the board.
      * Also updates the position and size of the components that depend on it
-     * @param {number[]} position 3D array with the new position of the board
-     * @param {number} sideLength 
+     * @param {MySceneGraph} newSceneGraph 
      */
-    updatePosAndSize(position, sideLength) {
+    updateTheme(newSceneGraph) {
+        const position = newSceneGraph.boardParser.position;
+        const sideLength = newSceneGraph.boardParser.sideLength
+
         if (position.length != 3) throw new Error("Invalid position array length (expected 3, got " + position.length);
+
+        this._sceneGraph = newSceneGraph;
 
         [this._x, this._y, this._z] = position;
         this._sideLength = sideLength;
@@ -74,11 +84,18 @@ export default class MyBoard {
         this._whiteStorage.updatePosAndSize(this._sideLength);
         this._blackStorage.updatePosAndSize(this._sideLength);
 
-        // Update the Scoreboard
-        this._scoreboard.updatePosAndSize(this._sideLength);
+        const monitorEnabled = this._sceneGraph.boardParser.useMonitor;
+        // Update the Monitor
+        this._monitor.updateTheme(this._sideLength, this._sceneGraph.boardParser.useMonitor);
 
-        // Update the Timer
-        this._timer.updatePosAndSize(this._sideLength);
+        // Since the monitor already updates the scoreboard and timer, only update them if the monitor is disabled
+        if (!monitorEnabled) {
+            // Update the Scoreboard
+            this._scoreboard.updatePosAndSize(this._sideLength);
+
+            // Update the Timer
+            this._timer.updatePosAndSize(this._sideLength);
+        }
 
         // Update the Spotlight Properties
         this._spotlightHeight = this._tileSideLength * 0.5;
@@ -310,16 +327,24 @@ export default class MyBoard {
         this.drawPiecesColor(true, selectedTile);
         this.drawPiecesColor(false, selectedTile);
 
+        // Clear The picking id currently in use
+        this._scene.clearPickRegistration();
+
         // Draw the Storages
         this._whiteStorage.display();
         this._blackStorage.display();
 
-        // Draw scoreboard
-        this._scoreboard.display();
+        // Draw the Monitor
+        if (this._monitor.enabled) {
+            this._monitor.display(this._scene.gameOrchestrator.turnCounter);
+        } else {
+            // Draw scoreboard
+            this._scoreboard.display();
 
-        // Draw timer
-        this._timer.display(this._scene.gameOrchestrator.turnCounter);
-
+            // Draw timer
+            this._timer.display(this._scene.gameOrchestrator.turnCounter);
+        }
+  
         this._scene.popMatrix();
     }
 

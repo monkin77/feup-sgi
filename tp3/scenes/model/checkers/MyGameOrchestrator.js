@@ -44,7 +44,7 @@ export default class MyGameOrchestrator {
                 this.state = new TurnState(this, player1, this._board);
             }
         } else {
-            this._board.updatePosAndSize(this._theme.boardParser.position, this._theme.boardParser.sideLength);
+            this._board.updateTheme(this._theme);
             // The Scene was changed
             if (newFilename == sceneFiles[0]) {
                 // Temple theme was loaded

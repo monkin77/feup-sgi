@@ -1,13 +1,6 @@
-import { Component } from "../model/Component.js";
-import { Highlighted } from "../model/Highlighted.js";
-import { Texture } from "../model/Texture.js";
 import { Parser } from "./Parser.js";
 import {
-    onXMLMinorError,
-    calculateTransformationMatrix,
-    buildComponentTransfID,
     invalidNumber,
-    isValidColor,
     parseCoordinates3D,
 } from "./utils.js";
 
@@ -35,12 +28,9 @@ export class BoardParser extends Parser {
      * @param {board block element} boardNode
      */
     parse(xmlReader, boardNode) {
-        const children = boardNode.children;
-
-        let err;
-
         let position = boardNode.getElementsByTagName("position");
         let sideLengthComp = boardNode.getElementsByTagName("sideLength");
+        let optionsComp = boardNode.getElementsByTagName("options");
 
         if (position.length != 1) {
             this.addReport(parserId, "no 'position' child defined for <board>");
@@ -72,10 +62,17 @@ export class BoardParser extends Parser {
             return;
         };
         
-        console.log("boardCoords: ", boardCoords, "sideLength: ", sideLength);
-
         this._position = boardCoords;
         this._sideLength = sideLength;
+
+        this._useMonitor = false;
+        if (optionsComp.length == 1) {
+            optionsComp = optionsComp[0];
+            const useMonitor = xmlReader.getBoolean(optionsComp, "useMonitor", false);
+            if (useMonitor != null) {
+                this._useMonitor = useMonitor;
+            }
+        };
         return;
     }
 
@@ -85,6 +82,10 @@ export class BoardParser extends Parser {
 
     get position() {
         return this._position;
+    }
+
+    get useMonitor() {
+        return this._useMonitor;
     }
 }
 

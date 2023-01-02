@@ -21,13 +21,16 @@ export default class MyTimer {
     /**
      * Method to update the dimensions of the timer
      * @param {*} newSideLength 
+     * @param {*} monitorEnabled
      */
-    updatePosAndSize(newSideLength) {
+    updatePosAndSize(newSideLength, monitorEnabled = false) {
         this._sideLength = newSideLength;
         this._spacing = newSideLength / 8;
         this._cardLength = newSideLength / 3;
+        this._cardHeight = newSideLength / 5;
+        this._monitorEnabled = monitorEnabled;
 
-        this._card = new MyRectangle(this._scene, "timer-card", 0, this._cardLength, 0, newSideLength / 5);
+        this._card = new MyRectangle(this._scene, "timer-card", 0, this._cardLength, 0, this._cardHeight);
     }
 
     /**
@@ -48,11 +51,14 @@ export default class MyTimer {
 
         this._scene.pushMatrix();
 
+        // Offset to take into account if displaying in the monitor or in the board
+        const offset = this._monitorEnabled ? this._sideLength + 0.01 : -0.1;
+
         if (isWhitePerspective) {
-            this._scene.translate(this._sideLength - this._cardLength, this._sideLength, 0);
+            this._scene.translate(this._sideLength - this._cardLength, this._sideLength - offset, 0);
             this._scene.rotate(Math.PI / 2, 1, 0, 0);
         } else {
-            this._scene.translate(this._cardLength, 0, 0);
+            this._scene.translate(this._cardLength, offset, 0);
             this._scene.rotate(Math.PI / 2, 1, 0, 0);
             this._scene.rotate(Math.PI, 0, 1, 0);
         }
@@ -76,5 +82,13 @@ export default class MyTimer {
 
         this._scene.setActiveShaderSimple(this._scene.defaultShader);
         this._scene.popMatrix();
+    }
+
+    get cardHeight() {
+        return this._cardHeight;
+    }
+
+    get cardLength() {
+        return this._cardLength;
     }
 }
