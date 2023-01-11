@@ -8,6 +8,13 @@ This repository contains the projects developed for the course of Computer Graph
 
 ----
 
+## Deployed versions
+1. [TP1](https://web.fe.up.pt/~up201906682/sgi/tp1/?file=testScene.xml)
+2. [TP2](https://web.fe.up.pt/~up201906682/sgi/tp2/?file=testScene.xml)
+3. [TP3](https://web.fe.up.pt/~up201906682/sgi/tp3/)
+
+---
+
 ## Main Highlights
 Lara Croft's Backflip
 
